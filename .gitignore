@@ -1,0 +1,15 @@
+# Godot engine cache and imported resources
+.godot/
+
+# Runtime state written by hook.py / the pet
+state/
+window.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS / editor noise
+Thumbs.db
+.DS_Store

@@ -1,0 +1,2 @@
+# Drop the source character image here as pet.png, then run:
+#   "C:\Windows\py.exe" -3 preprocess.py assets\pet.png game\assets\pet.png
