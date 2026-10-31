@@ -1,0 +1,23 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FishPet 动画验收</title><style>
+body{margin:32px;background:#edf2fa;color:#203453;font:16px/1.65 system-ui,"Microsoft YaHei",sans-serif}
+h1{font-size:26px}h2{font-size:16px}p{max-width:900px}button{padding:8px 16px;margin:0 8px 12px 0;cursor:pointer}
+main{display:flex;flex-wrap:wrap;gap:20px}article{background:white;border:1px solid #d6e0ed;border-radius:16px;padding:18px}
+img{width:212px;height:212px;object-fit:contain;display:block}body.large img{width:424px;height:424px}
+small{color:#516784}a{color:#2655a5}</style>
+<p style="padding:16px;background:#fff3cd;border:2px solid #d9a31c"><strong>喝水长袖已补画，请查看 <a href="../animation-review-20261025-v4/index.html">第 4 版动画预览</a>。</strong>此页为旧版对照。</p>
+<h1>FishPet 动画验收 · 第 2 版 · 2026-10-25</h1>
+<p><strong>这是第 2 版历史预览。</strong>摸鱼抚摸手臂和喝水袖口接缝的后续修复见 <a href="../animation-review-20261025-v3/index.html">第 3 版预览（含放大连续动画）</a>。</p>
+<p>以下为 Godot / Spine 实际骨架渲染，包含入场、保持和退场。默认角色基准高度 170 px；可放大检查手指、袖口与杯沿。动画按 12 帧/秒抽样展示，游戏运行速度不受影响。</p>
+<button onclick="document.body.classList.remove('large')">170 px 基准</button>
+<button onclick="document.body.classList.add('large')">340 px 放大检查</button>
+<main><article><h2>待机 · 左右顾盼</h2><img src="idle.webp" alt="待机 · 左右顾盼"></article>
+<article><h2>摸鱼 · 抱鲸鱼轻抚</h2><img src="slack.webp" alt="摸鱼 · 抱鲸鱼轻抚"></article>
+<article><h2>展示一 · 右键菜单</h2><img src="present.webp" alt="展示一 · 右键菜单"></article>
+<article><h2>展示二 · 提醒设置</h2><img src="present2.webp" alt="展示二 · 提醒设置"></article>
+<article><h2>喝水 · 双手捧杯仰头</h2><img src="drink.webp" alt="喝水 · 双手捧杯仰头"></article>
+<article><h2>工作 · 抱本写字</h2><img src="working.webp" alt="工作 · 抱本写字"></article>
+<article><h2>提醒 · 持续跳跃、双手挥动</h2><img src="reminders.webp" alt="提醒 · 持续跳跃、双手挥动"></article></main><p><small>本版修改：袖根连接衣身；提醒持续循环跳跃并挥动双手；展示一用于右键菜单、展示二用于提醒设置；喝水靠独立上臂与前臂旋转，小幅起落表现逐口啜饮；左手托住鲸鱼下沿。普通提醒点气泡停止，打开菜单暂时展示，关闭后继续未处理的提醒。</small></p>
+<p><small>这里是实际骨架渲染的动作片段。正面与侧面仍采用视角附件切换，端杯从胸前附近开始；运行时混合与交互另有回归测试。</small></p>
+<p><a href="five-poses.png">打开五动作静态对照</a> · <a href="../../ANIMATION_TAKEOVER_20261025.md">改动及验收记录</a></p></html>

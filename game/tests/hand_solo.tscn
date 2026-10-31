@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bhandsolo1"]
+
+[ext_resource type="Script" path="res://tests/hand_solo.gd" id="1_hs"]
+
+[node name="HandSolo" type="Node"]
+script = ExtResource("1_hs")

@@ -1,0 +1,25 @@
+{
+  "status": "painted prop; provisional registration, not integrated",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "visible_alpha_threshold": 24,
+  "source_bbox": [
+    70,
+    623,
+    1211,
+    1193
+  ],
+  "target_canvas": [
+    1024,
+    1024
+  ],
+  "uniform_scale": 0.5521472392638037,
+  "offset": [
+    136.34969325153375,
+    293.2883435582821
+  ],
+  "draw_order": "behind body_sit",
+  "notes": "Keep original PNG. Apply uniform registration at import/build. Confirm seat and back contact with newly painted seated body; do not reuse standing joint positions."
+}

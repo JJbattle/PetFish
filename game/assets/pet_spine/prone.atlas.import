@@ -1,0 +1,16 @@
+[remap]
+
+importer="spine.atlas"
+type="SpineAtlasResource"
+uid="uid://cqqx0klt3mx8s"
+path="res://.godot/imported/prone.atlas-732d95cbf4ed283c7cef01eab49329d8.spatlas"
+
+[deps]
+
+source_file="res://assets/pet_spine/prone.atlas"
+dest_files=["res://.godot/imported/prone.atlas-732d95cbf4ed283c7cef01eab49329d8.spatlas"]
+
+[params]
+
+normal_map_prefix="n"
+specular_map_prefix="s"

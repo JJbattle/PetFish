@@ -1,0 +1,50 @@
+{
+  "coordinates": "same screen coordinates as assembly.json",
+  "status": "static anatomical guides, NOT animated IK solution",
+  "points": {
+    "neck": [
+      735,
+      555
+    ],
+    "shoulder_near": [
+      650,
+      615
+    ],
+    "elbow_near": [
+      663,
+      732
+    ],
+    "wrist_near": [
+      730,
+      792
+    ],
+    "pen_tip": [
+      817,
+      858
+    ],
+    "shoulder_far": [
+      850,
+      620
+    ],
+    "elbow_far": [
+      878,
+      709
+    ],
+    "wrist_far": [
+      935,
+      779
+    ],
+    "support_fingers": [
+      985,
+      810
+    ],
+    "hip": [
+      780,
+      950
+    ],
+    "ground": [
+      1050,
+      1214
+    ]
+  }
+}

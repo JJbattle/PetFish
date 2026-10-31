@@ -1,0 +1,14 @@
+[remap]
+
+importer="spine.json"
+type="SpineSkeletonFileResource"
+uid="uid://dsaevcitocch4"
+path="res://.godot/imported/pet.spine-json-7b819f535bf85842a4e17740ae1fd329.spjson"
+
+[deps]
+
+source_file="res://tests/_v1rig/pet.spine-json"
+dest_files=["res://.godot/imported/pet.spine-json-7b819f535bf85842a4e17740ae1fd329.spjson"]
+
+[params]
+

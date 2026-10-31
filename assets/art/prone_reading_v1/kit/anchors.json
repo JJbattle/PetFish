@@ -1,0 +1,54 @@
+{
+  "coordinates": "assembly canvas, +y down",
+  "status": "approximate anatomical guides, not an IK solution",
+  "points": {
+    "neck_body": [
+      540,
+      500
+    ],
+    "head_control": [
+      515,
+      505
+    ],
+    "shoulder_near": [
+      600,
+      520
+    ],
+    "elbow_near": [
+      535,
+      622
+    ],
+    "wrist_near": [
+      482,
+      659
+    ],
+    "page_contact_near": [
+      439,
+      657
+    ],
+    "shoulder_far": [
+      380,
+      525
+    ],
+    "elbow_far": [
+      362,
+      606
+    ],
+    "wrist_far": [
+      309,
+      664
+    ],
+    "page_contact_far": [
+      276,
+      727
+    ],
+    "book_spine": [
+      440,
+      812
+    ],
+    "hip_support": [
+      820,
+      690
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://deidbysoy8sbu"]
+
+[ext_resource type="Script" path="res://tests/present_probe.gd" id="1_pp"]
+
+[node name="PresentProbe" type="Node"]
+script = ExtResource("1_pp")

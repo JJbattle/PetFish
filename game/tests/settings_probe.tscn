@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://coywhltc32gcs"]
+
+[ext_resource type="Script" path="res://tests/settings_probe.gd" id="1_sp"]
+
+[node name="SettingsProbe" type="Node"]
+script = ExtResource("1_sp")

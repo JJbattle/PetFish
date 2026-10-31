@@ -1,0 +1,24 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FishPet 动画验收</title><style>
+body{margin:32px;background:#edf2fa;color:#203453;font:16px/1.65 system-ui,"Microsoft YaHei",sans-serif}
+h1{font-size:26px}h2{font-size:16px}p{max-width:900px}button{padding:8px 16px;margin:0 8px 12px 0;cursor:pointer}
+main{display:flex;flex-wrap:wrap;gap:20px}article{background:white;border:1px solid #d6e0ed;border-radius:16px;padding:18px}
+img{width:212px;height:212px;object-fit:contain;display:block}body.large img{width:424px;height:424px}
+small{color:#516784}a{color:#2655a5}</style>
+<h1>FishPet 动画验收 · 第 4 版 · 2026-10-25</h1>
+<p>本版补画喝水原图：去掉两层袖口之间错误的裸露皮肤和多余花边，改为连续深蓝长袖，每只手腕只保留一个白色袖口。保留第 3 版的连续袖子网格与摸鱼修正。</p>
+<p><a href="drink-sleeve-before-after.png">查看实际骨架同一时刻的袖子修改前后对照</a></p><main><article><h2>摸鱼 · 手腕与袖口放大</h2><img style="width:360px;height:360px" src="slack-detail.webp" alt="摸鱼手臂连续动作放大"></article>
+<article><h2>喝水 · 肩、肘接缝放大</h2><img style="width:360px;height:360px" src="drink-detail.webp" alt="喝水袖子连续动作放大"></article></main>
+<p>以下为 Godot / Spine 实际骨架渲染，包含入场、保持和退场。默认角色基准高度 170 px；可放大检查手指、袖口与杯沿。动画按 12 帧/秒抽样展示，游戏运行速度不受影响。</p>
+<button onclick="document.body.classList.remove('large')">170 px 基准</button>
+<button onclick="document.body.classList.add('large')">340 px 放大检查</button>
+<main><article><h2>待机 · 左右顾盼</h2><img src="idle.webp" alt="待机 · 左右顾盼"></article>
+<article><h2>摸鱼 · 抱鲸鱼轻抚</h2><img src="slack.webp" alt="摸鱼 · 抱鲸鱼轻抚"></article>
+<article><h2>展示一 · 右键菜单</h2><img src="present.webp" alt="展示一 · 右键菜单"></article>
+<article><h2>展示二 · 提醒设置</h2><img src="present2.webp" alt="展示二 · 提醒设置"></article>
+<article><h2>喝水 · 双手捧杯仰头</h2><img src="drink.webp" alt="喝水 · 双手捧杯仰头"></article>
+<article><h2>工作 · 抱本写字</h2><img src="working.webp" alt="工作 · 抱本写字"></article>
+<article><h2>提醒 · 持续跳跃、双手挥动</h2><img src="reminders.webp" alt="提醒 · 持续跳跃、双手挥动"></article></main><p><small>提醒持续循环跳跃并挥动双手；展示一用于右键菜单、展示二用于提醒设置；喝水靠上臂与前臂旋转，小幅起落表现逐口啜饮；左手托住鲸鱼下沿。普通提醒点气泡停止，打开菜单暂时展示，关闭后继续未处理的提醒。</small></p>
+<p><small>这里是实际骨架渲染的动作片段。正面与侧面仍采用视角附件切换，端杯从胸前附近开始；运行时混合与交互另有回归测试。</small></p>
+<p><a href="five-poses.png">打开五动作静态对照</a> · <a href="../../ANIMATION_TAKEOVER_20261025.md">改动及验收记录</a></p></html>

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bsweepprobe1"]
+
+[ext_resource type="Script" path="res://tests/sweep_probe.gd" id="1_sp"]
+
+[node name="SweepProbe" type="Node"]
+script = ExtResource("1_sp")

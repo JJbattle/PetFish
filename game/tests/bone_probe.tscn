@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bboneprobe1"]
+
+[ext_resource type="Script" path="res://tests/bone_probe.gd" id="1_bp"]
+
+[node name="BoneProbe" type="Node"]
+script = ExtResource("1_bp")

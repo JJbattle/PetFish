@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bhandpose1"]
+
+[ext_resource type="Script" path="res://tests/hand_pose_probe.gd" id="1_hp"]
+
+[node name="HandPoseProbe" type="Node"]
+script = ExtResource("1_hp")

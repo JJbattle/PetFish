@@ -1,0 +1,176 @@
+{
+  "version": 1,
+  "canvas": [
+    1200,
+    850
+  ],
+  "coordinates": "pixels; origin top-left; +y down; angle degrees clockwise",
+  "status": "static assembly guide; not a production Spine export",
+  "parts": {
+    "head_sleep": {
+      "source_bbox": [
+        7,
+        89,
+        573,
+        549
+      ],
+      "padding": 12,
+      "size": [
+        590,
+        484
+      ]
+    },
+    "arm_near": {
+      "source_bbox": [
+        1166,
+        110,
+        1522,
+        469
+      ],
+      "padding": 12,
+      "size": [
+        380,
+        383
+      ]
+    },
+    "body_legs_tail": {
+      "source_bbox": [
+        556,
+        155,
+        1176,
+        540
+      ],
+      "padding": 12,
+      "size": [
+        644,
+        409
+      ]
+    },
+    "head_drowsy_reference": {
+      "source_bbox": [
+        997,
+        556,
+        1533,
+        1007
+      ],
+      "padding": 12,
+      "size": [
+        560,
+        475
+      ]
+    },
+    "arm_far": {
+      "source_bbox": [
+        47,
+        593,
+        415,
+        934
+      ],
+      "padding": 12,
+      "size": [
+        392,
+        365
+      ]
+    },
+    "pillow": {
+      "source_bbox": [
+        465,
+        613,
+        997,
+        955
+      ],
+      "padding": 12,
+      "size": [
+        556,
+        366
+      ]
+    },
+    "whale": {
+      "source": "tools/deepseek_whale.py",
+      "size": [
+        300,
+        221
+      ]
+    }
+  },
+  "draw_order_back_to_front": [
+    {
+      "name": "pillow",
+      "pivot": [
+        12,
+        12
+      ],
+      "position": [
+        160,
+        390
+      ],
+      "scale": 1.1,
+      "angle": 0
+    },
+    {
+      "name": "body_legs_tail",
+      "pivot": [
+        12,
+        12
+      ],
+      "position": [
+        480,
+        380
+      ],
+      "scale": 0.9,
+      "angle": 0
+    },
+    {
+      "name": "head_sleep",
+      "pivot": [
+        322,
+        391
+      ],
+      "position": [
+        536,
+        466
+      ],
+      "scale": 1,
+      "angle": 0
+    },
+    {
+      "name": "arm_far",
+      "pivot": [
+        257,
+        57
+      ],
+      "position": [
+        604,
+        520
+      ],
+      "scale": 0.62,
+      "angle": -10
+    },
+    {
+      "name": "whale",
+      "pivot": [
+        0,
+        0
+      ],
+      "position": [
+        420,
+        550
+      ],
+      "scale": 0.64,
+      "angle": 0
+    },
+    {
+      "name": "arm_near",
+      "pivot": [
+        239,
+        70
+      ],
+      "position": [
+        606,
+        475
+      ],
+      "scale": 0.65,
+      "angle": 20
+    }
+  ]
+}

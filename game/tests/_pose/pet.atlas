@@ -1,0 +1,152 @@
+pet.png
+size: 2048,660
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: false
+  xy: 0, 0
+  size: 603, 460
+  orig: 603, 460
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 605, 0
+  size: 549, 418
+  orig: 549, 418
+  offset: 0, 0
+  index: -1
+skirt
+  rotate: false
+  xy: 1156, 0
+  size: 372, 282
+  orig: 372, 282
+  offset: 0, 0
+  index: -1
+hair_r
+  rotate: false
+  xy: 1530, 0
+  size: 172, 221
+  orig: 172, 221
+  offset: 0, 0
+  index: -1
+hair_l
+  rotate: false
+  xy: 1704, 0
+  size: 190, 208
+  orig: 190, 208
+  offset: 0, 0
+  index: -1
+tail
+  rotate: false
+  xy: 0, 462
+  size: 226, 160
+  orig: 226, 160
+  offset: 0, 0
+  index: -1
+eyes_open
+  rotate: false
+  xy: 228, 462
+  size: 268, 98
+  orig: 268, 98
+  offset: 0, 0
+  index: -1
+eyes_half
+  rotate: false
+  xy: 498, 462
+  size: 268, 98
+  orig: 268, 98
+  offset: 0, 0
+  index: -1
+eyes_closed
+  rotate: false
+  xy: 768, 462
+  size: 268, 98
+  orig: 268, 98
+  offset: 0, 0
+  index: -1
+eyes_happy
+  rotate: false
+  xy: 1038, 462
+  size: 268, 98
+  orig: 268, 98
+  offset: 0, 0
+  index: -1
+arm_up_r
+  rotate: false
+  xy: 1308, 462
+  size: 83, 91
+  orig: 83, 91
+  offset: 0, 0
+  index: -1
+arm_fore_r
+  rotate: false
+  xy: 1393, 462
+  size: 102, 90
+  orig: 102, 90
+  offset: 0, 0
+  index: -1
+arm_fore_l
+  rotate: false
+  xy: 1497, 462
+  size: 101, 90
+  orig: 101, 90
+  offset: 0, 0
+  index: -1
+arm_up_l
+  rotate: false
+  xy: 1600, 462
+  size: 78, 89
+  orig: 78, 89
+  offset: 0, 0
+  index: -1
+cup
+  rotate: false
+  xy: 1680, 462
+  size: 123, 87
+  orig: 123, 87
+  offset: 0, 0
+  index: -1
+hand_grip
+  rotate: false
+  xy: 1805, 462
+  size: 45, 63
+  orig: 45, 63
+  offset: 0, 0
+  index: -1
+mouth_default
+  rotate: false
+  xy: 1852, 462
+  size: 62, 40
+  orig: 62, 40
+  offset: 0, 0
+  index: -1
+mouth_sip
+  rotate: false
+  xy: 1916, 462
+  size: 62, 40
+  orig: 62, 40
+  offset: 0, 0
+  index: -1
+mouth_smile
+  rotate: false
+  xy: 1980, 462
+  size: 62, 40
+  orig: 62, 40
+  offset: 0, 0
+  index: -1
+hand_rest
+  rotate: false
+  xy: 0, 624
+  size: 45, 34
+  orig: 45, 34
+  offset: 0, 0
+  index: -1
+hand_l
+  rotate: false
+  xy: 47, 624
+  size: 39, 28
+  orig: 39, 28
+  offset: 0, 0
+  index: -1

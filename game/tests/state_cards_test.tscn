@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bstatecards1"]
+
+[ext_resource type="Script" path="res://tests/state_cards_test.gd" id="1_sc"]
+
+[node name="StateCardsTest" type="Node"]
+script = ExtResource("1_sc")

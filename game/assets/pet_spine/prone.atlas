@@ -1,0 +1,33 @@
+prone.png
+size: 2048,1127
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+reading
+  rotate: false
+  xy: 0, 0
+  size: 1510, 986
+  orig: 1510, 986
+  offset: 0, 0
+  index: -1
+fluke
+  rotate: false
+  xy: 1512, 0
+  size: 301, 207
+  orig: 301, 207
+  offset: 0, 0
+  index: -1
+shoe_far
+  rotate: false
+  xy: 0, 988
+  size: 170, 137
+  orig: 170, 137
+  offset: 0, 0
+  index: -1
+shoe_near
+  rotate: false
+  xy: 1815, 0
+  size: 192, 155
+  orig: 192, 155
+  offset: 0, 0
+  index: -1

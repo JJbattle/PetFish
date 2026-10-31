@@ -3,7 +3,14 @@
 
 # Runtime state written by hook.py / the pet
 state/
+data/
 window.json
+
+# Debug captures from game/tests
+tools/_debug/
+
+# Spine runtime temp copies left behind while the editor holds the DLL
+*.TMP
 
 # Python
 __pycache__/

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bplayback01"]
+
+[ext_resource type="Script" path="res://tests/playback_test.gd" id="1_pb"]
+
+[node name="PlaybackTest" type="Node"]
+script = ExtResource("1_pb")

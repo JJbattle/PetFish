@@ -1,0 +1,67 @@
+{
+  "pose_reference.png": {
+    "size": [
+      1254,
+      1254
+    ],
+    "visible_bbox": [
+      17,
+      178,
+      1238,
+      1133
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  "body_sit.png": {
+    "size": [
+      1254,
+      1254
+    ],
+    "visible_bbox": [
+      432,
+      531,
+      1205,
+      1214
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  "status": "painted body underlay; not pixel-aligned to pose reference or runtime",
+  "notes": "Body extraction was repainted and rescaled by image generation. Do not overlay raw canvases or reuse standing joints. Follow body_sit as source for remaining attachments; assemble and register the complete set before export.",
+  "body_sit_landmarks_approx_normalized": {
+    "neck": [
+      0.575,
+      0.43
+    ],
+    "shoulder_screen_left": [
+      0.505,
+      0.48
+    ],
+    "shoulder_screen_right": [
+      0.675,
+      0.47
+    ],
+    "waist": [
+      0.59,
+      0.575
+    ],
+    "lap_book_center": [
+      0.68,
+      0.64
+    ],
+    "hip_contact": [
+      0.59,
+      0.765
+    ],
+    "foot_bottom": [
+      0.84,
+      0.945
+    ]
+  },
+  "landmarks_status": "visual guides only; not validated binding pivots"
+}

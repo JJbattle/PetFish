@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bclipshot1"]
+
+[ext_resource type="Script" path="res://tests/clip_shot.gd" id="1_cs"]
+
+[node name="ClipShot" type="Node"]
+script = ExtResource("1_cs")

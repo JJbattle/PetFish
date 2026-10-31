@@ -1,0 +1,157 @@
+{
+  "skeleton": {
+    "spine": "4.2.43",
+    "x": 0,
+    "y": -850,
+    "width": 1200,
+    "height": 850,
+    "images": "./"
+  },
+  "bones": [
+    {
+      "name": "root"
+    },
+    {
+      "name": "rest_body",
+      "parent": "root",
+      "x": 480,
+      "y": -380,
+      "rotation": 0
+    },
+    {
+      "name": "pillow",
+      "parent": "root",
+      "x": 160,
+      "y": -390,
+      "rotation": 0
+    },
+    {
+      "name": "head_sleep",
+      "parent": "rest_body",
+      "x": 56,
+      "y": -86,
+      "rotation": 0
+    },
+    {
+      "name": "arm_far",
+      "parent": "rest_body",
+      "x": 124,
+      "y": -140,
+      "rotation": 10
+    },
+    {
+      "name": "whale",
+      "parent": "rest_body",
+      "x": -60,
+      "y": -170,
+      "rotation": 0
+    },
+    {
+      "name": "arm_near",
+      "parent": "rest_body",
+      "x": 126,
+      "y": -95,
+      "rotation": -20
+    }
+  ],
+  "slots": [
+    {
+      "name": "pillow",
+      "bone": "pillow",
+      "attachment": "pillow"
+    },
+    {
+      "name": "body_legs_tail",
+      "bone": "rest_body",
+      "attachment": "body_legs_tail"
+    },
+    {
+      "name": "head_sleep",
+      "bone": "head_sleep",
+      "attachment": "head_sleep"
+    },
+    {
+      "name": "arm_far",
+      "bone": "arm_far",
+      "attachment": "arm_far"
+    },
+    {
+      "name": "whale",
+      "bone": "whale",
+      "attachment": "whale"
+    },
+    {
+      "name": "arm_near",
+      "bone": "arm_near",
+      "attachment": "arm_near"
+    }
+  ],
+  "skins": [
+    {
+      "name": "default",
+      "attachments": {
+        "pillow": {
+          "pillow": {
+            "type": "region",
+            "path": "pillow",
+            "x": 292.6,
+            "y": -188.10000000000002,
+            "width": 611.6,
+            "height": 402.6
+          }
+        },
+        "body_legs_tail": {
+          "body_legs_tail": {
+            "type": "region",
+            "path": "body_legs_tail",
+            "x": 279.0,
+            "y": -173.25,
+            "width": 579.6,
+            "height": 368.1
+          }
+        },
+        "head_sleep": {
+          "head_sleep": {
+            "type": "region",
+            "path": "head_sleep",
+            "x": -27.0,
+            "y": 149.0,
+            "width": 590,
+            "height": 484
+          }
+        },
+        "arm_far": {
+          "arm_far": {
+            "type": "region",
+            "path": "arm_far",
+            "x": -37.82,
+            "y": -77.81,
+            "width": 243.04,
+            "height": 226.3
+          }
+        },
+        "whale": {
+          "whale": {
+            "type": "region",
+            "path": "whale",
+            "x": 96.0,
+            "y": -70.72,
+            "width": 192.0,
+            "height": 141.44
+          }
+        },
+        "arm_near": {
+          "arm_near": {
+            "type": "region",
+            "path": "arm_near",
+            "x": -31.85,
+            "y": -78.97500000000001,
+            "width": 247.0,
+            "height": 248.95000000000002
+          }
+        }
+      }
+    }
+  ],
+  "animations": {}
+}

@@ -1,0 +1,169 @@
+{
+  "skeleton": {
+    "spine": "4.2.43",
+    "x": 0,
+    "y": -1280,
+    "width": 1280,
+    "height": 1280,
+    "images": "./"
+  },
+  "bones": [
+    {
+      "name": "root"
+    },
+    {
+      "name": "sit_body",
+      "parent": "root"
+    },
+    {
+      "name": "whale_cushion",
+      "parent": "root",
+      "x": 0,
+      "y": 35,
+      "rotation": 0
+    },
+    {
+      "name": "sit_head",
+      "parent": "sit_body",
+      "x": 735,
+      "y": -555,
+      "rotation": 0
+    },
+    {
+      "name": "book_lap",
+      "parent": "sit_body",
+      "x": 745,
+      "y": -785,
+      "rotation": 0
+    },
+    {
+      "name": "arm_far",
+      "parent": "sit_body",
+      "x": 850,
+      "y": -620,
+      "rotation": -10
+    },
+    {
+      "name": "arm_near_pen",
+      "parent": "sit_body",
+      "x": 650,
+      "y": -615,
+      "rotation": 0
+    }
+  ],
+  "slots": [
+    {
+      "name": "whale_cushion",
+      "bone": "whale_cushion",
+      "attachment": "whale_cushion"
+    },
+    {
+      "name": "hair_back",
+      "bone": "sit_head",
+      "attachment": "hair_back"
+    },
+    {
+      "name": "body_sit",
+      "bone": "sit_body",
+      "attachment": "body_sit"
+    },
+    {
+      "name": "head_front",
+      "bone": "sit_head",
+      "attachment": "head_front"
+    },
+    {
+      "name": "book_lap",
+      "bone": "book_lap",
+      "attachment": "book_lap"
+    },
+    {
+      "name": "arm_far",
+      "bone": "arm_far",
+      "attachment": "arm_far"
+    },
+    {
+      "name": "arm_near_pen",
+      "bone": "arm_near_pen",
+      "attachment": "arm_near_pen"
+    }
+  ],
+  "skins": [
+    {
+      "name": "default",
+      "attachments": {
+        "whale_cushion": {
+          "whale_cushion": {
+            "type": "region",
+            "path": "whale_cushion",
+            "x": 640.5,
+            "y": -908.0,
+            "width": 1171,
+            "height": 600
+          }
+        },
+        "hair_back": {
+          "hair_back": {
+            "type": "region",
+            "path": "hair_back",
+            "x": 9.35,
+            "y": 128.35,
+            "width": 647.6999999999999,
+            "height": 663.0
+          }
+        },
+        "body_sit": {
+          "body_sit": {
+            "type": "region",
+            "path": "body_sit",
+            "x": 818.5,
+            "y": -872.5,
+            "width": 803,
+            "height": 713
+          }
+        },
+        "head_front": {
+          "head_front": {
+            "type": "region",
+            "path": "head_front",
+            "x": 9.35,
+            "y": 128.35,
+            "width": 647.6999999999999,
+            "height": 663.0
+          }
+        },
+        "book_lap": {
+          "book_lap": {
+            "type": "region",
+            "path": "book_lap",
+            "x": 180.75,
+            "y": -63.0,
+            "width": 379.5,
+            "height": 141.0
+          }
+        },
+        "arm_far": {
+          "arm_far": {
+            "type": "region",
+            "path": "arm_far",
+            "x": 65.39999999999999,
+            "y": -70.5,
+            "width": 250.79999999999998,
+            "height": 227.4
+          }
+        },
+        "arm_near_pen": {
+          "arm_near_pen": {
+            "type": "region",
+            "path": "arm_near_pen",
+            "x": 62.97500000000001,
+            "y": -114.4,
+            "width": 226.05,
+            "height": 278.3
+          }
+        }
+      }
+    }
+  ],
+  "animations": {}
+}

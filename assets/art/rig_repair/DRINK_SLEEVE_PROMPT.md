@@ -1,0 +1,7 @@
+# 喝水长袖补画 v2
+
+内置 imagegen，编辑目标 `drink_two_hands_v1.png`，结果 `drink_two_hands_v2.png`，透明背景。修正原图双重袖口及裸露皮肤，保留手、杯子与姿势。
+
+## 完整提示
+
+Precise local clothing repair of the supplied transparent 1280x1280 character sprite. Preserve the EXACT canvas size, character placement, silhouette, pose, head, face, hair, hands, fingers, cup and all other artwork. ONLY repair both sleeves between elbow and wrist. Currently each sleeve mistakenly has TWO white ruffle cuffs separated by a large peach exposed skin oval. Replace BOTH exposed skin ovals and the LOWER redundant white ruffle rings with continuous opaque DARK NAVY BLUE SLEEVE FABRIC, matching the existing sleeve shading and subtle folds. Each arm must be fully covered by ONE continuous long navy sleeve from shoulder through elbow to wrist. Retain ONLY the upper white ruffle cuff nearest each hand (near image x835 y580 for near arm and x991 y555 for far arm). Fabric must extend all the way into those wrist cuffs without any gap, cutout, peach patch, or detached ring. Only hands and a small natural wrist beyond the single cuff show skin. Preserve the existing bent elbow contours and do not move any hands/cup/joints or enlarge the character. Remove redundant gold band near lower frill if necessary for continuous fabric. Match original anime rendering exactly. Transparent background. No new elements. Return full character, pixel aligned to source as closely as possible.

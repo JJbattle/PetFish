@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bfacesheet1"]
+
+[ext_resource type="Script" path="res://tests/face_sheet.gd" id="1_fs"]
+
+[node name="FaceSheet" type="Node"]
+script = ExtResource("1_fs")

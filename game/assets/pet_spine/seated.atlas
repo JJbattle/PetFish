@@ -1,0 +1,54 @@
+seated.png
+size: 2048,1660
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+whale_cushion
+  rotate: false
+  xy: 650, 715
+  size: 1171, 600
+  orig: 1171, 600
+  offset: 0, 0
+  index: -1
+hair_back
+  rotate: false
+  xy: 805, 0
+  size: 648, 663
+  orig: 648, 663
+  offset: 0, 0
+  index: -1
+body_sit
+  rotate: false
+  xy: 0, 0
+  size: 803, 713
+  orig: 803, 713
+  offset: 0, 0
+  index: -1
+head_front
+  rotate: false
+  xy: 0, 715
+  size: 648, 663
+  orig: 648, 663
+  offset: 0, 0
+  index: -1
+book_lap
+  rotate: false
+  xy: 481, 1380
+  size: 380, 141
+  orig: 380, 141
+  offset: 0, 0
+  index: -1
+arm_far
+  rotate: false
+  xy: 228, 1380
+  size: 251, 227
+  orig: 251, 227
+  offset: 0, 0
+  index: -1
+arm_near_pen
+  rotate: false
+  xy: 0, 1380
+  size: 226, 278
+  orig: 226, 278
+  offset: 0, 0
+  index: -1

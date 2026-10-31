@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bfishprobe1"]
+
+[ext_resource type="Script" path="res://tests/fish_probe.gd" id="1_fp"]
+
+[node name="FishProbe" type="Node"]
+script = ExtResource("1_fp")

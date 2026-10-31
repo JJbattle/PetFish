@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bhandart1"]
+
+[ext_resource type="Script" path="res://tests/hand_art_probe.gd" id="1_ha"]
+
+[node name="HandArt" type="Node"]
+script = ExtResource("1_ha")

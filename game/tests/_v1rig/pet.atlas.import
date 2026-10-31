@@ -1,0 +1,16 @@
+[remap]
+
+importer="spine.atlas"
+type="SpineAtlasResource"
+uid="uid://ds4dcov10qkmv"
+path="res://.godot/imported/pet.atlas-92881692d9ad7bc37a341a410f6ebff2.spatlas"
+
+[deps]
+
+source_file="res://tests/_v1rig/pet.atlas"
+dest_files=["res://.godot/imported/pet.atlas-92881692d9ad7bc37a341a410f6ebff2.spatlas"]
+
+[params]
+
+normal_map_prefix="n"
+specular_map_prefix="s"

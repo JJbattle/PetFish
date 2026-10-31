@@ -1,0 +1,207 @@
+{
+  "canvas": [
+    1280,
+    1280
+  ],
+  "coordinates": "top-left origin, +y down, angles clockwise; uniform scales",
+  "parts": {
+    "head_sit": {
+      "source_bbox": [
+        42,
+        11,
+        780,
+        767
+      ],
+      "padding": 12,
+      "size": [
+        762,
+        780
+      ]
+    },
+    "arm_near_pen": {
+      "source_bbox": [
+        821,
+        230,
+        1208,
+        712
+      ],
+      "padding": 12,
+      "size": [
+        411,
+        506
+      ]
+    },
+    "arm_far": {
+      "source_bbox": [
+        822,
+        815,
+        1216,
+        1170
+      ],
+      "padding": 12,
+      "size": [
+        418,
+        379
+      ]
+    },
+    "book_lap": {
+      "source_bbox": [
+        39,
+        932,
+        774,
+        1190
+      ],
+      "padding": 12,
+      "size": [
+        759,
+        282
+      ]
+    },
+    "body_sit": {
+      "source_bbox": [
+        429,
+        528,
+        1208,
+        1217
+      ],
+      "padding": 12,
+      "size": [
+        803,
+        713
+      ]
+    },
+    "whale_cushion": {
+      "source_bbox": [
+        67,
+        620,
+        1214,
+        1196
+      ],
+      "padding": 12,
+      "size": [
+        1171,
+        600
+      ]
+    },
+    "head_front": {
+      "source_bbox": [
+        42,
+        11,
+        780,
+        767
+      ],
+      "padding": 12,
+      "size": [
+        762,
+        780
+      ]
+    },
+    "hair_back": {
+      "source_bbox": [
+        42,
+        11,
+        780,
+        767
+      ],
+      "padding": 12,
+      "size": [
+        762,
+        780
+      ]
+    }
+  },
+  "draw_order_back_to_front": [
+    {
+      "name": "whale_cushion",
+      "pivot": [
+        -55,
+        -608
+      ],
+      "position": [
+        0,
+        -35
+      ],
+      "scale": 1,
+      "angle": 0
+    },
+    {
+      "name": "hair_back",
+      "pivot": [
+        370,
+        541
+      ],
+      "position": [
+        735,
+        555
+      ],
+      "scale": 0.85,
+      "angle": 0
+    },
+    {
+      "name": "body_sit",
+      "pivot": [
+        -417,
+        -516
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "scale": 1,
+      "angle": 0
+    },
+    {
+      "name": "head_front",
+      "pivot": [
+        370,
+        541
+      ],
+      "position": [
+        735,
+        555
+      ],
+      "scale": 0.85,
+      "angle": 0
+    },
+    {
+      "name": "book_lap",
+      "pivot": [
+        18,
+        15
+      ],
+      "position": [
+        745,
+        785
+      ],
+      "scale": 0.5,
+      "angle": 0
+    },
+    {
+      "name": "arm_far",
+      "pivot": [
+        100,
+        72
+      ],
+      "position": [
+        850,
+        620
+      ],
+      "scale": 0.6,
+      "angle": 10
+    },
+    {
+      "name": "arm_near_pen",
+      "pivot": [
+        91,
+        45
+      ],
+      "position": [
+        650,
+        615
+      ],
+      "scale": 0.55,
+      "angle": 0
+    }
+  ],
+  "status": "static assembly; animation not implemented"
+}

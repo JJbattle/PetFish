@@ -1,0 +1,172 @@
+{
+  "canvas": [
+    1280,
+    920
+  ],
+  "coordinates": "top-left origin, +y down, angles clockwise; uniform scale",
+  "source_size": [
+    1536,
+    1024
+  ],
+  "parts": {
+    "head": {
+      "source_bbox": [
+        12,
+        15,
+        642,
+        615
+      ],
+      "padding": 12,
+      "size": [
+        654,
+        624
+      ]
+    },
+    "body": {
+      "source_bbox": [
+        647,
+        61,
+        1318,
+        629
+      ],
+      "padding": 12,
+      "size": [
+        695,
+        592
+      ]
+    },
+    "arm_near": {
+      "source_bbox": [
+        1278,
+        217,
+        1515,
+        581
+      ],
+      "padding": 12,
+      "size": [
+        261,
+        388
+      ]
+    },
+    "arm_far": {
+      "source_bbox": [
+        25,
+        620,
+        365,
+        954
+      ],
+      "padding": 12,
+      "size": [
+        364,
+        358
+      ]
+    },
+    "pillow": {
+      "source_bbox": [
+        369,
+        715,
+        943,
+        969
+      ],
+      "padding": 12,
+      "size": [
+        598,
+        278
+      ]
+    },
+    "book": {
+      "source_bbox": [
+        943,
+        727,
+        1524,
+        958
+      ],
+      "padding": 12,
+      "size": [
+        605,
+        255
+      ]
+    }
+  },
+  "draw_order_back_to_front": [
+    {
+      "name": "pillow",
+      "pivot": [
+        303,
+        137
+      ],
+      "position": [
+        650,
+        660
+      ],
+      "scale": 1.3,
+      "angle": 0
+    },
+    {
+      "name": "body",
+      "pivot": [
+        105,
+        315
+      ],
+      "position": [
+        540,
+        500
+      ],
+      "scale": 0.9,
+      "angle": 0
+    },
+    {
+      "name": "book",
+      "pivot": [
+        299,
+        160
+      ],
+      "position": [
+        440,
+        750
+      ],
+      "scale": 0.9,
+      "angle": 0
+    },
+    {
+      "name": "arm_far",
+      "pivot": [
+        282,
+        77
+      ],
+      "position": [
+        380,
+        525
+      ],
+      "scale": 0.7,
+      "angle": -15
+    },
+    {
+      "name": "arm_near",
+      "pivot": [
+        154,
+        75
+      ],
+      "position": [
+        600,
+        520
+      ],
+      "scale": 0.8,
+      "angle": 25
+    },
+    {
+      "name": "head",
+      "pivot": [
+        320,
+        472
+      ],
+      "position": [
+        515,
+        505
+      ],
+      "scale": 0.7,
+      "angle": 0
+    }
+  ],
+  "status": "static assembly; no animation implemented"
+}
