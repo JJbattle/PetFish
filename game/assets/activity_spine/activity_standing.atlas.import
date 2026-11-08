@@ -1,0 +1,16 @@
+[remap]
+
+importer="spine.atlas"
+type="SpineAtlasResource"
+uid="uid://deq2bhpukfywu"
+path="res://.godot/imported/activity_standing.atlas-f2208eedc9c8a9f85e9c335b330f814e.spatlas"
+
+[deps]
+
+source_file="res://assets/activity_spine/activity_standing.atlas"
+dest_files=["res://.godot/imported/activity_standing.atlas-f2208eedc9c8a9f85e9c335b330f814e.spatlas"]
+
+[params]
+
+normal_map_prefix="n"
+specular_map_prefix="s"

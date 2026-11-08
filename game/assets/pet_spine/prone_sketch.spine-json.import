@@ -1,0 +1,14 @@
+[remap]
+
+importer="spine.json"
+type="SpineSkeletonFileResource"
+uid="uid://cmin24bmo26ol"
+path="res://.godot/imported/prone_sketch.spine-json-6168af6582a9133f575017fa22b51dcc.spjson"
+
+[deps]
+
+source_file="res://assets/pet_spine/prone_sketch.spine-json"
+dest_files=["res://.godot/imported/prone_sketch.spine-json-6168af6582a9133f575017fa22b51dcc.spjson"]
+
+[params]
+

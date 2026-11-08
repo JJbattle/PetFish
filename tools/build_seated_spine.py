@@ -1,6 +1,6 @@
 """Build a standalone Spine rig for the seated whale-cushion writing pose.
 
-Reads the seven `assets/art/whale_seated_work_v1/kit/` attachments and their
+Reads the seven `assets/art/whale_seated_work_v2/kit/` attachments and their
 static assembly manifest (`assembly.json`), packs them into one atlas, and emits
 a Spine 4.2 JSON carrying a single `seat_work_loop` writing cycle.
 
@@ -44,7 +44,7 @@ import json
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / 'assets/art/whale_seated_work_v1' / 'kit'
+SRC = ROOT / 'assets/art/whale_seated_work_v2' / 'kit'
 OUT = ROOT / 'tools/_debug/seated_spine'
 
 GUTTER = 2
@@ -53,22 +53,18 @@ CANVAS = (1280, 1280)
 
 # name -> (pivot, position, scale, angle).  Pivot is in the padded cutout PNG,
 # position is canvas coords (top-left origin, +y down), angle is clockwise.
-ASSEMBLY = [
-    ('whale_cushion', (-55, -608), (0, -35),   1.00, 0),
-    ('hair_back',     (370, 541),  (735, 555), 0.85, 0),
-    ('body_sit',      (-417, -516), (0, 0),    1.00, 0),
-    ('head_front',    (370, 541),  (735, 555), 0.85, 0),
-    ('book_lap',      (18, 15),    (745, 785), 0.50, 0),
-    ('arm_far',       (100, 72),   (850, 620), 0.60, 10),
-    ('arm_near_pen',  (91, 45),    (650, 615), 0.55, 0),
-]
+with (SRC / 'assembly.json').open(encoding='utf-8') as source:
+    layers = json.load(source)['draw_order_back_to_front']
+ASSEMBLY = [(row['name'], row['pivot'], row['position'], row['scale'], row['angle'])
+            for row in layers]
+
 
 # Piece -> bone name (head_front and hair_back share one bone so the hair seam
 # cannot drift; body_sit is renamed to sit_body like the rest rig).
 def bone_of(name: str) -> str:
     if name == 'body_sit':
         return 'sit_body'
-    if name in ('head_front', 'hair_back'):
+    if name in ('head_sit', 'chin'):
         return 'sit_head'
     return name
 
@@ -185,8 +181,11 @@ def build(out_dir: Path = OUT):
     # Parents must precede their children in the bone array.
     by_name = {row[0]: row for row in ASSEMBLY}
     bones = [{'name': 'root'}]
-    for name in ('body_sit', 'whale_cushion', 'hair_back', 'book_lap', 'arm_far', 'arm_near_pen'):
+    for name in ('body_sit', 'whale_cushion', 'head_sit', 'book_lap', 'arm_far', 'arm_near_pen'):
         _pivot, position, _scale, angle = by_name[name][1:]
+        if parent_of(name) == 'sit_body':
+            bx, by = by_name['body_sit'][2]
+            position = (position[0] - bx, position[1] - by)
         bones.append({'name': bone_of(name), 'parent': parent_of(name),
                       'x': round(position[0], 3), 'y': round(-position[1], 3),
                       'rotation': round(-angle, 3)})

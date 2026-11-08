@@ -15,7 +15,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT = ROOT / 'tools/_debug/prone_preview_proj'
 PRONE_SPINE = ROOT / 'tools/_debug/prone_spine'
-REFERENCE = ROOT / 'assets/art/prone_reading_v2/kit/assembled.png'
+REFERENCE = ROOT / 'assets/art/prone_reading_v3/kit/assembled.png'
 
 CANVAS = (1536, 1024)
 

@@ -24,6 +24,7 @@ const TYPE_HOLD := 2.4
 
 var _font: Font
 var _reminders: Node
+var _deepseek: Node
 ## Seconds left of "the user is writing something into a field".
 var _typing := 0.0
 
@@ -49,6 +50,9 @@ var _memo_title_edit: LineEdit
 var _memo_detail_edit: LineEdit
 var _memo_date_edit: LineEdit
 
+var _api_key_edit: LineEdit
+var _api_key_status: Label
+
 var _hint: Label
 var _hint_timer := 0.0
 var _loading := false
@@ -56,9 +60,10 @@ var _reload_queued := false
 var _refresh_accum := 0.0
 
 
-func setup(font: Font, reminders: Node) -> void:
+func setup(font: Font, reminders: Node, deepseek: Node) -> void:
 	_font = font
 	_reminders = reminders
+	_deepseek = deepseek
 	_build()
 	_watch_typing(self)
 	reload()
@@ -121,6 +126,7 @@ func _build() -> void:
 	_build_sit(_tab("久坐"))
 	_build_alarm(_tab("闹钟"))
 	_build_memo(_tab("备忘"))
+	_build_chat(_tab("AI 聊天"))
 
 	_hint = _label("", 12, C_WARN)
 	_hint.position = Vector2(14, size.y - 20)
@@ -283,6 +289,26 @@ func _build_memo(box: VBoxContainer) -> void:
 	box.add_child(_memo_list)
 
 
+func _build_chat(box: VBoxContainer) -> void:
+	box.add_child(_label("大肥鱼聊天用 DeepSeek，需要一个 API 密钥", 12, C_DIM))
+	box.add_child(_label("到 platform.deepseek.com 申请，把 sk- 开头的密钥粘贴到下面", 12, C_DIM))
+
+	_api_key_edit = _edit("粘贴 DeepSeek 密钥（sk-…）", 0)
+	_api_key_edit.secret = true
+	_api_key_edit.context_menu_enabled = false
+	_api_key_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	box.add_child(_api_key_edit)
+
+	_api_key_status = _label("尚未配置密钥", 12, C_DIM)
+	box.add_child(_api_key_status)
+
+	var save := _button("保存密钥", 13, Vector2(0, 30))
+	save.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	save.pressed.connect(_on_save_api_key)
+	box.add_child(save)
+	box.add_child(_label("保存后密钥会隐藏，无法再查看或复制", 11, C_DIM))
+
+
 # ---------------------------------------------------------------- actions
 
 
@@ -308,6 +334,28 @@ func _on_add_memo() -> void:
 	_memo_detail_edit.text = ""
 	_memo_date_edit.text = ""
 	_show_hint("备忘已添加", C_OK)
+
+
+func _on_save_api_key() -> void:
+	var key: String = _api_key_edit.text.strip_edges()
+	if key == "":
+		_show_hint("先粘贴密钥再保存", C_WARN)
+		return
+	_deepseek.set_api_key(key)
+	_api_key_edit.text = ""
+	_update_key_status()
+	_show_hint("密钥已保存，现在就能和大肥鱼聊天", C_OK)
+
+
+func _update_key_status() -> void:
+	if _api_key_status == null:
+		return
+	if _deepseek != null and _deepseek.has_key():
+		_api_key_status.text = "已配置密钥 · 已隐藏，无法查看"
+		_api_key_status.add_theme_color_override("font_color", C_OK)
+	else:
+		_api_key_status.text = "尚未配置密钥"
+		_api_key_status.add_theme_color_override("font_color", C_DIM)
 
 
 func _setter(kind: String, value) -> void:
@@ -355,6 +403,7 @@ func reload() -> void:
 	_rebuild_alarms()
 	_rebuild_memos()
 	_loading = false
+	_update_key_status()
 
 
 func _update_sit_label() -> void:

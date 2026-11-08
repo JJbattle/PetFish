@@ -25,6 +25,11 @@ func visible_hands() -> int:
 		var slot = pet._rig.get_skeleton().find_slot(name)
 		if slot.get_attachment() != null and slot.get_color().a > 0.01:
 			count += 2 if name in ["drink_arms", "work_arms"] else 1
+	for side in ["l", "r"]:
+		var slot = pet._rig.get_skeleton().find_slot("arm_up_" + side + "_front")
+		var arm = slot.get_attachment()
+		if arm != null and arm.get_attachment_name() == "wave_" + side and slot.get_color().a > 0.01:
+			count += 1
 	return count
 
 

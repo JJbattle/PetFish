@@ -91,6 +91,11 @@ def _parse():
 
 
 def main():
+    # The console may be a GBK codepage; Godot logs UTF-8 and test output can
+    # contain emoji (e.g. the 💬 chat prompt), so don't crash printing the tail.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, 'reconfigure'):
+            stream.reconfigure(errors='replace')
     timeout, log_path, cmd = _parse()
     os.makedirs(STATE_DIR, exist_ok=True)
 

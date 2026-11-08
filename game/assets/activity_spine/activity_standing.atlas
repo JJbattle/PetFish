@@ -1,0 +1,173 @@
+activity_standing.png
+size: 2048,1768
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+common/hair_back
+  rotate: false
+  xy: 0, 0
+  size: 612, 630
+  orig: 612, 630
+  offset: 0, 0
+  index: -1
+common/tail
+  rotate: false
+  xy: 938, 1536
+  size: 207, 130
+  orig: 207, 130
+  offset: 0, 0
+  index: -1
+standing/bodice
+  rotate: false
+  xy: 966, 1084
+  size: 353, 330
+  orig: 353, 330
+  offset: 0, 0
+  index: -1
+standing/skirt
+  rotate: false
+  xy: 1321, 1084
+  size: 353, 330
+  orig: 353, 330
+  offset: 0, 0
+  index: -1
+arm_l
+  rotate: false
+  xy: 336, 1536
+  size: 121, 213
+  orig: 121, 213
+  offset: 0, 0
+  index: -1
+standing/arm_open_l
+  rotate: false
+  xy: 459, 1536
+  size: 169, 213
+  orig: 169, 213
+  offset: 0, 0
+  index: -1
+arm_r
+  rotate: false
+  xy: 630, 1536
+  size: 122, 213
+  orig: 122, 213
+  offset: 0, 0
+  index: -1
+standing/arm_open_r
+  rotate: false
+  xy: 754, 1536
+  size: 182, 213
+  orig: 182, 213
+  offset: 0, 0
+  index: -1
+common/head_front
+  rotate: false
+  xy: 614, 0
+  size: 497, 450
+  orig: 497, 450
+  offset: 0, 0
+  index: -1
+common/head_closed
+  rotate: false
+  xy: 1113, 0
+  size: 500, 450
+  orig: 500, 450
+  offset: 0, 0
+  index: -1
+common/head_turn_left
+  rotate: false
+  xy: 0, 632
+  size: 476, 450
+  orig: 476, 450
+  offset: 0, 0
+  index: -1
+common/head_turn_right
+  rotate: false
+  xy: 478, 632
+  size: 477, 450
+  orig: 477, 450
+  offset: 0, 0
+  index: -1
+extra/head_left_step1
+  rotate: false
+  xy: 957, 632
+  size: 493, 450
+  orig: 493, 450
+  offset: 0, 0
+  index: -1
+extra/head_left_step2
+  rotate: false
+  xy: 1452, 632
+  size: 466, 450
+  orig: 466, 450
+  offset: 0, 0
+  index: -1
+extra/head_right_step1
+  rotate: false
+  xy: 0, 1084
+  size: 488, 450
+  orig: 488, 450
+  offset: 0, 0
+  index: -1
+extra/head_right_step2
+  rotate: false
+  xy: 490, 1084
+  size: 474, 450
+  orig: 474, 450
+  offset: 0, 0
+  index: -1
+leg_l
+  rotate: false
+  xy: 1676, 1084
+  size: 82, 230
+  orig: 82, 230
+  offset: 0, 0
+  index: -1
+leg_heel_l
+  rotate: false
+  xy: 1760, 1084
+  size: 82, 230
+  orig: 82, 230
+  offset: 0, 0
+  index: -1
+leg_r
+  rotate: false
+  xy: 1844, 1084
+  size: 82, 230
+  orig: 82, 230
+  offset: 0, 0
+  index: -1
+leg_heel_r
+  rotate: false
+  xy: 1928, 1084
+  size: 82, 230
+  orig: 82, 230
+  offset: 0, 0
+  index: -1
+shoe_l
+  rotate: false
+  xy: 0, 1536
+  size: 82, 230
+  orig: 82, 230
+  offset: 0, 0
+  index: -1
+heel_l
+  rotate: false
+  xy: 84, 1536
+  size: 82, 230
+  orig: 82, 230
+  offset: 0, 0
+  index: -1
+shoe_r
+  rotate: false
+  xy: 168, 1536
+  size: 82, 230
+  orig: 82, 230
+  offset: 0, 0
+  index: -1
+heel_r
+  rotate: false
+  xy: 252, 1536
+  size: 82, 230
+  orig: 82, 230
+  offset: 0, 0
+  index: -1

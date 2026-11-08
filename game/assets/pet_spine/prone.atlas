@@ -1,33 +1,68 @@
 prone.png
-size: 2048,1127
+size: 2048,1729
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-reading
-  rotate: false
-  xy: 0, 0
-  size: 1510, 986
-  orig: 1510, 986
-  offset: 0, 0
-  index: -1
 fluke
   rotate: false
-  xy: 1512, 0
-  size: 301, 207
-  orig: 301, 207
+  xy: 0, 1575
+  size: 227, 152
+  orig: 227, 152
   offset: 0, 0
   index: -1
 shoe_far
   rotate: false
-  xy: 0, 988
-  size: 170, 137
-  orig: 170, 137
+  xy: 350, 1575
+  size: 94, 80
+  orig: 94, 80
   offset: 0, 0
   index: -1
 shoe_near
   rotate: false
-  xy: 1815, 0
-  size: 192, 155
-  orig: 192, 155
+  xy: 229, 1575
+  size: 119, 108
+  orig: 119, 108
+  offset: 0, 0
+  index: -1
+whale_cushion
+  rotate: false
+  xy: 0, 973
+  size: 1171, 600
+  orig: 1171, 600
+  offset: 0, 0
+  index: -1
+reading_base
+  rotate: false
+  xy: 0, 0
+  size: 1406, 971
+  orig: 1406, 971
+  offset: 0, 0
+  index: -1
+eyes_neutral
+  rotate: false
+  xy: 1173, 973
+  size: 426, 190
+  orig: 426, 190
+  offset: 0, 0
+  index: -1
+eyes_happy
+  rotate: false
+  xy: 1601, 973
+  size: 426, 190
+  orig: 426, 190
+  offset: 0, 0
+  index: -1
+mouth_neutral
+  rotate: false
+  xy: 446, 1575
+  size: 99, 51
+  orig: 99, 51
+  offset: 0, 0
+  index: -1
+mouth_happy
+  rotate: false
+  xy: 547, 1575
+  size: 99, 51
+  orig: 99, 51
   offset: 0, 0
   index: -1

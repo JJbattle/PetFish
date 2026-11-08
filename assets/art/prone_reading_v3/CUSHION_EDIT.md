@@ -1,0 +1,5 @@
+# 趴读换鲸鱼垫
+
+内置 imagegen 局部去除旧枕头。character_without_cushion.png 保留原画的表情和四肢配准。靠垫 PNG 与坐姿字节相同。
+
+Surgical local transparent removal only on the supplied 1536x1024 layered puppet reference: remove the ENTIRE light blue puffy cloud-shaped pillow from underneath the prone blue-haired maid's chest and arms. Replace it with fully transparent empty space (it will be replaced later with a separate cushion sprite). ONLY where it meets the body reconstruct a tiny rim of her dress, hair, collar or sleeve along the newly exposed boundary. Keep face, hair, neutral expression, all existing navy sleeve and cream ruffles, BOTH original hands holding left and right book edges, entire open book, body, feet, fluke, all proportions and exact positions untouched. Retain the short original body. The resulting pose should have visible empty transparent cutouts between chest, arms and book and below the viewer-right forearm; do not insert any other furniture, shadow, cloth, object or ground. Pixel registered local retouch: preserve frame and size/coordinates of every other region. One transparent PNG.

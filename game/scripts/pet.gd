@@ -10,9 +10,13 @@ const TranscriptTail = preload("res://scripts/transcript_tail.gd")
 const Silhouette = preload("res://scripts/silhouette.gd")
 const Reminders = preload("res://scripts/reminders.gd")
 const SettingsPanel = preload("res://scripts/settings_panel.gd")
+const ChatPanel = preload("res://scripts/chat_panel.gd")
+const Deepseek = preload("res://scripts/deepseek.gd")
+const GitFeed = preload("res://scripts/git_feed.gd")
+const ActivitySession = preload("res://scripts/activity_session.gd")
 
-const STATE_DIR := "I:/PetFish/state"
-const CONFIG_PATH := "I:/PetFish/window.json"
+const STATE_DIR := "res://../state"
+const CONFIG_PATH := "user://window.json"
 const FONT_PATH := "C:/Windows/Fonts/msyh.ttc"
 const RIG_SILHOUETTE_PATH := "res://assets/pet_spine/pet_silhouette.png"
 const RIG_JSON_PATH := "res://assets/pet_spine/pet.spine-json"
@@ -28,13 +32,26 @@ const PET_CENTER_X := 168.0
 const POLL_INTERVAL := 0.5
 const HOVER_GRACE := 0.25
 const SLACK_AFTER := 600.0
+# Slack "偷着乐" beat: while she reads prone, the face flips to the happy eye and
+# mouth attachments for a short stretch, then back to neutral, on a randomized
+# cooldown.  The read loop keeps running underneath so the body never stops; only
+# the prone rig's two face slots change (docs/ART_BRIEF_HAPPY_EXPRESSION.md).
+const HAPPY_BEAT_MIN := 2.0
+const HAPPY_BEAT_MAX := 3.0
+const HAPPY_COOLDOWN_MIN := 24.0
+const HAPPY_COOLDOWN_MAX := 42.0
+# Slack alternates between the reading pose and the "doodle the whale" sketch
+# pose every SLACK_SWITCH_MIN..MAX seconds, so 摸鱼 has a little variety.  The
+# sketch rig's face is baked in, so the happy-beat only runs while reading.
+const SLACK_SWITCH_MIN := 25.0
+const SLACK_SWITCH_MAX := 55.0
 const NOTICE_SECS := 8.0
 # Bubble / card positions are derived from the pet's live on-screen box in
 # _layout_ui(), so they track PET_TARGET_H instead of being hard-coded for one
 # size (the 170 px pet sits lower than the old 340 px one, so fixed rects drift).
-## Right-click menu size: five 30 px buttons plus padding.  Also used to clamp
+## Right-click menu size: six 30 px buttons plus padding.  Also used to clamp
 ## its top so the taller menu still fits inside WIN_SIZE.
-const MENU_SIZE := Vector2(150, 186)
+const MENU_SIZE := Vector2(150, 218)
 
 # Geometry of the rig's visible content, measured from a setup-pose capture:
 # source alpha bbox and the node-local origin it maps from.  The rig is 1:1
@@ -53,11 +70,31 @@ const SEATED_SILHOUETTE_PATH := "res://assets/pet_spine/seated_silhouette.png"
 const PRONE_JSON_PATH := "res://assets/pet_spine/prone.spine-json"
 const PRONE_ATLAS_PATH := "res://assets/pet_spine/prone.atlas"
 const PRONE_SILHOUETTE_PATH := "res://assets/pet_spine/prone_silhouette.png"
+const PRONE_SKETCH_JSON_PATH := "res://assets/pet_spine/prone_sketch.spine-json"
+const PRONE_SKETCH_ATLAS_PATH := "res://assets/pet_spine/prone_sketch.atlas"
+const PRONE_SKETCH_SILHOUETTE_PATH := "res://assets/pet_spine/prone_sketch_silhouette.png"
+# The follow-along rig is authored in y-up world coords (spine-godot flips y), so
+# its node-local content sits in a 1024x1024 box just like seated/prone, and the
+# same origin-ZERO placement applies.
+const ACTIVITY_JSON_PATH := "res://assets/activity_spine/activity_standing.spine-json"
+const ACTIVITY_ATLAS_PATH := "res://assets/activity_spine/activity_standing.atlas"
+const ACTIVITY_SILHOUETTE_PATH := "res://assets/activity_spine/activity_standing_silhouette.png"
+const ACTIVITY_SRC_BBOX := Rect2i(225, 65, 589, 848)
+const ACTIVITY_CANVAS := Vector2(1024, 1024)
 
-const SEATED_SRC_BBOX := Rect2i(67, 105, 1147, 1112)
+const SEATED_SRC_BBOX := Rect2i(275, 108, 780, 798)
 const SEATED_CANVAS := Vector2(1280, 1280)
-const PRONE_SRC_BBOX := Rect2i(0, 17, 1536, 980)
+const PRONE_SRC_BBOX := Rect2i(25, 78, 1448, 914)
 const PRONE_CANVAS := Vector2(1536, 1024)
+const PRONE_SKETCH_SRC_BBOX := Rect2i(29, 32, 1506, 979)
+const PRONE_SKETCH_CANVAS := Vector2(1600, 1040)
+# Head-height rescale (docs/POSE_HEAD_SCALE.md): the standing source head is
+# 355 px tall, seated 379 px, prone 528 px.  Scale seated/prone by 355/head so
+# every pose's head lands at the same ~74 px on screen; the props (book, pillow,
+# whale cushion) scale with the whole rig once.
+const SEATED_HEAD_RATIO := 355.0 / 379.0
+const PRONE_HEAD_RATIO := 355.0 / 528.0
+const PRONE_SKETCH_HEAD_RATIO := 355.0 / 557.0
 const RIG_FADE_SPEED := 12.0
 
 # drink chain: 100 / 250 / 500 ml -> 1 / 2 / 3 sips.  Clip lengths live in the
@@ -78,6 +115,8 @@ var _font: Font
 var _rig: SpineSprite
 var _rig_seated: SpineSprite
 var _rig_prone: SpineSprite
+var _rig_prone_sketch: SpineSprite
+var _rig_activity: SpineSprite
 ## The three pose rigs and the fade that swaps between pose families.  Each rig
 ## keeps its own silhouette for hit-testing and the Windows draw region.
 var _rigs := {}
@@ -116,11 +155,42 @@ var _reminders
 var _settings
 var _settings_rect := Rect2()
 var _settings_open := false
+var _chat_panel
+var _deepseek
+var _feed
+var _chat_rect := Rect2()
+var _chat_open := false
+## True when the panel was opened by a plain notice (not a reminder) and should
+## close itself again once `_notice_timer` runs out.
+var _chat_auto_close := false
+## The collapsed bubble is the chat entry in every state.  `_bubble_speech` is the
+## last assistant reply, `_bubble_notice` the pending reminder line; the bubble
+## shows whichever is current, else live working progress, else the idle prompt.
+var _bubble_speech := ""
+var _bubble_notice := ""
+## Weekly feed sync: `_feed_pending` means new content is waiting for the user to
+## click the bubble (their consent); `_feed_text` is what to reveal on that click.
+var _feed_pending := false
+var _feed_text := ""
 var _chime: AudioStreamPlayer
 
-var _notice_text := ""
 var _notice_timer := 0.0
 var _attention_clip := ""
+## The kind of the pending reminder ("water"/"sit"/"alarm"/"memo"/"").  Water and
+## sit act from the bubble (their prompt + action live in a small card above it);
+## alarm and memo keep the chat card's top banner.
+var _notice_kind := ""
+## The small action card shown for a water/sit reminder, so the user can log water
+## or start the follow-along without opening the chat card at all.
+var _notice_card: Panel
+var _notice_card_box: VBoxContainer
+var _notice_card_rect := Rect2()
+## Follow-along session: `_activity` owns timing/config, `_activity_active` means
+## the activity rig owns the stage (blocking the normal state/chain/present logic).
+var _activity
+var _activity_active := false
+var _activity_bar_accum := 0.0
+var _activity_bar_title: Label
 # The active chain and the queue of things waiting for it are separate: a
 # reminder that arrives mid-sip waits its turn instead of cutting the sip, and
 # two identical reminders collapse into one.
@@ -145,6 +215,15 @@ var _entry: Dictionary = {}
 var _state := "idle"
 var _state_age := 0.0
 var _t := 0.0
+# Happy-beat state for the prone (slack) rig: `_happy` is whether the face is on
+# the happy attachments right now, and `_happy_timer` counts down to the next
+# flip (beat length while happy, cooldown while neutral).
+var _happy := false
+var _happy_timer := 0.0
+# Slack pose alternation: `_slack_sketching` flips between the reading and
+# sketch rigs; `_slack_switch_timer` counts down to the next flip.
+var _slack_sketching := false
+var _slack_switch_timer := 0.0
 var _poll_accum := 0.0
 var _save_accum := 0.0
 var _hover := false
@@ -167,10 +246,13 @@ func _ready() -> void:
 	_load_font()
 	_load_pet()
 	_build_ui()
-	_store = StatusStore.new("user://preview_state" if test_window else STATE_DIR)
+	_store = StatusStore.new("user://preview_state" if test_window else ProjectSettings.globalize_path(STATE_DIR))
 	_tail = TranscriptTail.new()
 	_setup_reminders()
+	_setup_feed()
 	_load_config()
+	_happy_timer = randf_range(HAPPY_COOLDOWN_MIN, HAPPY_COOLDOWN_MAX)
+	_slack_switch_timer = randf_range(SLACK_SWITCH_MIN, SLACK_SWITCH_MAX)
 	_refresh_status()
 	_update_passthrough()
 
@@ -202,19 +284,33 @@ func _load_font() -> void:
 
 func _load_pet() -> void:
 	var target_h := _target_height()
+	# The three poses are authored at different source sizes, so feeding each the
+	# same `target_h` would draw their heads at different screen sizes.  Rescale
+	# seated/prone by the head-height ratios above; `_make_rig` then divides by
+	# the pose's own bbox height, so this nets out to the desired whole-rig scale.
+	var standing_scale := target_h / float(RIG_SRC_BBOX.size.y)
+	var seated_h := float(SEATED_SRC_BBOX.size.y) * standing_scale * SEATED_HEAD_RATIO
+	var prone_h := float(PRONE_SRC_BBOX.size.y) * standing_scale * PRONE_HEAD_RATIO
+	var prone_sketch_h := float(PRONE_SKETCH_SRC_BBOX.size.y) * standing_scale * PRONE_SKETCH_HEAD_RATIO
 
 	_rig = _make_rig(RIG_JSON_PATH, RIG_ATLAS_PATH, RIG_SRC_BBOX, RIG_LOCAL_ORIGIN, target_h)
 	if _rig == null:
 		push_error("pet: could not load the standing Spine rig")
 		return
-	_rig_seated = _make_rig(SEATED_JSON_PATH, SEATED_ATLAS_PATH, SEATED_SRC_BBOX, Vector2.ZERO, target_h)
-	_rig_prone = _make_rig(PRONE_JSON_PATH, PRONE_ATLAS_PATH, PRONE_SRC_BBOX, Vector2.ZERO, target_h)
+	_rig_seated = _make_rig(SEATED_JSON_PATH, SEATED_ATLAS_PATH, SEATED_SRC_BBOX, Vector2.ZERO, seated_h)
+	_rig_prone = _make_rig(PRONE_JSON_PATH, PRONE_ATLAS_PATH, PRONE_SRC_BBOX, Vector2.ZERO, prone_h)
+	_rig_prone_sketch = _make_rig(PRONE_SKETCH_JSON_PATH, PRONE_SKETCH_ATLAS_PATH, PRONE_SKETCH_SRC_BBOX, Vector2.ZERO, prone_sketch_h)
+	_rig_activity = _make_rig(ACTIVITY_JSON_PATH, ACTIVITY_ATLAS_PATH, ACTIVITY_SRC_BBOX, Vector2.ZERO, target_h)
 
 	_rigs = {"standing": _rig}
 	if _rig_seated != null:
 		_rigs["seated"] = _rig_seated
 	if _rig_prone != null:
 		_rigs["prone"] = _rig_prone
+	if _rig_prone_sketch != null:
+		_rigs["prone_sketch"] = _rig_prone_sketch
+	if _rig_activity != null:
+		_rigs["activity"] = _rig_activity
 	for rig in _rigs.values():
 		rig.z_index = 0
 		add_child(rig)
@@ -227,12 +323,14 @@ func _load_pet() -> void:
 		"standing": _load_silhouette(RIG_SILHOUETTE_PATH),
 		"seated": _load_silhouette(SEATED_SILHOUETTE_PATH),
 		"prone": _load_silhouette(PRONE_SILHOUETTE_PATH),
+		"prone_sketch": _load_silhouette(PRONE_SKETCH_SILHOUETTE_PATH),
+		"activity": _load_silhouette(ACTIVITY_SILHOUETTE_PATH),
 	}
 	if _sil_images["standing"] == null:
 		_sil_images["standing"] = _placeholder_silhouette()
 	# A missing seated/prone silhouette falls back to the standing union, which
 	# is large enough to avoid clipping (it just hit-tests a little loosely).
-	for rig_name in ["seated", "prone"]:
+	for rig_name in ["seated", "prone", "prone_sketch", "activity"]:
 		if _sil_images[rig_name] == null:
 			_sil_images[rig_name] = _sil_images["standing"]
 	_sil_rects = {}
@@ -242,6 +340,10 @@ func _load_pet() -> void:
 				_sil_rects[rig_name] = _sil_rect_for(_rig_seated, Vector2.ZERO, SEATED_CANVAS)
 			"prone":
 				_sil_rects[rig_name] = _sil_rect_for(_rig_prone, Vector2.ZERO, PRONE_CANVAS)
+			"prone_sketch":
+				_sil_rects[rig_name] = _sil_rect_for(_rig_prone_sketch, Vector2.ZERO, PRONE_SKETCH_CANVAS)
+			"activity":
+				_sil_rects[rig_name] = _sil_rect_for(_rig_activity, Vector2.ZERO, ACTIVITY_CANVAS)
 			_:
 				_sil_rects[rig_name] = _sil_rect_for(_rig, RIG_LOCAL_ORIGIN, Vector2(1024, 1024))
 	_pet_image = _sil_images["standing"]
@@ -355,19 +457,28 @@ func _layout_ui() -> void:
 	# character's 1:1 content box (top = hairline, end.x = rightmost pixel).
 	var head_top := _pet_rect.position.y
 	var col_x := _pet_rect.end.x + 24.0
-	# Bubble floats just above the head; its tail (drawn in _draw) points at it.
-	_bubble_rect = Rect2(PET_CENTER_X - 150.0, head_top - 67.0, 300.0, 52.0)
-	# Cards sit in a right-hand column clear of the pet (which turns to present),
-	# and start below the bubble so its tail is never covered by a card corner.
+	# The collapsed chat bubble floats just above the head and stops short of the
+	# right-hand cards (the info card + menu still show on hover and must not
+	# cover it), so it is narrower than the old 300 px progress bubble.
+	_bubble_rect = Rect2(8.0, head_top - 67.0, minf(300.0, col_x - 16.0), 52.0)
+	# The reminder action card floats above the bubble; water (3 amounts + 稍后)
+	# and sit (跟练/已活动/稍后) both fit in this fixed height.
+	_notice_card_rect = Rect2(8.0, maxf(6.0, _bubble_rect.position.y - 206.0),
+		minf(270.0, col_x - 16.0), 200.0)
+	# The menu and settings cards sit in a right-hand column clear of the pet
+	# (which turns to present); the menu starts below the bubble's tail.
 	var card_top := maxf(head_top - 20.0, _bubble_rect.end.y + 6.0)
-	# The info card is text only: five short lines, and the widest one ("喝水
-	# 1500 / 1500 ml · 久坐 120 分钟") measures 218 px at 12 px.  256 px leaves
-	# the 226 px the labels need plus padding, 40% narrower than the old 428.
-	_panel_rect = Rect2(col_x, card_top, 256.0, 142.0)
+	# The info card lives in the right-hand column, stacked just above the menu,
+	# so the head-top stays clear for the chat bubble / chat card alone.  While it
+	# is up, the one-line bubble hides (see _refresh_texts) so they never overlap.
+	_panel_rect = Rect2(col_x, card_top - 142.0 - 8.0, 256.0, 142.0)
 	# The menu is taller than the info card, so clamp it to stay on screen.
 	_menu_pos = Vector2(col_x, minf(card_top, WIN_SIZE.y - MENU_SIZE.y - 6.0))
 	# The settings card holds real controls, so it keeps the full column width.
 	_settings_rect = Rect2(col_x, 14.0, 428.0, 452.0)
+	# The chat card (input + history + reminders) floats above the head in the
+	# bubble's old spot; the right-hand column keeps only the settings card.
+	_chat_rect = Rect2(PET_CENTER_X - 160.0, maxf(6.0, head_top - 300.0), 320.0, 290.0)
 
 
 func _build_ui() -> void:
@@ -382,8 +493,22 @@ func _build_ui() -> void:
 	_bubble_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_bubble_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 	_bubble_label.max_lines_visible = 2
-	_bubble_label.text = "打盹中…"
+	_bubble_label.text = "💬 和大肥鱼聊聊…"
+	# The bubble is the collapsed chat entry: always up unless the chat card is
+	# open, showing a pending reminder, live working progress, or the last reply.
+	_bubble.visible = false
 	add_child(_bubble)
+
+	# The reminder action card (water amounts / sit follow-along) is a sibling of
+	# the bubble, rebuilt each time a water/sit reminder fires.
+	_notice_card = _make_panel(_notice_card_rect)
+	_notice_card.visible = false
+	_notice_card_box = VBoxContainer.new()
+	_notice_card_box.position = Vector2(12.0, 9.0)
+	_notice_card_box.size = _notice_card_rect.size - Vector2(24.0, 18.0)
+	_notice_card_box.add_theme_constant_override("separation", 4)
+	_notice_card.add_child(_notice_card_box)
+	add_child(_notice_card)
 
 	_panel = _make_panel(_panel_rect)
 	_panel.visible = false
@@ -402,9 +527,11 @@ func _build_ui() -> void:
 	menu_box.size = Vector2(MENU_SIZE.x - 24.0, MENU_SIZE.y - 18.0)
 	menu_box.add_theme_constant_override("separation", 4)
 	_menu.add_child(menu_box)
+
 	for item in [
 		["喝水打卡", "water"],
 		["提醒设置", "settings"],
+		["检查更新", "feed"],
 		["切换会话", "cycle"],
 		["取消固定", "unpin"],
 		["退出", "quit"],
@@ -419,6 +546,25 @@ func _build_ui() -> void:
 		button.pressed.connect(_on_menu_action.bind(item[1]))
 		menu_box.add_child(button)
 	add_child(_menu)
+
+	_chat_panel = ChatPanel.new()
+	_chat_panel.name = "Chat"
+	_chat_panel.position = _chat_rect.position
+	_chat_panel.size = _chat_rect.size
+	_chat_panel.visible = false
+	_chat_panel.setup(_font)
+	_chat_panel.closed.connect(_on_chat_closed)
+	_chat_panel.send.connect(_on_chat_send)
+	_chat_panel.dismissed.connect(_on_reminder_dismissed)
+	_chat_panel.collapse.connect(_close_chat)
+	add_child(_chat_panel)
+
+	_deepseek = Deepseek.new()
+	_deepseek.name = "Deepseek"
+	if test_window:
+		_deepseek.secrets_path = "user://preview_secrets_%d.json" % OS.get_process_id()
+	_deepseek.chat_reply.connect(_on_chat_reply)
+	add_child(_deepseek)
 
 
 # ---------------------------------------------------------------- reminders
@@ -441,13 +587,55 @@ func _setup_reminders() -> void:
 	_settings.size = _settings_rect.size
 	_settings.visible = false
 	add_child(_settings)
-	_settings.setup(_font, _reminders)
+	_settings.setup(_font, _reminders, _deepseek)
 	_settings.closed.connect(_close_settings)
 
 	_chime = AudioStreamPlayer.new()
 	_chime.stream = _build_chime()
 	_chime.volume_db = -7.0
 	add_child(_chime)
+
+
+func _setup_feed() -> void:
+	_feed = GitFeed.new()
+	_feed.name = "GitFeed"
+	if test_window:
+		_feed.data_path = "user://preview_feed_%d.json" % OS.get_process_id()
+	add_child(_feed)
+	if test_window:
+		_feed.set_process(false)
+	_feed.feed_ready.connect(_on_feed_ready)
+	_feed.feed_checked.connect(_on_feed_checked)
+
+
+## New weekly content arrived: prompt in the bubble only (no card, no pose
+## change).  The user consents by clicking the bubble, which reveals the content.
+func _on_feed_ready(text: String) -> void:
+	_feed_text = text
+	_feed_pending = true
+	_refresh_texts()
+
+
+## A manual "检查更新" finished with nothing new (or a transient failure).  It is
+## an informational line in the chat card, never the reminder banner, so it never
+## clobbers a pending alarm/memo.
+func _on_feed_checked(message: String) -> void:
+	if not _chat_open:
+		_open_chat(false)
+	_chat_panel.notice(message)
+	_notice_timer = NOTICE_SECS
+	_chat_auto_close = true
+
+
+## Clicking the bubble while a feed is pending is consent: open the chat card and
+## show the full item as a distinct yellow bold line (the two-line bubble can't
+## hold it).
+func _reveal_feed() -> void:
+	var text := _feed_text
+	_feed_pending = false
+	_feed_text = ""
+	_open_chat(false)
+	_chat_panel.feed_message(text)
 
 
 ## A soft two-tone ping, synthesised so the project needs no audio asset.
@@ -473,9 +661,9 @@ func _build_chime() -> AudioStreamWAV:
 
 
 func _on_notice(kind: String, text: String) -> void:
-	_show_notice(text)
 	_attention_clip = str({"water": "water_remind", "sit": "hop_sit",
 		"alarm": "hop_alarm", "memo": "hop_memo"}.get(kind, "hop_memo"))
+	_show_notice(text, kind)
 	# A drink finishes safely; cards temporarily take priority over the loop.
 	if not _chain_busy() and not _presenting():
 		_enter_state()
@@ -484,6 +672,12 @@ func _on_notice(kind: String, text: String) -> void:
 
 func _on_water_logged(ml: int, total: int, goal: int) -> void:
 	_attention_clip = ""
+	_bubble_notice = ""
+	_notice_kind = ""
+	# Logging water resolves the pending drink reminder, so drop its banner (and
+	# the bubble action card) too.
+	_chat_panel.clear_reminder()
+	_hide_notice_card()
 	var left := maxi(0, goal - total)
 	var text := "陪你喝了 %d ml · 今天 %d ml" % [ml, total]
 	if left <= 0:
@@ -502,19 +696,257 @@ func _on_water_logged(ml: int, total: int, goal: int) -> void:
 	start_chain(clips)
 
 
-func _show_notice(text: String) -> void:
-	_notice_text = text
+func _show_notice(text: String, kind: String = "") -> void:
+	_notice_kind = kind
+	if kind == "water" or kind == "sit":
+		# Water and sit act from the bubble: show the line plus an action card
+		# above it, and never open the chat card / banner for them.
+		_close_chat()
+		_bubble_notice = text
+		_refresh_texts()
+		_show_notice_card(kind, text)
+		_update_passthrough()
+		return
+	if not _chat_open:
+		_open_chat(false)
+	if _attention_clip != "":
+		# A real reminder (alarm/memo) needs an action, so it opens the banner at
+		# the top of the card (never the chat log) and also survives as a bubble
+		# line while the card is collapsed.
+		_bubble_notice = text
+		_chat_panel.reminder(text)
+	else:
+		# A plain drink-logged notice is informational: append it to the log and
+		# let the panel close itself after NOTICE_SECS.
+		_chat_panel.notice(text)
 	_notice_timer = NOTICE_SECS
-	_refresh_texts()
+	# A plain notice (drink logged etc.) closes the panel on its own after
+	# NOTICE_SECS; a reminder keeps its attention clip set, so the panel stays
+	# until the user acts on or dismisses it.
+	_chat_auto_close = (_attention_clip == "")
 
 
 func _dismiss_notice() -> void:
 	_attention_clip = ""
+	_bubble_notice = ""
+	_notice_kind = ""
+	_chat_panel.clear_reminder()
+	_hide_notice_card()
 	_notice_timer = 0.0
-	_notice_text = ""
+	_chat_auto_close = false
 	_refresh_texts()
 	if not _chain_busy() and not _presenting():
 		_enter_state()
+
+
+## The reminder banner's "确认": acknowledge the reminder but keep the chat card
+## open so the user can carry on talking.
+func _on_reminder_dismissed() -> void:
+	_dismiss_notice()
+
+
+## (Re)build the small action card above the bubble for a water/sit reminder.
+func _show_notice_card(kind: String, text: String) -> void:
+	if _notice_card == null:
+		return
+	_clear_notice_card()
+	var title := _make_label(13, C_WARN)
+	title.text = text
+	_notice_card_box.add_child(title)
+	if kind == "water":
+		for item in [["🥤 150 ml", "log_150"], ["🥤 250 ml", "log_250"],
+				["🥤 500 ml", "log_500"], ["稍后", "later"]]:
+			_notice_card_box.add_child(_action_button(item[0], item[1]))
+	else:
+		for item in [["跟我动 1 分钟", "activity"], ["我已经活动了", "stood"],
+				["稍后", "later"]]:
+			_notice_card_box.add_child(_action_button(item[0], item[1]))
+	_notice_card.position = _notice_card_rect.position
+	_notice_card.visible = true
+
+
+## The follow-along's first tap: choose one of the three routines in place.
+func _show_activity_pick() -> void:
+	if _notice_card == null:
+		return
+	_clear_notice_card()
+	var title := _make_label(13, C_WORK)
+	title.text = "选一套，跟着动 1 分钟"
+	_notice_card_box.add_child(title)
+	for item in [["原地巡逻", "activity_a"], ["海草舒展", "activity_b"],
+			["肩膀放松", "activity_c"], ["返回", "activity_back"]]:
+		_notice_card_box.add_child(_action_button(item[0], item[1]))
+	_notice_card.visible = true
+
+
+func _clear_notice_card() -> void:
+	# Detach now (so a rebuild in the same frame never shows stale buttons), then
+	# free deferred: the caller is usually inside one of these buttons' pressed
+	# signals, and freeing the emitting node mid-signal is not safe.
+	for child in _notice_card_box.get_children():
+		_notice_card_box.remove_child(child)
+		child.queue_free()
+
+
+func _hide_notice_card() -> void:
+	if _notice_card != null:
+		_notice_card.visible = false
+
+
+func _action_button(text: String, action: String) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.focus_mode = Control.FOCUS_NONE
+	button.custom_minimum_size = Vector2(0, 30)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if _font != null:
+		button.add_theme_font_override("font", _font)
+		button.add_theme_font_size_override("font_size", 14)
+	button.pressed.connect(_on_notice_action.bind(action))
+	return button
+
+
+func _on_notice_action(action: String) -> void:
+	match action:
+		"log_150":
+			_reminders.log_water(150)
+		"log_250":
+			_reminders.log_water(250)
+		"log_500":
+			_reminders.log_water(500)
+		"stood":
+			# "I already moved": confirm the activity, then settle back.
+			_reminders.stand_up()
+			_dismiss_notice()
+		"activity":
+			_show_activity_pick()
+		"activity_a", "activity_b", "activity_c":
+			_start_activity(action)
+		"activity_back":
+			_show_notice_card("sit", _bubble_notice)
+		"activity_pause":
+			if _activity != null:
+				_activity.pause()
+			_refresh_activity_bar()
+		"activity_resume":
+			if _activity != null:
+				_activity.resume()
+			_refresh_activity_bar()
+		"activity_end":
+			_end_activity(false)
+		"activity_done":
+			_end_activity(true)
+		"activity_skip":
+			_end_activity(false)
+		"later":
+			_hide_notice_card()
+
+
+# ---------------------------------------------------------------- activity
+
+
+func _start_activity(action: String) -> void:
+	var pkg := action.trim_prefix("activity_")
+	if _activity == null:
+		_activity = ActivitySession.new()
+	if not _activity.start(pkg):
+		# Missing clips (B/C not built yet): keep the sit card and say so.
+		_show_notice_card("sit", "这套动作还在准备中，先试试原地巡逻吧")
+		return
+	_hide_notice_card()
+	_attention_clip = ""
+	_activity_active = true
+	_request_rig("activity")
+	# start() already advanced to segment 0; play it now.
+	_play_on("activity", _activity.current_clip(), _activity.current_loop())
+	_refresh_activity_bar()
+	_refresh_texts()
+	_update_passthrough()
+
+
+func _tick_activity(delta: float) -> void:
+	if _activity == null:
+		return
+	var before: String = _activity.current_clip()
+	_activity.advance(minf(delta, 0.5))
+	if _activity.state() == "awaiting_confirmation":
+		_on_activity_finished()
+		return
+	var after: String = _activity.current_clip()
+	if after != before and after != "":
+		_play_on("activity", after, _activity.current_loop())
+		_refresh_activity_bar()
+	_activity_bar_accum += delta
+	if _activity_bar_accum >= 1.0:
+		_activity_bar_accum = 0.0
+		if _activity_bar_title != null and _activity.state() == "running":
+			_activity_bar_title.text = _activity_status_text()
+
+
+func _on_activity_finished() -> void:
+	_activity_active = false
+	_request_rig("standing")
+	_show_activity_done()
+
+
+func _show_activity_done() -> void:
+	if _notice_card == null:
+		return
+	_clear_notice_card()
+	var title := _make_label(13, C_WARN)
+	title.text = "这一分钟做完了吗？"
+	_notice_card_box.add_child(title)
+	_notice_card_box.add_child(_action_button("完成活动", "activity_done"))
+	_notice_card_box.add_child(_action_button("暂不记录", "activity_skip"))
+	_notice_card.visible = true
+
+
+func _end_activity(completed: bool) -> void:
+	_activity_active = false
+	if _activity != null:
+		_activity.stop()
+	_request_rig("standing")
+	_hide_notice_card()
+	if completed:
+		_reminders.stand_up()
+		_dismiss_notice()
+	else:
+		# Ended early / "暂不记录": re-offer the sit reminder and resume its bounce.
+		_attention_clip = "hop_sit"
+		_show_notice_card("sit", _bubble_notice)
+		_refresh_texts()
+		if not _chain_busy() and not _presenting():
+			_enter_state()
+	_update_passthrough()
+
+
+func _refresh_activity_bar() -> void:
+	if _notice_card == null or _activity == null:
+		return
+	_clear_notice_card()
+	_activity_bar_title = _make_label(13, C_WORK)
+	_activity_bar_title.text = _activity_status_text()
+	_notice_card_box.add_child(_activity_bar_title)
+	if _activity.state() == "paused":
+		_notice_card_box.add_child(_action_button("继续", "activity_resume"))
+	else:
+		_notice_card_box.add_child(_action_button("暂停", "activity_pause"))
+	_notice_card_box.add_child(_action_button("结束", "activity_end"))
+	_notice_card.visible = true
+
+
+func _activity_status_text() -> String:
+	if _activity == null:
+		return ""
+	var seg: String = _activity.current_clip()
+	var seg_name: String = {
+		"activity_ready": "站稳准备", "activity_march_cycle": "原地踏步",
+		"activity_heel_cycle": "缓慢提踵", "activity_relax": "放松",
+	}.get(seg, "")
+	var remain: int = int(ceilf(_activity.total_remaining()))
+	if _activity.state() == "paused":
+		return "%s · 已暂停 · 剩 %ds" % [_activity.package_name(), remain]
+	return "%s · %s · 剩 %ds" % [_activity.package_name(), seg_name, remain]
 
 
 func _play_chime() -> void:
@@ -525,6 +957,7 @@ func _play_chime() -> void:
 
 
 func _open_settings() -> void:
+	_close_chat()
 	_settings_open = true
 	_settings.visible = true
 	_settings.reload()
@@ -539,6 +972,55 @@ func _close_settings() -> void:
 	_settings_open = false
 	_settings.visible = false
 	_update_passthrough()
+
+
+## The chat card is a plain overlay above the head, not one of the "present a
+## card" poses, so opening it leaves the pet on whatever state pose she is
+## already holding; replies and reminders live in the panel itself.
+func _open_chat(focus: bool = true) -> void:
+	_close_settings()
+	_set_menu_open(false)
+	_chat_open = true
+	_chat_auto_close = false
+	_chat_panel.visible = true
+	if focus:
+		_chat_panel.focus_input()
+	_hover = false
+	_show_panel(false)
+	_bubble.visible = false
+	_update_passthrough()
+
+
+func _close_chat() -> void:
+	if not _chat_open:
+		return
+	_chat_open = false
+	_chat_panel.visible = false
+	_chat_auto_close = false
+	_refresh_texts()
+	_update_passthrough()
+
+
+## The chat card's ✕: closing the panel acknowledges the reminder it was
+## showing.  Clicking outside (in _input) only collapses to the bubble, so the
+## reminder survives until this is pressed or the user acts on it.
+func _on_chat_closed() -> void:
+	if _attention_clip != "":
+		_dismiss_notice()
+	_close_chat()
+
+
+func _on_chat_send(messages: Array) -> void:
+	_deepseek.send(messages)
+
+
+func _on_chat_reply(text: String, error: String) -> void:
+	if error != "":
+		_chat_panel.error(error)
+	else:
+		_bubble_speech = text
+		_chat_panel.reply(text)
+		_refresh_texts()
 
 
 func _make_panel(rect: Rect2) -> Panel:
@@ -587,14 +1069,17 @@ func _process(delta: float) -> void:
 		_notice_timer -= delta
 		if _notice_timer <= 0.0:
 			_notice_timer = 0.0
-			_notice_text = ""
 			_refresh_texts()
+			if _chat_auto_close:
+				_close_chat()
 	_poll_accum += delta
 	if _poll_accum >= POLL_INTERVAL:
 		_poll_accum = 0.0
 		_refresh_status()
 	_update_hover(delta)
 	_animate(delta)
+	_tick_happy(delta)
+	_tick_slack_pose(delta)
 	_maybe_save_position(delta)
 
 
@@ -626,6 +1111,11 @@ func _set_state(next_state: String) -> void:
 		return
 	_state = next_state
 	_state_age = 0.0
+	if _activity_active:
+		# The follow-along session owns the stage: record the state change but
+		# don't swap clips away from the activity rig until the session ends.
+		queue_redraw()
+		return
 	if not _chain_busy():
 		if _presenting():
 			_request_rig("standing")
@@ -656,22 +1146,18 @@ func _refresh_texts() -> void:
 		_water_line.text = "喝水 %d / %d ml   ·   久坐 %d 分钟" % [
 			_reminders.today_ml(), _reminders.goal_ml(), _reminders.sit_minutes()]
 
-	if _notice_timer > 0.0:
-		_bubble_label.text = _notice_text
+	if _chat_open:
+		# An active chat (or a reminder on top of it) owns the head-top spot.
+		_bubble.visible = false
+		_chat_panel.visible = true
 	else:
-		match _state:
-			"working":
-				_bubble_label.text = action if action != "" else "思考中…"
-			"needs_input":
-				_bubble_label.text = "喂，需要你点一下"
-			"done":
-				_bubble_label.text = "干完啦 · " + _fmt_time(elapsed)
-			"ended":
-				_bubble_label.text = "收工了"
-			"slack":
-				_bubble_label.text = "摸鱼中… 有事叫我"
-			_:
-				_bubble_label.text = "打盹中…"
+		# Collapsed: the bubble is the chat entry in every state.  It shows a
+		# pending notice/reminder, then live working progress, then the last
+		# reply, then the idle prompt.  Hovering the pet keeps it up (the
+		# right-hand cards no longer hide it).
+		_bubble_label.text = _bubble_text()
+		_bubble.visible = true
+		_chat_panel.visible = false
 	_update_passthrough()
 
 
@@ -687,6 +1173,41 @@ func _current_action() -> String:
 	if _tail.tool_name != "":
 		return _tail.tool_name
 	return "思考中"
+
+
+## What the collapsed bubble shows: a pending notice/reminder first, then live
+## working progress, then the last assistant reply, then the idle prompt.
+func _bubble_text() -> String:
+	if _activity_active:
+		return _activity_status_text()
+	if _bubble_notice != "":
+		return _bubble_notice
+	if _feed_pending:
+		return "🔄 有新同步内容，点我查看"
+	if _state == "working":
+		return _working_bubble_text()
+	if _bubble_speech != "":
+		return _bubble_speech
+	return "💬 和大肥鱼聊聊…"
+
+
+## Two-line "progress" bubble for the working state: the tool she is on now,
+## then the step count.  Detail is capped so a long Bash description can't push
+## the step line out of the bubble; tool output is never surfaced.
+func _working_bubble_text() -> String:
+	var tool := str(_tail.tool_name)
+	if tool == "":
+		return "干活中…"
+	var head := tool
+	var detail := str(_tail.detail)
+	if detail != "":
+		if detail.length() > 20:
+			detail = detail.substr(0, 19) + "…"
+		head += " · " + detail
+	var step := int(_tail.tool_count)
+	if step > 0:
+		return "%s\n第 %d 步" % [head, step]
+	return head
 
 
 func _state_title() -> String:
@@ -762,8 +1283,11 @@ func _anim_for(state: String) -> String:
 func _pose_rig(state: String) -> String:
 	if state == "working" and _rig_seated != null:
 		return "seated"
-	if state == "slack" and _rig_prone != null:
-		return "prone"
+	if state == "slack":
+		if _slack_sketching and _rig_prone_sketch != null:
+			return "prone_sketch"
+		if _rig_prone != null:
+			return "prone"
 	return "standing"
 
 
@@ -772,7 +1296,7 @@ func _state_loop(state: String) -> String:
 	if state == "working":
 		return "seat_work_loop"
 	if state == "slack":
-		return "prone_read_loop"
+		return "prone_sketch_loop" if _slack_sketching else "prone_read_loop"
 	return _anim_for(state)
 
 
@@ -898,6 +1422,9 @@ func _chain_next() -> void:
 ## through their own clips so nothing pops on or off.
 func _enter_state() -> void:
 	if _rig == null:
+		return
+	if _activity_active:
+		# The activity session drives the rig; never enter a state pose under it.
 		return
 	# The seated/prone rigs own the working/slack loops; everything else (and any
 	# reminder/hop) is a standing pose.
@@ -1089,12 +1616,24 @@ func _show_panel(show_it: bool) -> void:
 	if _panel.visible == show_it:
 		return
 	_panel.visible = show_it
-	_update_passthrough()
+	# The hover card replaces the one-line bubble while it is up; _refresh_texts
+	# re-derives the bubble (and the passthrough region) for the new state.
+	_refresh_texts()
 
 
 func _animate(delta: float) -> void:
 	if _rig == null:
 		return
+	if _activity_active:
+		# The follow-along session owns the stage; block the normal state machine.
+		_tick_activity(delta)
+	else:
+		_animate_state(delta)
+	_tick_fade(delta)
+	_apply_rig_modulate()
+
+
+func _animate_state(delta: float) -> void:
 	var showing := _presenting()
 	if _chain_busy():
 		_tick_chain()
@@ -1140,8 +1679,9 @@ func _animate(delta: float) -> void:
 		# "done" leaves when its animation has played through, not on a timer;
 		# the state stays "done" so the bubble keeps reporting the session
 		_play("idle")
-	# Cross-rig fade: fade the shown rig out, swap the silhouette, fade the new
-	# rig in.  The needs_input warm pulse rides on the standing rig's modulate.
+## Cross-rig fade: fade the shown rig out, swap the silhouette, fade the new
+## rig in.  The needs_input warm pulse rides on the standing rig's modulate.
+func _tick_fade(delta: float) -> void:
 	if _fade_dir != 0:
 		_fade_alpha = clampf(_fade_alpha + _fade_dir * delta * RIG_FADE_SPEED, 0.0, 1.0)
 		if _fade_dir < 0 and _fade_alpha <= 0.0:
@@ -1152,16 +1692,84 @@ func _animate(delta: float) -> void:
 		elif _fade_dir > 0 and _fade_alpha >= 1.0:
 			_fade_alpha = 1.0
 			_fade_dir = 0
-	_apply_rig_modulate()
+
+
+## Flip the slack face to the "偷着乐" happy attachments for a short beat, then
+## back to neutral.  Only the prone rig has the swappable eye/mouth slots; the
+## sketch pose's face is baked into the body, so the beat pauses while she
+## doodles.  Leaving slack always snaps the face back so a lingering happy beat
+## never shows on the seated or standing pose.
+func _tick_happy(delta: float) -> void:
+	if _state != "slack" or _rig_prone == null or _slack_sketching:
+		if _happy:
+			_set_happy(false)
+			_happy_timer = randf_range(HAPPY_COOLDOWN_MIN, HAPPY_COOLDOWN_MAX)
+		return
+	_happy_timer -= delta
+	if _happy:
+		if _happy_timer <= 0.0:
+			_set_happy(false)
+			_happy_timer = randf_range(HAPPY_COOLDOWN_MIN, HAPPY_COOLDOWN_MAX)
+	else:
+		if _happy_timer <= 0.0:
+			_set_happy(true)
+			_happy_timer = randf_range(HAPPY_BEAT_MIN, HAPPY_BEAT_MAX)
+
+
+## Alternate the slack pose between reading and "doodle the whale" on a random
+## schedule, so 摸鱼 stays varied.  The choice only changes while she is actually
+## prone and unoccupied; a drink chain or an open card has her on the standing
+## rig, and `_enter_state` re-derives the pose from `_slack_sketching` when she
+## returns, so nothing fights for the stage.
+func _tick_slack_pose(delta: float) -> void:
+	if _state != "slack" or _rig_prone == null:
+		# Leaving slack returns to reading, so a dangling doodle never persists.
+		if _slack_sketching:
+			_slack_sketching = false
+			_slack_switch_timer = randf_range(SLACK_SWITCH_MIN, SLACK_SWITCH_MAX)
+		return
+	if _rig_prone_sketch == null or _chain_busy() or _presenting():
+		return
+	_slack_switch_timer -= delta
+	if _slack_switch_timer <= 0.0:
+		_slack_sketching = not _slack_sketching
+		_slack_switch_timer = randf_range(SLACK_SWITCH_MIN, SLACK_SWITCH_MAX)
+		_enter_state()
+
+
+func _set_happy(on: bool) -> void:
+	if _happy == on:
+		return
+	_happy = on
+	if _rig_prone == null:
+		return
+	var skeleton := _rig_prone.get_skeleton()
+	if skeleton == null:
+		return
+	var face := "happy" if on else "neutral"
+	skeleton.set_attachment("prone_eyes", face)
+	skeleton.set_attachment("prone_mouth", face)
 
 
 func _update_hover(delta: float) -> void:
-	# The cards own the right side while they are up: no hover card on top.
-	if _settings_open or _menu_open:
+	# The settings or chat card owns the stage while it is up: hover neither
+	# shows the info card nor re-opens the menu on top of it.
+	if _settings_open or _chat_open:
 		_hover_hold = 0.0
 		if _hover:
 			_hover = false
 			_show_panel(false)
+		return
+	# The follow-along session owns the stage too: hovering must not open the info
+	# card or the right-click menu, because presenting a card would turn her away
+	# from the exercise pose.  The activity bar (pause/end) stays the only UI.
+	if _activity_active:
+		_hover_hold = 0.0
+		if _hover:
+			_hover = false
+			_show_panel(false)
+		if _menu_open:
+			_set_menu_open(false)
 		return
 	var mouse := _mouse_local()
 	if _hit_test(mouse):
@@ -1173,7 +1781,16 @@ func _update_hover(delta: float) -> void:
 	if want == _hover:
 		return
 	_hover = want
-	_show_panel(_hover)
+	if _hover:
+		# Hovering reveals the info card above her head and, without any
+		# right-click, opens the small action menu on her right.
+		_show_panel(true)
+		if not _menu_open:
+			_set_menu_open(true)
+	else:
+		_show_panel(false)
+		if _menu_open:
+			_set_menu_open(false)
 	queue_redraw()
 
 
@@ -1221,7 +1838,12 @@ func _update_passthrough() -> void:
 		extra.append(_menu_rect)
 	if _settings_open:
 		extra.append(_settings_rect)
-	var key := "%s|%s|%s|%s|%s" % [_bubble.visible, _panel.visible, _menu_open, _settings_open, _shown_rig]
+	if _chat_panel.visible:
+		extra.append(_chat_rect)
+	if _notice_card != null and _notice_card.visible:
+		extra.append(_notice_card_rect)
+	var key := "%s|%s|%s|%s|%s|%s|%s" % [_bubble.visible, _panel.visible, _menu_open,
+		_settings_open, _chat_panel.visible, _shown_rig, _notice_card != null and _notice_card.visible]
 	if key == _passthrough_key:
 		return
 	_passthrough_key = key
@@ -1233,9 +1855,10 @@ func _update_passthrough() -> void:
 
 
 func _draw() -> void:
-	# Speech-bubble tail (hidden while the hover panel is covering that spot).
-	if _bubble.visible and not _panel.visible:
-		var cx := _bubble_rect.position.x + _bubble_rect.size.x * 0.5
+	# Speech-bubble tail, pointing at the head.  The collapsed bubble no longer
+	# sits under the hover cards, so it stays up whenever the bubble is visible.
+	if _bubble.visible:
+		var cx := clampf(PET_CENTER_X, _bubble_rect.position.x + 12.0, _bubble_rect.end.x - 12.0)
 		var y := _bubble_rect.end.y - 3.0
 		draw_colored_polygon(PackedVector2Array([
 			Vector2(cx - 9.0, y),
@@ -1253,18 +1876,48 @@ func _input(event: InputEvent) -> void:
 	# Use the event's own position: DisplayServer's cursor position is in screen
 	# space and lags behind by a frame when the window has just moved.
 	var mouse: Vector2 = event.position
+	if _notice_card != null and _notice_card.visible:
+		# The reminder action card owns left-clicks while it is up: a click outside
+		# it (and off the bubble) hides it, keeping the reminder pending.  Buttons
+		# inside the card are handled by the buttons themselves.
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if not _notice_card_rect.has_point(mouse) \
+					and not (_bubble.visible and _bubble_rect.has_point(mouse)):
+				_hide_notice_card()
+			return
+	if _chat_open:
+		if event.button_index == MOUSE_BUTTON_LEFT and not _chat_rect.has_point(mouse):
+			# A click away just collapses the panel back to the bubble; only the
+			# ✕ (or acting on the reminder) acknowledges a pending reminder.
+			_close_chat()
+		return
 	if _settings_open:
 		if event.button_index == MOUSE_BUTTON_LEFT and not _settings_rect.has_point(mouse):
 			_close_settings()
 		return
 	if event.button_index == MOUSE_BUTTON_LEFT:
+		# The bubble above the head is the chat entry: click it to open the chat
+		# card (input + history + reminders).  It also still shows live progress
+		# while working, and a click there opens the chat too.  A pending water/sit
+		# reminder turns the click into its action card instead of the chat.
+		if _bubble.visible and _bubble_rect.has_point(mouse):
+			if _activity_active:
+				# During a follow-along the bubble shows its live status; a click
+				# re-opens the pause/end bar instead of the chat.
+				_refresh_activity_bar()
+			elif _feed_pending:
+				# A pending feed turns the click into consent to reveal it.
+				_reveal_feed()
+			elif _notice_kind == "water" or _notice_kind == "sit":
+				_show_notice_card(_notice_kind, _bubble_notice)
+			else:
+				_open_chat()
+			return
 		if _menu_open:
-			if not _menu_rect.has_point(mouse):
-				_set_menu_open(false)
-			return
-		if _notice_timer > 0.0 and _bubble_rect.has_point(mouse):
-			_dismiss_notice()
-			return
+			if _menu_rect.has_point(mouse):
+				return
+			_set_menu_open(false)
+			# fall through: a left-click on the pet still starts a drag
 		if _pet_hit(mouse):
 			DisplayServer.window_start_drag()
 	elif event.button_index == MOUSE_BUTTON_RIGHT:
@@ -1273,6 +1926,10 @@ func _input(event: InputEvent) -> void:
 
 
 func _set_menu_open(open: bool) -> void:
+	# During a follow-along the menu is a non-exercise operation: ignore it so the
+	# right-click (and any lingering hover) can't steal the stage from the pose.
+	if open and _activity_active:
+		return
 	_menu_open = open
 	_menu.visible = open
 	if open:
@@ -1293,6 +1950,8 @@ func _on_menu_action(action: String) -> void:
 		"settings":
 			_open_settings()
 			return
+		"feed":
+			_feed.check_now()
 		"cycle":
 			_pinned_id = _store.next_session(str(_entry.get("session_id", "")))
 			_refresh_status()

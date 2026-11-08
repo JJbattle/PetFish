@@ -1,0 +1,25 @@
+{
+  "gif": {
+    "png_opaque_pixels": 11150,
+    "original_gif_opaque_pixels": 41612,
+    "original_alpha_iou": 0.2678296808919646,
+    "corrected_alpha_iou": 1.0
+  },
+  "attachment_types": {
+    "region": 26
+  },
+  "slots_by_bone": {
+    "head": 2,
+    "hip": 2,
+    "thigh_l": 1,
+    "calf_l": 1,
+    "foot_l": 1,
+    "thigh_r": 1,
+    "calf_r": 1,
+    "foot_r": 1,
+    "torso": 1,
+    "upper_arm_l": 1,
+    "upper_arm_r": 1
+  },
+  "relax_has_slot_timeline": false
+}

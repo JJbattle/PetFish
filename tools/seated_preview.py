@@ -17,7 +17,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT = ROOT / 'tools/_debug/seated_preview_proj'
 SEATED_SPINE = ROOT / 'tools/_debug/seated_spine'
-REFERENCE = ROOT / 'assets/art/whale_seated_work_v1/kit/assembled.png'
+REFERENCE = ROOT / 'assets/art/whale_seated_work_v2/kit/assembled.png'
 
 CANVAS = (1280, 1280)
 

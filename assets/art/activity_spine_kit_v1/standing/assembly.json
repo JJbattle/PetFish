@@ -1,0 +1,427 @@
+{
+  "version": 1,
+  "canvas": [
+    1024,
+    1024
+  ],
+  "coordinates": "top-left; y down; clockwise degrees",
+  "status": "static assembly; unweighted region setup; no animations",
+  "layers": [
+    {
+      "name": "hair_back",
+      "file": "common/hair_back.png",
+      "pivot": [
+        234.0,
+        0
+      ],
+      "position": [
+        512,
+        130
+      ],
+      "scale": 1.3070539419087137,
+      "angle": 0,
+      "bone": "head",
+      "active": true
+    },
+    {
+      "name": "tail",
+      "file": "common/tail.png",
+      "pivot": [
+        35.6,
+        200.88
+      ],
+      "position": [
+        630,
+        700
+      ],
+      "scale": 0.4659498207885305,
+      "angle": 0,
+      "bone": "hip",
+      "active": true
+    },
+    {
+      "name": "thigh_l",
+      "file": "standing/thigh_l.png",
+      "pivot": [
+        78.5,
+        440
+      ],
+      "position": [
+        475,
+        920
+      ],
+      "scale": 0.5227272727272727,
+      "angle": 0,
+      "bone": "thigh_l",
+      "active": true
+    },
+    {
+      "name": "calf_l",
+      "file": "standing/calf_l.png",
+      "pivot": [
+        78.5,
+        440
+      ],
+      "position": [
+        475,
+        920
+      ],
+      "scale": 0.5227272727272727,
+      "angle": 0,
+      "bone": "calf_l",
+      "active": true
+    },
+    {
+      "name": "shoe_l",
+      "file": "standing/shoe_l.png",
+      "pivot": [
+        78.5,
+        440
+      ],
+      "position": [
+        475,
+        920
+      ],
+      "scale": 0.5227272727272727,
+      "angle": 0,
+      "bone": "foot_l",
+      "active": true
+    },
+    {
+      "name": "calf_heel_l",
+      "file": "standing/calf_heel_l.png",
+      "pivot": [
+        78.5,
+        440
+      ],
+      "position": [
+        475,
+        920
+      ],
+      "scale": 0.5227272727272727,
+      "angle": 0,
+      "bone": "calf_l",
+      "active": false
+    },
+    {
+      "name": "heel_l",
+      "file": "extra/heel_l.png",
+      "pivot": [
+        138.0,
+        232.26
+      ],
+      "position": [
+        475,
+        920
+      ],
+      "scale": 0.32489451476793246,
+      "angle": 0,
+      "bone": "foot_l",
+      "active": false
+    },
+    {
+      "name": "thigh_r",
+      "file": "standing/thigh_r.png",
+      "pivot": [
+        78.5,
+        440
+      ],
+      "position": [
+        549,
+        920
+      ],
+      "scale": 0.5227272727272727,
+      "angle": 0,
+      "bone": "thigh_r",
+      "active": true
+    },
+    {
+      "name": "calf_r",
+      "file": "standing/calf_r.png",
+      "pivot": [
+        78.5,
+        440
+      ],
+      "position": [
+        549,
+        920
+      ],
+      "scale": 0.5227272727272727,
+      "angle": 0,
+      "bone": "calf_r",
+      "active": true
+    },
+    {
+      "name": "shoe_r",
+      "file": "standing/shoe_r.png",
+      "pivot": [
+        78.5,
+        440
+      ],
+      "position": [
+        549,
+        920
+      ],
+      "scale": 0.5227272727272727,
+      "angle": 0,
+      "bone": "foot_r",
+      "active": true
+    },
+    {
+      "name": "calf_heel_r",
+      "file": "standing/calf_heel_r.png",
+      "pivot": [
+        78.5,
+        440
+      ],
+      "position": [
+        549,
+        920
+      ],
+      "scale": 0.5227272727272727,
+      "angle": 0,
+      "bone": "calf_r",
+      "active": false
+    },
+    {
+      "name": "heel_r",
+      "file": "extra/heel_r.png",
+      "pivot": [
+        138.5,
+        232.26
+      ],
+      "position": [
+        549,
+        920
+      ],
+      "scale": 0.32489451476793246,
+      "angle": 0,
+      "bone": "foot_r",
+      "active": false
+    },
+    {
+      "name": "bodice",
+      "file": "standing/bodice.png",
+      "pivot": [
+        241.0,
+        0
+      ],
+      "position": [
+        512,
+        424
+      ],
+      "scale": 0.7317073170731707,
+      "angle": 0,
+      "bone": "torso",
+      "active": true
+    },
+    {
+      "name": "skirt",
+      "file": "standing/skirt.png",
+      "pivot": [
+        241.0,
+        0
+      ],
+      "position": [
+        512,
+        424
+      ],
+      "scale": 0.7317073170731707,
+      "angle": 0,
+      "bone": "hip",
+      "active": true
+    },
+    {
+      "name": "arm_l",
+      "file": "standing/arm_l.png",
+      "pivot": [
+        172.07999999999998,
+        41.900000000000006
+      ],
+      "position": [
+        452,
+        457
+      ],
+      "scale": 0.5083532219570406,
+      "angle": 0,
+      "bone": "upper_arm_l",
+      "active": true
+    },
+    {
+      "name": "arm_open_l",
+      "file": "standing/arm_open_l.png",
+      "pivot": [
+        142.56,
+        32.64
+      ],
+      "position": [
+        452,
+        457
+      ],
+      "scale": 0.7830882352941176,
+      "angle": 0,
+      "bone": "upper_arm_l",
+      "active": false
+    },
+    {
+      "name": "arm_r",
+      "file": "standing/arm_r.png",
+      "pivot": [
+        66.92,
+        41.800000000000004
+      ],
+      "position": [
+        572,
+        457
+      ],
+      "scale": 0.5095693779904307,
+      "angle": 0,
+      "bone": "upper_arm_r",
+      "active": true
+    },
+    {
+      "name": "arm_open_r",
+      "file": "standing/arm_open_r.png",
+      "pivot": [
+        78.88000000000001,
+        32.64
+      ],
+      "position": [
+        572,
+        457
+      ],
+      "scale": 0.7830882352941176,
+      "angle": 0,
+      "bone": "upper_arm_r",
+      "active": false
+    },
+    {
+      "name": "head_front",
+      "file": "common/head_front.png",
+      "pivot": [
+        243.0,
+        400.40000000000003
+      ],
+      "position": [
+        512,
+        460
+      ],
+      "scale": 1.0227272727272727,
+      "angle": 0,
+      "bone": "head",
+      "active": true
+    },
+    {
+      "name": "head_closed",
+      "file": "common/head_closed.png",
+      "pivot": [
+        244.0,
+        399.49
+      ],
+      "position": [
+        512,
+        460
+      ],
+      "scale": 1.0250569476082005,
+      "angle": 0,
+      "bone": "head",
+      "active": false
+    },
+    {
+      "name": "head_turn_left",
+      "file": "common/head_turn_left.png",
+      "pivot": [
+        204.6,
+        400.40000000000003
+      ],
+      "position": [
+        512,
+        460
+      ],
+      "scale": 1.0227272727272727,
+      "angle": 0,
+      "bone": "head",
+      "active": false
+    },
+    {
+      "name": "head_turn_right",
+      "file": "common/head_turn_right.png",
+      "pivot": [
+        259.84000000000003,
+        398.58000000000004
+      ],
+      "position": [
+        512,
+        460
+      ],
+      "scale": 1.0273972602739727,
+      "angle": 0,
+      "bone": "head",
+      "active": false
+    },
+    {
+      "name": "head_left_step1",
+      "file": "extra/head_left_step1.png",
+      "pivot": [
+        240.1,
+        406.77000000000004
+      ],
+      "position": [
+        512,
+        460
+      ],
+      "scale": 1.0067114093959733,
+      "angle": 0,
+      "bone": "head",
+      "active": false
+    },
+    {
+      "name": "head_left_step2",
+      "file": "extra/head_left_step2.png",
+      "pivot": [
+        212.06,
+        404.95
+      ],
+      "position": [
+        512,
+        460
+      ],
+      "scale": 1.0112359550561798,
+      "angle": 0,
+      "bone": "head",
+      "active": false
+    },
+    {
+      "name": "head_right_step1",
+      "file": "extra/head_right_step1.png",
+      "pivot": [
+        245.31,
+        404.04
+      ],
+      "position": [
+        512,
+        460
+      ],
+      "scale": 1.0135135135135136,
+      "angle": 0,
+      "bone": "head",
+      "active": false
+    },
+    {
+      "name": "head_right_step2",
+      "file": "extra/head_right_step2.png",
+      "pivot": [
+        259.74,
+        415.87
+      ],
+      "position": [
+        512,
+        460
+      ],
+      "scale": 0.9846827133479212,
+      "angle": 0,
+      "bone": "head",
+      "active": false
+    }
+  ]
+}

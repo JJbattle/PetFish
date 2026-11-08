@@ -15,7 +15,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	var settings: Control = pet._settings
 	_walk(settings, 0)
-	for tab in 4:
+	for tab in pet._settings._tabs.get_tab_count():
 		pet._settings._tabs.current_tab = tab
 		await get_tree().process_frame
 		await RenderingServer.frame_post_draw

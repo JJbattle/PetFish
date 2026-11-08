@@ -123,26 +123,31 @@ def refine(skeleton):
         if not entering and not leaving:
             a["bones"]["write_tip"] = {"translate": tr([(0, 0, 0), (.25, 3, 1), (.5, -2, 0), (.75, 2, 1), (1, -2, 0), (1.25, 3, 1), (1.5, 0, 0), (2.25, 0, 0), (2.5, 2, 1), (2.75, -2, 0), (3, 2, 1), (3.25, -2, 0), (3.5, 3, 1), (3.75, 0, 0), (T, 0, 0)])}
 
-    # Seamless repeated hops with both hands waving. The runtime holds this
-    # loop until acknowledgement (or until the pending session resumes).
-    from build_spine import base_anim, arms_front
+    # Raised palms stay at cheek height across the loop boundary. A short
+    # second wave follows the first, then both hands linger before repeating.
+    from build_spine import base_anim
     for name in ("needs_input", "needs_input_hop", "hop_sit", "hop_alarm", "hop_memo", "water_remind"):
-        T = 1.2
-        a = base_anim(T, eyes=att([(0, "eyes_open"), (.28, "eyes_happy"), (.50, "eyes_open")]),
+        T = 1.8
+        a = base_anim(T, eyes=att([(0, "eyes_open"), (.86, "eyes_happy"), (1.08, "eyes_open")]),
                       mouth=att([(0, "mouth_smile")]))
-        arms_front(a)
         a["slots"] = {slot: a.pop(slot) for slot in list(a) if slot in setup}
         a["bones"] = {
-            "root": {"translate": tr([(0, 0), (.12, 4), (.30, -30), (.42, -36), (.55, -24), (.72, 0), (.80, 3), (.94, 0), (T, 0)])},
-            "head": {"rotate": ro([(0, 0), (.32, -2), (.72, 2), (T, 0)])},
+            "root": {"translate": tr([(0, 0), (.18, 1), (.38, -9), (.62, 0),
+                                      (.77, 1), (.96, -5), (1.16, 0), (T, 0)])},
+            "head": {"rotate": ro([(0, -1), (.55, 1.5), (1.14, -2), (T, -1)])},
         }
-        for side, sign in (("L", 1), ("R", -1)):
-            a["bones"]["arm" + side + "1"] = {"rotate": ro([(0, sign * 46), (.30, sign * 64), (.52, sign * 54), (.72, sign * 64), (T, sign * 46)])}
-            a["bones"]["arm" + side + "2"] = {"rotate": ro([(0, sign * 45), (.30, sign * 64), (.46, sign * 38), (.62, sign * 67), (.82, sign * 40), (T, sign * 45)])}
-            tag = side.lower()
-            a["slots"]["arm_up_" + tag] = {"attachment": att([(0, None)])}
-            a["slots"]["arm_up_" + tag + "_front"] = {"attachment": att([(0, "arm_up_" + tag)])}
-            a["slots"]["hand_" + tag + "_front"] = {"attachment": att([(0, "hand_open_l" if tag == "l" else "hand_open")])}
+        for side, sign, lag in (("l", 1, 0.0), ("r", -1, .13)):
+            # Shoulder fabric stays on chest. The forearm fans sideways;
+            # the wrist follows slightly later to turn the open palm.
+            beats = [(.15,-18), (.38,19), (.62,-16), (.88,15), (1.12,-8), (1.34,2)]
+            for joint, amplitude, delay in (("elbow", 1, 0), ("wrist", .65, .06)):
+                pairs = [(0, 0)] + [(t+lag+delay, sign*v*amplitude) for t,v in beats] + [(T,0)]
+                a["bones"]["wave_"+joint+"_"+side] = {"rotate": ro(pairs)}
+            for part in ("arm_up_", "arm_fore_", "hand_"):
+                a["slots"][part+side] = {"attachment": att([(0,None)])}
+                visible = "wave_"+side if part == "arm_up_" else None
+                a["slots"][part+side+"_front"] = {"attachment": att([(0,visible)]),
+                                                  "rgba": col([(0,1)])}
         animations[name] = a
 
     # Hand ownership changes atomically, including the sub-millisecond keys

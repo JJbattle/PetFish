@@ -1,0 +1,426 @@
+{
+  "skeleton": {
+    "spine": "4.2.43",
+    "x": 0,
+    "y": -1024,
+    "width": 1024,
+    "height": 1024,
+    "images": "../parts/"
+  },
+  "bones": [
+    {
+      "name": "root"
+    },
+    {
+      "name": "hip",
+      "parent": "root",
+      "x": 512,
+      "y": -650
+    },
+    {
+      "name": "torso",
+      "parent": "hip",
+      "x": 0,
+      "y": 100
+    },
+    {
+      "name": "head",
+      "parent": "torso",
+      "x": 0,
+      "y": 90
+    },
+    {
+      "name": "thigh_l",
+      "parent": "hip",
+      "x": -37,
+      "y": -55
+    },
+    {
+      "name": "calf_l",
+      "parent": "thigh_l",
+      "x": 0,
+      "y": -63
+    },
+    {
+      "name": "foot_l",
+      "parent": "calf_l",
+      "x": 0,
+      "y": -90
+    },
+    {
+      "name": "thigh_r",
+      "parent": "hip",
+      "x": 37,
+      "y": -55
+    },
+    {
+      "name": "calf_r",
+      "parent": "thigh_r",
+      "x": 0,
+      "y": -63
+    },
+    {
+      "name": "foot_r",
+      "parent": "calf_r",
+      "x": 0,
+      "y": -90
+    },
+    {
+      "name": "upper_arm_l",
+      "parent": "torso",
+      "x": -60,
+      "y": 93
+    },
+    {
+      "name": "forearm_l",
+      "parent": "upper_arm_l",
+      "x": -28,
+      "y": -87
+    },
+    {
+      "name": "hand_l",
+      "parent": "forearm_l",
+      "x": -24,
+      "y": -62
+    },
+    {
+      "name": "upper_arm_r",
+      "parent": "torso",
+      "x": 60,
+      "y": 93
+    },
+    {
+      "name": "forearm_r",
+      "parent": "upper_arm_r",
+      "x": 28,
+      "y": -87
+    },
+    {
+      "name": "hand_r",
+      "parent": "forearm_r",
+      "x": 24,
+      "y": -62
+    },
+    {
+      "name": "chair",
+      "parent": "root",
+      "x": 512,
+      "y": -920
+    }
+  ],
+  "slots": [
+    {
+      "name": "chair",
+      "bone": "chair",
+      "attachment": "chair"
+    },
+    {
+      "name": "hair_back",
+      "bone": "head",
+      "attachment": "hair_back"
+    },
+    {
+      "name": "tail",
+      "bone": "hip",
+      "attachment": "tail"
+    },
+    {
+      "name": "thigh_l",
+      "bone": "thigh_l",
+      "attachment": "thigh_l"
+    },
+    {
+      "name": "calf_l",
+      "bone": "calf_l",
+      "attachment": "calf_l"
+    },
+    {
+      "name": "shoe_l",
+      "bone": "foot_l",
+      "attachment": "shoe_l"
+    },
+    {
+      "name": "thigh_r",
+      "bone": "thigh_r",
+      "attachment": "thigh_r"
+    },
+    {
+      "name": "calf_r",
+      "bone": "calf_r",
+      "attachment": "calf_r"
+    },
+    {
+      "name": "shoe_r",
+      "bone": "foot_r",
+      "attachment": "shoe_r"
+    },
+    {
+      "name": "bodice",
+      "bone": "torso",
+      "attachment": "bodice"
+    },
+    {
+      "name": "skirt",
+      "bone": "hip",
+      "attachment": "skirt"
+    },
+    {
+      "name": "arm_l",
+      "bone": "upper_arm_l",
+      "attachment": "arm_l"
+    },
+    {
+      "name": "arm_r",
+      "bone": "upper_arm_r",
+      "attachment": "arm_r"
+    },
+    {
+      "name": "head",
+      "bone": "head",
+      "attachment": "head_front"
+    }
+  ],
+  "skins": [
+    {
+      "name": "default",
+      "attachments": {
+        "chair": {
+          "chair": {
+            "type": "region",
+            "path": "seated/chair",
+            "x": 0.0,
+            "y": 195.0,
+            "width": 317.2881355932203,
+            "height": 390.0,
+            "rotation": 0
+          }
+        },
+        "hair_back": {
+          "hair_back": {
+            "type": "region",
+            "path": "common/hair_back",
+            "x": 0.0,
+            "y": 15.0,
+            "width": 611.701244813278,
+            "height": 630.0,
+            "rotation": 0
+          }
+        },
+        "tail": {
+          "tail": {
+            "type": "region",
+            "path": "common/tail",
+            "x": 205.08602150537635,
+            "y": -21.400000000000002,
+            "width": 207.34767025089607,
+            "height": 130.0,
+            "rotation": 0
+          }
+        },
+        "thigh_l": {
+          "thigh_l": {
+            "type": "region",
+            "path": "seated/thigh_l",
+            "x": 0.0,
+            "y": -100.0,
+            "width": 85.1673640167364,
+            "height": 230.0,
+            "rotation": 0
+          }
+        },
+        "calf_l": {
+          "calf_l": {
+            "type": "region",
+            "path": "seated/calf_l",
+            "x": 0.0,
+            "y": -37.0,
+            "width": 85.1673640167364,
+            "height": 230.0,
+            "rotation": 0
+          }
+        },
+        "shoe_l": {
+          "shoe_l": {
+            "type": "region",
+            "path": "seated/shoe_l",
+            "x": 0.0,
+            "y": 53.0,
+            "width": 85.1673640167364,
+            "height": 230.0,
+            "rotation": 0
+          }
+        },
+        "thigh_r": {
+          "thigh_r": {
+            "type": "region",
+            "path": "seated/thigh_r",
+            "x": 0.0,
+            "y": -100.0,
+            "width": 84.68619246861924,
+            "height": 230.0,
+            "rotation": 0
+          }
+        },
+        "calf_r": {
+          "calf_r": {
+            "type": "region",
+            "path": "seated/calf_r",
+            "x": 0.0,
+            "y": -37.0,
+            "width": 84.68619246861924,
+            "height": 230.0,
+            "rotation": 0
+          }
+        },
+        "shoe_r": {
+          "shoe_r": {
+            "type": "region",
+            "path": "seated/shoe_r",
+            "x": 0.0,
+            "y": 53.0,
+            "width": 84.68619246861924,
+            "height": 230.0,
+            "rotation": 0
+          }
+        },
+        "bodice": {
+          "bodice": {
+            "type": "region",
+            "path": "seated/bodice",
+            "x": 0.0,
+            "y": -39.0,
+            "width": 350.625,
+            "height": 330.0,
+            "rotation": 0
+          }
+        },
+        "skirt": {
+          "skirt": {
+            "type": "region",
+            "path": "seated/skirt",
+            "x": 0.0,
+            "y": 61.0,
+            "width": 350.625,
+            "height": 330.0,
+            "rotation": 0
+          }
+        },
+        "arm_l": {
+          "arm_l": {
+            "type": "region",
+            "path": "seated/arm_l",
+            "x": -20.859006211180116,
+            "y": -85.19999999999999,
+            "width": 94.8136645962733,
+            "height": 213.0,
+            "rotation": 0
+          },
+          "arm_open_l": {
+            "type": "region",
+            "path": "standing/arm_open_l",
+            "x": -27.06352941176471,
+            "y": -80.94,
+            "width": 169.14705882352942,
+            "height": 213.0,
+            "rotation": 0
+          }
+        },
+        "arm_r": {
+          "arm_r": {
+            "type": "region",
+            "path": "seated/arm_r",
+            "x": 20.416182572614105,
+            "y": -85.2,
+            "width": 92.80082987551867,
+            "height": 213.0,
+            "rotation": 0
+          },
+          "arm_open_r": {
+            "type": "region",
+            "path": "standing/arm_open_r",
+            "x": 29.06823529411764,
+            "y": -80.94,
+            "width": 181.6764705882353,
+            "height": 213.0,
+            "rotation": 0
+          }
+        },
+        "head": {
+          "head_front": {
+            "type": "region",
+            "path": "common/head_front",
+            "x": 0.0,
+            "y": 184.50000000000003,
+            "width": 497.04545454545456,
+            "height": 450.0,
+            "rotation": 0
+          },
+          "head_closed": {
+            "type": "region",
+            "path": "common/head_closed",
+            "x": 0.0,
+            "y": 184.50000000000003,
+            "width": 500.22779043280184,
+            "height": 450.00000000000006,
+            "rotation": 0
+          },
+          "head_turn_left": {
+            "type": "region",
+            "path": "common/head_turn_left",
+            "x": 28.534090909090914,
+            "y": 184.50000000000003,
+            "width": 475.5681818181818,
+            "height": 450.0,
+            "rotation": 0
+          },
+          "head_turn_right": {
+            "type": "region",
+            "path": "common/head_turn_right",
+            "x": -28.602739726027433,
+            "y": 184.50000000000006,
+            "width": 476.7123287671233,
+            "height": 450.00000000000006,
+            "rotation": 0
+          },
+          "head_left_step1": {
+            "type": "region",
+            "path": "extra/head_left_step1",
+            "x": 4.9328859060402745,
+            "y": 184.50000000000006,
+            "width": 493.2885906040269,
+            "height": 450.00000000000006,
+            "rotation": 0
+          },
+          "head_left_step2": {
+            "type": "region",
+            "path": "extra/head_left_step2",
+            "x": 18.647191011235954,
+            "y": 184.5,
+            "width": 466.17977528089887,
+            "height": 450.0,
+            "rotation": 0
+          },
+          "head_right_step1": {
+            "type": "region",
+            "path": "extra/head_right_step1",
+            "x": -4.875000000000003,
+            "y": 184.50000000000003,
+            "width": 487.50000000000006,
+            "height": 450.00000000000006,
+            "rotation": 0
+          },
+          "head_right_step2": {
+            "type": "region",
+            "path": "extra/head_right_step2",
+            "x": -18.945295404814015,
+            "y": 184.5,
+            "width": 473.63238512035014,
+            "height": 450.0,
+            "rotation": 0
+          }
+        }
+      }
+    }
+  ],
+  "animations": {}
+}

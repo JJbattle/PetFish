@@ -10,7 +10,7 @@ signal notice(kind: String, text: String)
 signal water_logged(ml: int, total_ml: int, goal_ml: int)
 signal changed
 
-const DATA_PATH := "I:/PetFish/data/pet_data.json"
+const DATA_PATH := "user://data/pet_data.json"
 const TICK := 1.0
 
 var _data: Dictionary = {}
@@ -75,7 +75,7 @@ func load_data() -> void:
 
 
 func _save() -> void:
-	DirAccess.make_dir_recursive_absolute(data_path.get_base_dir())
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(data_path.get_base_dir()))
 	var file := FileAccess.open(data_path, FileAccess.WRITE)
 	if file == null:
 		push_warning("reminders: cannot write " + data_path)

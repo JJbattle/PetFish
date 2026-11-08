@@ -1,0 +1,173 @@
+{
+  "status": "isolated prototype; no changes merged into animator builder",
+  "contact": [
+    {
+      "time": "0.000",
+      "feet": {
+        "l": {
+          "ground_y": 911,
+          "contact_x": 475.5
+        },
+        "r": {
+          "ground_y": 911,
+          "contact_x": 547.0
+        }
+      }
+    },
+    {
+      "time": "0.990",
+      "feet": {
+        "l": {
+          "ground_y": 911,
+          "contact_x": 475.5
+        },
+        "r": {
+          "ground_y": 911,
+          "contact_x": 547.0
+        }
+      }
+    },
+    {
+      "time": "1.000",
+      "feet": {
+        "l": {
+          "ground_y": 911,
+          "contact_x": 475.5
+        },
+        "r": {
+          "ground_y": 911,
+          "contact_x": 547.0
+        }
+      }
+    },
+    {
+      "time": "1.010",
+      "feet": {
+        "l": {
+          "ground_y": 911,
+          "contact_x": 475.5
+        },
+        "r": {
+          "ground_y": 911,
+          "contact_x": 547.0
+        }
+      }
+    },
+    {
+      "time": "2.000",
+      "feet": {
+        "l": {
+          "ground_y": 911,
+          "contact_x": 475.5
+        },
+        "r": {
+          "ground_y": 911,
+          "contact_x": 547.0
+        }
+      }
+    },
+    {
+      "time": "3.490",
+      "feet": {
+        "l": {
+          "ground_y": 911,
+          "contact_x": 475.5
+        },
+        "r": {
+          "ground_y": 911,
+          "contact_x": 547.0
+        }
+      }
+    },
+    {
+      "time": "3.500",
+      "feet": {
+        "l": {
+          "ground_y": 911,
+          "contact_x": 475.5
+        },
+        "r": {
+          "ground_y": 911,
+          "contact_x": 547.0
+        }
+      }
+    },
+    {
+      "time": "3.510",
+      "feet": {
+        "l": {
+          "ground_y": 911,
+          "contact_x": 475.5
+        },
+        "r": {
+          "ground_y": 911,
+          "contact_x": 547.0
+        }
+      }
+    },
+    {
+      "time": "4.000",
+      "feet": {
+        "l": {
+          "ground_y": 911,
+          "contact_x": 475.5
+        },
+        "r": {
+          "ground_y": 911,
+          "contact_x": 547.0
+        }
+      }
+    }
+  ],
+  "same_pose_switch_pixel_diffs": [
+    0,
+    0,
+    0
+  ],
+  "source_pngs_modified": false,
+  "base_animation_modified": false,
+  "zoom_loop": {
+    "source_frames": 181,
+    "fps": 15,
+    "seconds": 12,
+    "boundary_max_channel_delta": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "actual_loop": {
+    "source_frames": 181,
+    "fps": 15,
+    "seconds": 12,
+    "boundary_max_channel_delta": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "march_regression": {
+    "0.000": {
+      "all_changed": 22,
+      "above_ankle_y830_changed": 22,
+      "max_channel_delta": 1
+    },
+    "0.500": {
+      "all_changed": 182,
+      "above_ankle_y830_changed": 8,
+      "max_channel_delta": 2
+    },
+    "1.500": {
+      "all_changed": 228,
+      "above_ankle_y830_changed": 6,
+      "max_channel_delta": 1
+    },
+    "2.000": {
+      "all_changed": 22,
+      "above_ankle_y830_changed": 22,
+      "max_channel_delta": 1
+    }
+  }
+}

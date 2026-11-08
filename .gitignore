@@ -6,8 +6,14 @@ state/
 data/
 window.json
 
+# Local secrets (DeepSeek API key etc.)
+secrets.json
+
 # Debug captures from game/tests
 tools/_debug/
+
+# Windows export builds
+dist/
 
 # Spine runtime temp copies left behind while the editor holds the DLL
 *.TMP

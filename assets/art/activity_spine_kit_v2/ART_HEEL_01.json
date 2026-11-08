@@ -1,0 +1,65 @@
+{
+  "issue": "ART-HEEL-01",
+  "date": "2026-11-07",
+  "kind": "redrawn front-facing heel shoes plus attachment registration",
+  "applies_to": "standing shoe_l/heel_l and shoe_r/heel_r; +y is up in Spine",
+  "source_skeleton_sha256": "a59aaad6e2ed0a728efd79644e23fcc137b671a8f9ee77d5d6738a22913d0455",
+  "alpha_threshold": 128,
+  "changes": [
+    {
+      "slot": "shoe_l",
+      "attachment": "heel_l",
+      "path": "extra/heel_l",
+      "source_png": "heel_l.png",
+      "region": {
+        "type": "region",
+        "path": "extra/heel_l",
+        "x": 1.0,
+        "y": -16.0,
+        "width": 69,
+        "height": 80,
+        "rotation": 0
+      },
+      "old_region": {
+        "type": "region",
+        "path": "extra/heel_l",
+        "x": 0.0,
+        "y": -25.040000000000006,
+        "width": 90,
+        "height": 77,
+        "rotation": 0
+      },
+      "target_ground_y": 911,
+      "target_contact_x": 475.5,
+      "png_sha256": "72aaeb494246ac8f92afe5a1329a0c81ab6cece1fe4a509c0b671c81dbeba418"
+    },
+    {
+      "slot": "shoe_r",
+      "attachment": "heel_r",
+      "path": "extra/heel_r",
+      "source_png": "heel_r.png",
+      "region": {
+        "type": "region",
+        "path": "extra/heel_r",
+        "x": -1.5,
+        "y": -16.0,
+        "width": 69,
+        "height": 80,
+        "rotation": 0
+      },
+      "old_region": {
+        "type": "region",
+        "path": "extra/heel_r",
+        "x": 0.0,
+        "y": -25.040000000000006,
+        "width": 90,
+        "height": 77,
+        "rotation": 0
+      },
+      "target_ground_y": 911,
+      "target_contact_x": 547.0,
+      "png_sha256": "f9e6a47355f9a258ee394675181daeed842ede884ff01b914c79e3e54a371c2d"
+    }
+  ],
+  "status": "contact and ankle continuity passed for seven sampled frames"
+}

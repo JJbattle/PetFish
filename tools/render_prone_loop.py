@@ -2,8 +2,7 @@
 
 Two views of the full 4.0 s loop, mirroring tools/render_seated_loop.py:
 
-- `actual`  -- the assembled content is ~980 px tall (its alpha bbox), mapped
-  to the production pet's 170 px baseline with a 170/980 factor.
+- `actual`  -- uses the game head scale at the default standing height of 170 px.
 - `zoom`    -- 1:1 with the authoring canvas (about 5.8x the baseline), for
   checking the ~0.6 deg reading lean and ~1 deg fluke sway.
 
@@ -22,7 +21,7 @@ OUT = ROOT / 'tools/_debug/prone_loop'
 CLIP = 'prone_read_loop'
 DURATION = 4.0
 STEP = 0.2
-SCALES = {'actual': 170.0 / 980.0, 'zoom': 1.0}
+SCALES = {'actual': 170.0 / 820.0 * 355.0 / 528.0, 'zoom': 1.0}
 
 
 def frames():

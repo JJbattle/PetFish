@@ -1,0 +1,113 @@
+{
+  "status": "contact and ankle continuity passed for seven sampled frames",
+  "alpha_threshold": 128,
+  "contact_definition": "bottom 3-row opaque band median; visible sole max-y",
+  "scope": "not a full animation/biomechanical approval",
+  "samples": [
+    {
+      "time": 0.0,
+      "feet": {
+        "l": {
+          "sole_y": 911,
+          "bottom_band_median_x": 475.5,
+          "ankle_center_gap_rows": []
+        },
+        "r": {
+          "sole_y": 911,
+          "bottom_band_median_x": 547.0,
+          "ankle_center_gap_rows": []
+        }
+      }
+    },
+    {
+      "time": 0.49,
+      "feet": {
+        "l": {
+          "sole_y": 911,
+          "bottom_band_median_x": 475.5,
+          "ankle_center_gap_rows": []
+        },
+        "r": {
+          "sole_y": 911,
+          "bottom_band_median_x": 547.0,
+          "ankle_center_gap_rows": []
+        }
+      }
+    },
+    {
+      "time": 0.5,
+      "feet": {
+        "l": {
+          "sole_y": 911,
+          "bottom_band_median_x": 475.5,
+          "ankle_center_gap_rows": []
+        },
+        "r": {
+          "sole_y": 911,
+          "bottom_band_median_x": 547.0,
+          "ankle_center_gap_rows": []
+        }
+      }
+    },
+    {
+      "time": 1.0,
+      "feet": {
+        "l": {
+          "sole_y": 911,
+          "bottom_band_median_x": 475.5,
+          "ankle_center_gap_rows": []
+        },
+        "r": {
+          "sole_y": 911,
+          "bottom_band_median_x": 547.0,
+          "ankle_center_gap_rows": []
+        }
+      }
+    },
+    {
+      "time": 1.49,
+      "feet": {
+        "l": {
+          "sole_y": 911,
+          "bottom_band_median_x": 475.5,
+          "ankle_center_gap_rows": []
+        },
+        "r": {
+          "sole_y": 911,
+          "bottom_band_median_x": 547.0,
+          "ankle_center_gap_rows": []
+        }
+      }
+    },
+    {
+      "time": 1.5,
+      "feet": {
+        "l": {
+          "sole_y": 911,
+          "bottom_band_median_x": 475.5,
+          "ankle_center_gap_rows": []
+        },
+        "r": {
+          "sole_y": 911,
+          "bottom_band_median_x": 547.0,
+          "ankle_center_gap_rows": []
+        }
+      }
+    },
+    {
+      "time": 2.0,
+      "feet": {
+        "l": {
+          "sole_y": 911,
+          "bottom_band_median_x": 475.5,
+          "ankle_center_gap_rows": []
+        },
+        "r": {
+          "sole_y": 911,
+          "bottom_band_median_x": 547.0,
+          "ankle_center_gap_rows": []
+        }
+      }
+    }
+  ]
+}

@@ -63,7 +63,9 @@
 
 ## 躺卧动作队列（2026-10-31 更新）
 
-趴读制作入口已改为 [v2 装配说明](assets/art/prone_reading_v2/kit/ASSEMBLY_GUIDE.md)。静止帧按趴姿原稿修正尾巴后原位拆分，v1 六件重拼图归档。游戏内验收待接入。
+趴读已在游戏中换成坐姿的同款鲸鱼垫。「趴着画画」也已完成[三件装配和描线样例](assets/art/prone_sketch_v1/kit/ASSEMBLY_GUIDE.md)，使用同一个靠垫 PNG，等待安排游戏入口。下面的排队描述为历史记录。
+
+当前使用[趴读 v3 装配说明](assets/art/prone_reading_v3/kit/ASSEMBLY_GUIDE.md)。新版收短躯干，双膝折向肩后，按站姿头高对齐；已接入项目并在隔离 Godot 场景核对阅读循环。以下 v1 记录供追溯。
 
 用户已要求继续下一个动作，本轮先交付“趴着看书”的静态拆件包：
 `assets/art/prone_reading_v1/kit/`。六个透明 PNG 已实际拼装，装配坐标、

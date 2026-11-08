@@ -1,0 +1,26 @@
+prone_sketch.png
+size: 2048,1567
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+whale_cushion
+  rotate: false
+  xy: 0, 989
+  size: 1124, 576
+  orig: 1124, 576
+  offset: 0, 0
+  index: -1
+body_pad
+  rotate: false
+  xy: 0, 0
+  size: 1135, 987
+  orig: 1135, 987
+  offset: 0, 0
+  index: -1
+drawing_arm
+  rotate: false
+  xy: 1126, 989
+  size: 188, 301
+  orig: 188, 301
+  offset: 0, 0
+  index: -1

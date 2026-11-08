@@ -41,6 +41,23 @@ def repair_layers(layers):
 
     from build_spine import build_face
     front = registered("assets/art/rig_repair/front_armless_v1.png", .78, (31, 28))
+    wave = registered("assets/art/reminder_wave_v1/raised_arm.png", .21, (230, 381))
+    arm, box = region(wave)
+    layers["wave_l"] = (arm, box)
+    # Reflect about the midpoint of the two shoulder sockets, not the canvas.
+    layers["wave_r"] = (arm.transpose(Image.Transpose.FLIP_LEFT_RIGHT),
+                        (950-box[2], box[1], 950-box[0], box[3]))
+    # The painted apron frill crosses the shoulder socket. Let its original
+    # pixels show through the stationary sleeve root on both sides.
+    for tag in ("l", "r"):
+        arm, (x0, y0, _, _) = layers["wave_" + tag]
+        for y in range(arm.height):
+            for x in range(arm.width):
+                sx, sy = x+x0, y+y0
+                if 395 <= sx <= 555 and 532 <= sy <= 610:
+                    red, green, _, opacity = front.getpixel((sx, sy))
+                    if opacity > 160 and red > 140 and green > 110:
+                        arm.putpixel((x, y), (0, 0, 0, 0))
     side = registered("assets/art/rig_repair/r34_armless_v1.png", side_art.S, (1, 91))
     layers["body"] = region(lower(front, 542))
     layers["head"] = region(upper(front, 548))
@@ -217,6 +234,18 @@ def repair_layers(layers):
     arms = Image.new("RGBA", (1024, 1024))
     arms.alpha_composite(source, (30, 100))
     layers["work_arms"] = region(arms)
+
+
+def wave_weights(side):
+    from build_spine import smoothstep
+
+    def weights(x, y):
+        outward = 335-x if side == "l" else x-614
+        fore = smoothstep(-17, 17, .7*(outward + 568-y))
+        palm = smoothstep(-9, 9, 496-y)
+        return {"chest": 1-fore, "wave_elbow_"+side: fore*(1-palm),
+                "wave_wrist_"+side: fore*palm}
+    return weights
 
 
 def drink_sleeve_weights(side):

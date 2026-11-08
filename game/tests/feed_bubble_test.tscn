@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cfeedbub01"]
+
+[ext_resource type="Script" path="res://tests/feed_bubble_test.gd" id="1_fb"]
+
+[node name="FeedBubbleTest" type="Node"]
+script = ExtResource("1_fb")

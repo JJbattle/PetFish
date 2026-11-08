@@ -1,0 +1,64 @@
+{
+  "status": "isolated corrective prototype, not merged into animator builder",
+  "source_textures_edited": false,
+  "poses": {
+    "0.000": {
+      "changed_pixels": 0,
+      "both_feet_below_y830_changed": 0,
+      "left_outer_at_y762": 454
+    },
+    "0.500": {
+      "changed_pixels": 2406,
+      "both_feet_below_y830_changed": 0,
+      "left_outer_at_y762": 459
+    },
+    "1.500": {
+      "changed_pixels": 2439,
+      "both_feet_below_y830_changed": 0,
+      "left_outer_at_y762": 454
+    },
+    "2.000": {
+      "changed_pixels": 0,
+      "both_feet_below_y830_changed": 0,
+      "left_outer_at_y762": 454
+    }
+  },
+  "loops": {
+    "zoom": {
+      "source_frames": 91,
+      "fps": 15,
+      "duration": 6,
+      "boundary_pixel_diffs": [
+        0,
+        66,
+        0,
+        0
+      ],
+      "boundary_max_channel_delta": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "method": "one continuously advanced loop state"
+    },
+    "actual": {
+      "source_frames": 91,
+      "fps": 15,
+      "duration": 6,
+      "boundary_pixel_diffs": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "boundary_max_channel_delta": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "method": "one continuously advanced loop state"
+    }
+  }
+}

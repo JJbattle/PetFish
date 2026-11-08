@@ -1,0 +1,135 @@
+{
+  "skeleton": {
+    "spine": "4.2.43",
+    "images": "./",
+    "width": 1600,
+    "height": 1040,
+    "y": -1040
+  },
+  "bones": [
+    {
+      "name": "root"
+    },
+    {
+      "name": "whale_cushion",
+      "parent": "root",
+      "x": 15,
+      "y": -367
+    },
+    {
+      "name": "body_pad",
+      "parent": "root",
+      "x": 404,
+      "y": -28
+    },
+    {
+      "name": "drawing_arm",
+      "parent": "root",
+      "x": 1040,
+      "y": -650
+    }
+  ],
+  "slots": [
+    {
+      "name": "whale_cushion",
+      "bone": "whale_cushion",
+      "attachment": "whale_cushion"
+    },
+    {
+      "name": "body_pad",
+      "bone": "body_pad",
+      "attachment": "body_pad"
+    },
+    {
+      "name": "drawing_arm",
+      "bone": "drawing_arm",
+      "attachment": "drawing_arm"
+    }
+  ],
+  "skins": [
+    {
+      "name": "default",
+      "attachments": {
+        "whale_cushion": {
+          "whale_cushion": {
+            "type": "region",
+            "path": "whale_cushion",
+            "width": 1124.1599999999999,
+            "height": 576.0,
+            "x": 562.0799999999999,
+            "y": -288.0,
+            "rotation": 0
+          }
+        },
+        "body_pad": {
+          "body_pad": {
+            "type": "region",
+            "path": "body_pad",
+            "width": 1135,
+            "height": 987,
+            "x": 567.5,
+            "y": -493.5,
+            "rotation": 0
+          }
+        },
+        "drawing_arm": {
+          "drawing_arm": {
+            "type": "region",
+            "path": "drawing_arm",
+            "width": 187.812,
+            "height": 301.03200000000004,
+            "x": -52.84130892349263,
+            "y": -104.36659323390803,
+            "rotation": -19
+          }
+        }
+      }
+    }
+  ],
+  "animations": {
+    "prone_sketch_loop": {
+      "bones": {
+        "drawing_arm": {
+          "rotate": [
+            {
+              "time": 0,
+              "value": 0
+            },
+            {
+              "time": 0.4,
+              "value": 0.9
+            },
+            {
+              "time": 0.75,
+              "value": -0.55
+            },
+            {
+              "time": 1.1,
+              "value": 0.5
+            },
+            {
+              "time": 1.4,
+              "value": -0.25
+            },
+            {
+              "time": 1.95,
+              "value": -0.25
+            },
+            {
+              "time": 2.35,
+              "value": 0.7
+            },
+            {
+              "time": 2.7,
+              "value": -0.45
+            },
+            {
+              "time": 3,
+              "value": 0
+            }
+          ]
+        }
+      }
+    }
+  }
+}

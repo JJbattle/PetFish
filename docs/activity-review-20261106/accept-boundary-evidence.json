@@ -1,0 +1,80 @@
+[
+  {
+    "time": "0.990",
+    "feet": {
+      "l": {
+        "bottom": 911,
+        "contact_x": 475.5
+      },
+      "r": {
+        "bottom": 911,
+        "contact_x": 547.0
+      }
+    }
+  },
+  {
+    "time": "1.000",
+    "feet": {
+      "l": {
+        "bottom": 911,
+        "contact_x": 475.5
+      },
+      "r": {
+        "bottom": 911,
+        "contact_x": 547.0
+      }
+    }
+  },
+  {
+    "time": "1.010",
+    "feet": {
+      "l": {
+        "bottom": 911,
+        "contact_x": 475.5
+      },
+      "r": {
+        "bottom": 911,
+        "contact_x": 547.0
+      }
+    }
+  },
+  {
+    "time": "3.490",
+    "feet": {
+      "l": {
+        "bottom": 911,
+        "contact_x": 475.5
+      },
+      "r": {
+        "bottom": 911,
+        "contact_x": 547.0
+      }
+    }
+  },
+  {
+    "time": "3.500",
+    "feet": {
+      "l": {
+        "bottom": 911,
+        "contact_x": 475.5
+      },
+      "r": {
+        "bottom": 911,
+        "contact_x": 547.0
+      }
+    }
+  },
+  {
+    "time": "3.510",
+    "feet": {
+      "l": {
+        "bottom": 911,
+        "contact_x": 475.5
+      },
+      "r": {
+        "bottom": 911,
+        "contact_x": 547.0
+      }
+    }
+  }
+]

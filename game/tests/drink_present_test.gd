@@ -129,9 +129,9 @@ func _check_layout() -> void:
 	if pet._bubble_rect.end.y > pet._pet_rect.position.y:
 		_fail("bubble should sit above the head: bubble=%s pet.top=%.1f"
 			% [pet._bubble_rect, pet._pet_rect.position.y])
-	if pet._panel_rect.position.x < pet._pet_rect.end.x:
-		_fail("panel should sit right of the pet: panel=%s pet.right=%.1f"
-			% [pet._panel_rect, pet._pet_rect.end.x])
+	if pet._panel_rect.end.y > pet._pet_rect.position.y:
+		_fail("info panel should sit above the head: panel=%s pet.top=%.1f"
+			% [pet._panel_rect, pet._pet_rect.position.y])
 	if pet._settings_rect.position.x < pet._pet_rect.end.x:
 		_fail("settings should sit right of the pet: settings=%s pet.right=%.1f"
 			% [pet._settings_rect, pet._pet_rect.end.x])

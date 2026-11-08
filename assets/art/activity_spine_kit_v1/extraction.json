@@ -1,0 +1,477 @@
+{
+  "common/head_front": {
+    "sheet_rect": [
+      0.0,
+      0.0,
+      512.0,
+      512.0
+    ],
+    "crop_bbox": [
+      39,
+      28,
+      501,
+      444
+    ],
+    "padding": 12,
+    "size": [
+      486,
+      440
+    ]
+  },
+  "common/head_turn_left": {
+    "sheet_rect": [
+      512.0,
+      0.0,
+      1024.0,
+      512.0
+    ],
+    "crop_bbox": [
+      35,
+      27,
+      476,
+      443
+    ],
+    "padding": 12,
+    "size": [
+      465,
+      440
+    ]
+  },
+  "common/head_turn_right": {
+    "sheet_rect": [
+      1024.0,
+      0.0,
+      1536.0,
+      512.0
+    ],
+    "crop_bbox": [
+      29,
+      28,
+      469,
+      442
+    ],
+    "padding": 12,
+    "size": [
+      464,
+      438
+    ]
+  },
+  "common/head_closed": {
+    "sheet_rect": [
+      0.0,
+      512.0,
+      512.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      38,
+      13,
+      502,
+      428
+    ],
+    "padding": 12,
+    "size": [
+      488,
+      439
+    ]
+  },
+  "common/hair_back": {
+    "sheet_rect": [
+      512.0,
+      512.0,
+      1024.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      38,
+      9,
+      482,
+      467
+    ],
+    "padding": 12,
+    "size": [
+      468,
+      482
+    ]
+  },
+  "common/tail": {
+    "sheet_rect": [
+      1024.0,
+      512.0,
+      1536.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      50,
+      117,
+      471,
+      372
+    ],
+    "padding": 12,
+    "size": [
+      445,
+      279
+    ]
+  },
+  "standing/body": {
+    "sheet_rect": [
+      0.0,
+      0.0,
+      512.0,
+      512.0
+    ],
+    "crop_bbox": [
+      44,
+      69,
+      502,
+      496
+    ],
+    "padding": 12,
+    "size": [
+      482,
+      451
+    ]
+  },
+  "standing/arm_l": {
+    "sheet_rect": [
+      512.0,
+      0.0,
+      1024.0,
+      512.0
+    ],
+    "crop_bbox": [
+      129,
+      84,
+      344,
+      479
+    ],
+    "padding": 12,
+    "size": [
+      239,
+      419
+    ]
+  },
+  "standing/arm_r": {
+    "sheet_rect": [
+      1024.0,
+      0.0,
+      1536.0,
+      512.0
+    ],
+    "crop_bbox": [
+      169,
+      85,
+      384,
+      479
+    ],
+    "padding": 12,
+    "size": [
+      239,
+      418
+    ]
+  },
+  "standing/leg_l_full": {
+    "sheet_rect": [
+      0.0,
+      512.0,
+      512.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      188,
+      60,
+      321,
+      476
+    ],
+    "padding": 12,
+    "size": [
+      157,
+      440
+    ]
+  },
+  "standing/leg_r_full": {
+    "sheet_rect": [
+      512.0,
+      512.0,
+      1024.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      160,
+      60,
+      293,
+      476
+    ],
+    "padding": 12,
+    "size": [
+      157,
+      440
+    ]
+  },
+  "standing/arm_open_l": {
+    "sheet_rect": [
+      1024.0,
+      512.0,
+      1280.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      0,
+      112,
+      192,
+      360
+    ],
+    "padding": 12,
+    "size": [
+      216,
+      272
+    ]
+  },
+  "standing/arm_open_r": {
+    "sheet_rect": [
+      1280.0,
+      512.0,
+      1536.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      0,
+      112,
+      208,
+      360
+    ],
+    "padding": 12,
+    "size": [
+      232,
+      272
+    ]
+  },
+  "seated/body": {
+    "sheet_rect": [
+      0.0,
+      0.0,
+      512.0,
+      512.0
+    ],
+    "crop_bbox": [
+      34,
+      52,
+      503,
+      492
+    ],
+    "padding": 12,
+    "size": [
+      493,
+      464
+    ]
+  },
+  "seated/arm_l": {
+    "sheet_rect": [
+      512.0,
+      0.0,
+      1024.0,
+      512.0
+    ],
+    "crop_bbox": [
+      151,
+      34,
+      342,
+      493
+    ],
+    "padding": 12,
+    "size": [
+      215,
+      483
+    ]
+  },
+  "seated/arm_r": {
+    "sheet_rect": [
+      1024.0,
+      0.0,
+      1536.0,
+      512.0
+    ],
+    "crop_bbox": [
+      114,
+      35,
+      300,
+      493
+    ],
+    "padding": 12,
+    "size": [
+      210,
+      482
+    ]
+  },
+  "seated/leg_l_full": {
+    "sheet_rect": [
+      0.0,
+      512.0,
+      512.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      190,
+      31,
+      343,
+      485
+    ],
+    "padding": 12,
+    "size": [
+      177,
+      478
+    ]
+  },
+  "seated/leg_r_full": {
+    "sheet_rect": [
+      512.0,
+      512.0,
+      1024.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      165,
+      31,
+      317,
+      485
+    ],
+    "padding": 12,
+    "size": [
+      176,
+      478
+    ]
+  },
+  "seated/chair": {
+    "sheet_rect": [
+      1024.0,
+      512.0,
+      1536.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      71,
+      34,
+      431,
+      482
+    ],
+    "padding": 12,
+    "size": [
+      384,
+      472
+    ]
+  },
+  "extra/head_left_step1": {
+    "sheet_rect": [
+      0.0,
+      0.0,
+      512.0,
+      512.0
+    ],
+    "crop_bbox": [
+      38,
+      26,
+      504,
+      449
+    ],
+    "padding": 12,
+    "size": [
+      490,
+      447
+    ]
+  },
+  "extra/head_left_step2": {
+    "sheet_rect": [
+      512.0,
+      0.0,
+      1024.0,
+      512.0
+    ],
+    "crop_bbox": [
+      35,
+      29,
+      472,
+      450
+    ],
+    "padding": 12,
+    "size": [
+      461,
+      445
+    ]
+  },
+  "extra/head_right_step1": {
+    "sheet_rect": [
+      1024.0,
+      0.0,
+      1536.0,
+      512.0
+    ],
+    "crop_bbox": [
+      15,
+      28,
+      472,
+      448
+    ],
+    "padding": 12,
+    "size": [
+      481,
+      444
+    ]
+  },
+  "extra/head_right_step2": {
+    "sheet_rect": [
+      0.0,
+      512.0,
+      512.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      40,
+      16,
+      497,
+      449
+    ],
+    "padding": 12,
+    "size": [
+      481,
+      457
+    ]
+  },
+  "extra/heel_l_source": {
+    "sheet_rect": [
+      512.0,
+      512.0,
+      1024.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      120,
+      117,
+      372,
+      463
+    ],
+    "padding": 12,
+    "size": [
+      276,
+      370
+    ]
+  },
+  "extra/heel_r_source": {
+    "sheet_rect": [
+      1024.0,
+      512.0,
+      1536.0,
+      1024.0
+    ],
+    "crop_bbox": [
+      99,
+      117,
+      352,
+      464
+    ],
+    "padding": 12,
+    "size": [
+      277,
+      371
+    ]
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "canvas": [
+    1280,
+    1280
+  ],
+  "draw_order_back_to_front": [
+    {
+      "name": "whale_cushion",
+      "pivot": [
+        -55,
+        -608
+      ],
+      "position": [
+        230,
+        130
+      ],
+      "scale": 0.65,
+      "angle": 0
+    },
+    {
+      "name": "head_sit",
+      "pivot": [
+        370,
+        541
+      ],
+      "position": [
+        735,
+        555
+      ],
+      "scale": 0.85,
+      "angle": 0
+    },
+    {
+      "name": "body_sit",
+      "pivot": [
+        600,
+        263
+      ],
+      "position": [
+        735,
+        545
+      ],
+      "scale": 0.38,
+      "angle": 0
+    },
+    {
+      "name": "chin",
+      "pivot": [
+        370,
+        541
+      ],
+      "position": [
+        735,
+        555
+      ],
+      "scale": 0.85,
+      "angle": 0
+    },
+    {
+      "name": "book_lap",
+      "pivot": [
+        18,
+        15
+      ],
+      "position": [
+        734,
+        689
+      ],
+      "scale": 0.325,
+      "angle": 0
+    },
+    {
+      "name": "arm_far",
+      "pivot": [
+        100,
+        72
+      ],
+      "position": [
+        805,
+        573
+      ],
+      "scale": 0.37,
+      "angle": 10
+    },
+    {
+      "name": "arm_near_pen",
+      "pivot": [
+        91,
+        45
+      ],
+      "position": [
+        671,
+        581
+      ],
+      "scale": 0.35,
+      "angle": 0
+    }
+  ]
+}

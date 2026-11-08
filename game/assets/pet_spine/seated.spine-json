@@ -15,43 +15,43 @@
     {
       "name": "sit_body",
       "parent": "root",
-      "x": 0,
-      "y": 0,
+      "x": 735,
+      "y": -545,
       "rotation": 0
     },
     {
       "name": "whale_cushion",
       "parent": "root",
-      "x": 0,
-      "y": 35,
+      "x": 230,
+      "y": -130,
       "rotation": 0
     },
     {
       "name": "sit_head",
       "parent": "sit_body",
-      "x": 735,
-      "y": -555,
+      "x": 0,
+      "y": -10,
       "rotation": 0
     },
     {
       "name": "book_lap",
       "parent": "sit_body",
-      "x": 745,
-      "y": -785,
+      "x": -1,
+      "y": -144,
       "rotation": 0
     },
     {
       "name": "arm_far",
       "parent": "sit_body",
-      "x": 850,
-      "y": -620,
+      "x": 70,
+      "y": -28,
       "rotation": -10
     },
     {
       "name": "arm_near_pen",
       "parent": "sit_body",
-      "x": 650,
-      "y": -615,
+      "x": -64,
+      "y": -36,
       "rotation": 0
     }
   ],
@@ -62,9 +62,9 @@
       "attachment": "whale_cushion"
     },
     {
-      "name": "hair_back",
+      "name": "head_sit",
       "bone": "sit_head",
-      "attachment": "hair_back"
+      "attachment": "head_sit"
     },
     {
       "name": "body_sit",
@@ -72,9 +72,9 @@
       "attachment": "body_sit"
     },
     {
-      "name": "head_front",
+      "name": "chin",
       "bone": "sit_head",
-      "attachment": "head_front"
+      "attachment": "chin"
     },
     {
       "name": "book_lap",
@@ -100,16 +100,16 @@
           "whale_cushion": {
             "type": "region",
             "path": "whale_cushion",
-            "x": 640.5,
-            "y": -908.0,
-            "width": 1171.0,
-            "height": 600.0
+            "x": 416.325,
+            "y": -590.2,
+            "width": 761.15,
+            "height": 390.0
           }
         },
-        "hair_back": {
-          "hair_back": {
+        "head_sit": {
+          "head_sit": {
             "type": "region",
-            "path": "hair_back",
+            "path": "head_sit",
             "x": 9.35,
             "y": 128.35,
             "width": 647.7,
@@ -120,16 +120,16 @@
           "body_sit": {
             "type": "region",
             "path": "body_sit",
-            "x": 818.5,
-            "y": -872.5,
-            "width": 803.0,
-            "height": 713.0
+            "x": 10.26,
+            "y": -138.32,
+            "width": 476.52,
+            "height": 476.52
           }
         },
-        "head_front": {
-          "head_front": {
+        "chin": {
+          "chin": {
             "type": "region",
-            "path": "head_front",
+            "path": "chin",
             "x": 9.35,
             "y": 128.35,
             "width": 647.7,
@@ -140,30 +140,30 @@
           "book_lap": {
             "type": "region",
             "path": "book_lap",
-            "x": 180.75,
-            "y": -63.0,
-            "width": 379.5,
-            "height": 141.0
+            "x": 117.487,
+            "y": -40.95,
+            "width": 246.675,
+            "height": 91.65
           }
         },
         "arm_far": {
           "arm_far": {
             "type": "region",
             "path": "arm_far",
-            "x": 65.4,
-            "y": -70.5,
-            "width": 250.8,
-            "height": 227.4
+            "x": 40.33,
+            "y": -43.475,
+            "width": 154.66,
+            "height": 140.23
           }
         },
         "arm_near_pen": {
           "arm_near_pen": {
             "type": "region",
             "path": "arm_near_pen",
-            "x": 62.975,
-            "y": -114.4,
-            "width": 226.05,
-            "height": 278.3
+            "x": 40.075,
+            "y": -72.8,
+            "width": 143.85,
+            "height": 177.1
           }
         }
       }

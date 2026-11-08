@@ -1,0 +1,18 @@
+{
+  "png_files": 45,
+  "setups": {
+    "standing": {
+      "bones": 17,
+      "slots": 13,
+      "regions": 26,
+      "animations": 0
+    },
+    "seated": {
+      "bones": 17,
+      "slots": 14,
+      "regions": 23,
+      "animations": 0
+    }
+  },
+  "status": "static artwork/JSON checks only; not Spine editor/runtime validation"
+}

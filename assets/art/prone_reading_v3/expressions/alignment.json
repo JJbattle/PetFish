@@ -1,0 +1,51 @@
+{
+  "canvas": [
+    1536,
+    1024
+  ],
+  "reading_offset": [
+    -3,
+    26
+  ],
+  "character_offset": [
+    354,
+    0
+  ],
+  "reference": "v3 chin center (500,677), y down, bounds exclude right/bottom",
+  "slots": {
+    "prone_eyes": {
+      "tile_top_left": [
+        276,
+        486
+      ],
+      "pixel_rectangles": [
+        [
+          317,
+          551,
+          459,
+          638
+        ],
+        [
+          522,
+          519,
+          671,
+          613
+        ]
+      ]
+    },
+    "prone_mouth": {
+      "tile_top_left": [
+        463,
+        625
+      ],
+      "pixel_rectangles": [
+        [
+          481,
+          638,
+          519,
+          660
+        ]
+      ]
+    }
+  }
+}

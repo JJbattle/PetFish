@@ -1,0 +1,54 @@
+{
+  "canvas": [
+    1600,
+    1040
+  ],
+  "visible_bbox": [
+    29,
+    32,
+    1535,
+    1011
+  ],
+  "draw_order_back_to_front": [
+    {
+      "name": "whale_cushion",
+      "pivot": [
+        0,
+        0
+      ],
+      "position": [
+        15,
+        367
+      ],
+      "scale": 0.96,
+      "angle_cw": 0
+    },
+    {
+      "name": "body_pad",
+      "pivot": [
+        0,
+        0
+      ],
+      "position": [
+        404,
+        28
+      ],
+      "scale": 1,
+      "angle_cw": 0
+    },
+    {
+      "name": "drawing_arm",
+      "pivot": [
+        165,
+        52
+      ],
+      "position": [
+        1040,
+        650
+      ],
+      "scale": 0.666,
+      "angle_cw": 19
+    }
+  ],
+  "reference": "canvas top left; x right, y down; uniform scale"
+}

@@ -1,10 +1,11 @@
 """Build the seated + prone rigs into the production asset folder.
 
-The seated (`whale_seated_work_v1`) and prone (`prone_reading_v2`) poses are
+The seated (`whale_seated_work_v2`) and prone (`prone_reading_v3`) poses are
 separate Spine skeletons from the standing `pet` rig, so they are emitted as
 their own `.spine-json` / `.atlas` / `.png` triplets next to `pet.*` and loaded
 by `pet.gd` as additional SpineSprite nodes that swap in for the `working` and
-`slack` states.
+`slack` states.  The prone sketch pose (`prone_sketch_v1`) joins `slack` as an
+alternate to reading, emitted the same way.
 
 This also writes a per-rig alpha silhouette.  The seated/prone animations move
 only a couple of canvas pixels (a ~1 deg head nod and a sub-degree arm scribble),
@@ -19,13 +20,15 @@ from PIL import Image, ImageFilter
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_seated_spine
 import build_prone_spine
+import build_prone_sketch_spine
 
 ROOT = Path(__file__).resolve().parents[1]
 DEST = ROOT / 'game/assets/pet_spine'
 
 SILHOUETTES = [
-    ('assets/art/whale_seated_work_v1/kit/assembled.png', 'seated_silhouette.png', (1280, 1280)),
-    ('assets/art/prone_reading_v2/kit/assembled.png', 'prone_silhouette.png', (1536, 1024)),
+    ('assets/art/whale_seated_work_v2/kit/assembled.png', 'seated_silhouette.png', (1280, 1280)),
+    ('assets/art/prone_reading_v3/kit/assembled.png', 'prone_silhouette.png', (1536, 1024)),
+    ('assets/art/prone_sketch_v1/kit/assembled.png', 'prone_sketch_silhouette.png', (1600, 1040)),
 ]
 
 
@@ -43,6 +46,7 @@ def main() -> None:
     DEST.mkdir(parents=True, exist_ok=True)
     build_seated_spine.build(DEST)
     build_prone_spine.build(DEST)
+    build_prone_sketch_spine.build(DEST)
     for src_rel, out_name, canvas in SILHOUETTES:
         write_silhouette(src_rel, out_name, canvas)
     print('pose rigs ->', DEST)

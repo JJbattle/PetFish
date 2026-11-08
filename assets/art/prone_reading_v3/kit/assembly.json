@@ -1,0 +1,70 @@
+{
+  "reading": {
+    "top_left": [
+      -3,
+      26
+    ],
+    "size": [
+      1406,
+      971
+    ],
+    "control": [
+      510,
+      677
+    ]
+  },
+  "fluke": {
+    "top_left": [
+      760,
+      118
+    ],
+    "size": [
+      227,
+      152
+    ],
+    "control": [
+      842,
+      315
+    ]
+  },
+  "shoe_far": {
+    "top_left": [
+      917,
+      272
+    ],
+    "size": [
+      94,
+      80
+    ],
+    "control": [
+      948,
+      352
+    ]
+  },
+  "shoe_near": {
+    "top_left": [
+      1005,
+      295
+    ],
+    "size": [
+      119,
+      108
+    ],
+    "control": [
+      1046,
+      409
+    ]
+  },
+  "scene": {
+    "character_offset": [
+      354,
+      0
+    ],
+    "cushion_top_left": [
+      12,
+      384
+    ],
+    "cushion_scale": 0.9055408970976253,
+    "draw_order": "cushion behind all character slots"
+  }
+}

@@ -3,8 +3,7 @@
 Produces two views of the full 4.0 s loop so the motion can be judged at both the
 real desktop size and a magnified size:
 
-- `actual`  -- the assembled content is ~1106 px tall (its alpha bbox), so it is
-  mapped to the production pet's 170 px baseline with a 170/1106 factor.
+- `actual`  -- the head matches the standing rig at the default 170 px pet height.
 - `zoom`    -- 1:1 with the authoring canvas (about 6.5x the baseline), for
   checking the 2-4 px pen stroke and breathing rise/fall.
 
@@ -23,7 +22,7 @@ OUT = ROOT / 'tools/_debug/seated_loop'
 CLIP = 'seat_work_loop'
 DURATION = 4.0
 STEP = 0.2
-SCALES = {'actual': 170.0 / 1106.0, 'zoom': 1.0}
+SCALES = {'actual': 170.0 / 820.0 * 355.0 / 379.0, 'zoom': 1.0}
 
 
 def frames():

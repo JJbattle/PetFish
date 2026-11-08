@@ -1,26 +1,17 @@
-"""Build a standalone Spine rig for the prone-reading pose (v2).
+"""Build the v3 prone-reading rig with swappable eyes and mouth.
 
-Reads the four `assets/art/prone_reading_v2/kit/` attachments and the
-weight-painted mesh skeleton `prone_v2.json` that `tools/prepare_prone_v2.py`
-regenerates from the corrected master (the duplicate bottom-right whale fluke
-is removed), packs the four images into one atlas, and adds the
-`prone_read_loop` reading cycle.
+Packs the v3 fluke, feet, reading base and four expression textures.
+The face_setup.json from prepare_prone_expressions.py preserves the reading
+mesh and registers the new eye and mouth slots. Add the prone_read_loop cycle.
 
 Deliberately separate from the production `pet` rig, exactly like
 `build_seated_spine.py` / `build_rest_spine.py`: it never writes into
 `game/assets/pet_spine/` on its own and is only meant for isolated previewing;
 `build_pose_rigs.py` is the only writer into the game asset folder.
 
-v2 vs v1
---------
-v1 cut the pose into six flat regions (head/body/book/arms/pillow) and scaled
-them onto a 1280x920 canvas.  v2 keeps the art at the master's 1536x1024 scale
-and instead weight-paints three moving pieces -- the tail fluke and the two
-feet -- out of a single `reading` mesh, so the face/hair/arms/pillow/book never
-re-tear at their seams.  The mesh vertices, uvs and bone pivots come straight
-from `prone_v2.json`, already in spine-godot's convention (verified by
-`build_spine.py`'s mesh path), so this builder only packs the atlas and
-supplies the animation.
+The v3 master folds the legs towards the head. The fluke and feet use the
+new master's landmarks. Book, pillow, fingers and sleeves share the reading
+mesh so their contact points stay registered.
 
 Reading cycle (`prone_read_loop`, 4.0 s)
 ----------------------------------------
@@ -35,13 +26,16 @@ import json
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / 'assets/art/prone_reading_v2' / 'kit'
+SRC = ROOT / 'assets/art/prone_reading_v3' / 'kit'
+FACE = SRC.parent / 'expressions'
 OUT = ROOT / 'tools/_debug/prone_spine'
 
 GUTTER = 2
 ATLAS_WIDTH = 2048
 
-PIECES = ['reading', 'fluke', 'shoe_far', 'shoe_near']
+PIECE_DIRS = {name: SRC for name in ('fluke', 'shoe_far', 'shoe_near', 'whale_cushion')}
+PIECE_DIRS.update({name: FACE for name in ('reading_base', 'eyes_neutral',
+                  'eyes_happy', 'mouth_neutral', 'mouth_happy')})
 
 
 def read_loop() -> dict:
@@ -97,8 +91,8 @@ def shelf_pack(items):
 def build(out_dir: Path = OUT):
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # ---- pack the four kit PNGs into one atlas -----------------------------
-    imgs = {name: Image.open(SRC / (name + '.png')).convert('RGBA') for name in PIECES}
+    imgs = {name: Image.open(folder / (name + '.png')).convert('RGBA')
+            for name, folder in PIECE_DIRS.items()}
     placements, page_size = shelf_pack(list(imgs.items()))
     page = Image.new('RGBA', page_size, (0, 0, 0, 0))
     rects = {}
@@ -112,7 +106,7 @@ def build(out_dir: Path = OUT):
              'format: RGBA8888',
              'filter: Linear,Linear',
              'repeat: none']
-    for name in PIECES:
+    for name in imgs:
         x, y, w, h = rects[name]
         atlas += [name,
                   '  rotate: false',
@@ -124,7 +118,7 @@ def build(out_dir: Path = OUT):
     (out_dir / 'prone.atlas').write_text('\n'.join(atlas) + '\n', encoding='utf-8', newline='\n')
 
     # ---- skeleton: reuse the weight-painted mesh from the kit --------------
-    skeleton = json.loads((SRC / 'prone_v2.json').read_text(encoding='utf-8'))
+    skeleton = json.loads((FACE / 'face_setup.json').read_text(encoding='utf-8'))
     skeleton['animations'] = {'prone_read_loop': {'bones': read_loop()}}
     (out_dir / 'prone.spine-json').write_text(
         json.dumps(skeleton, indent=2), encoding='utf-8', newline='\n')

@@ -1,0 +1,14 @@
+[remap]
+
+importer="spine.json"
+type="SpineSkeletonFileResource"
+uid="uid://4rryb4hhvyf1"
+path="res://.godot/imported/activity_standing.spine-json-a847f923469bb54d5cddc9b626dcda9b.spjson"
+
+[deps]
+
+source_file="res://assets/activity_spine/activity_standing.spine-json"
+dest_files=["res://.godot/imported/activity_standing.spine-json-a847f923469bb54d5cddc9b626dcda9b.spjson"]
+
+[params]
+

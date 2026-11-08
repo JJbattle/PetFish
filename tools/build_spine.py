@@ -126,6 +126,14 @@ BONES = [
     ("tail2", "tail1", 675.0, 760.0),
     ("tailFin", "tail2", 730.0, 700.0),
     ("skirt", "hip", 470.0, 665.0),
+    # ---- legs (placeholder): two-bone chains from the hip.  The sock rides
+    # legL/legR; the shoe rides footL/footR so a heel-raise can pivot the shoe
+    # independently of the leg.  These are placeholder joints: the real pivots
+    # (hip socket, knee, ball of foot) are refined once real leg art lands.
+    ("legL", "hip", 442.0, 720.0),
+    ("footL", "legL", 432.0, 905.0),
+    ("legR", "hip", 500.0, 720.0),
+    ("footR", "legR", 520.0, 905.0),
     ("armL1", "chest", 414.0, 566.0),
     ("armL2", "armL1", 363.0, 625.0),
     ("handL", "armL2", 338.0, 663.0),
@@ -188,6 +196,10 @@ BONES = [
     # through the hand during a sideways stroke.
     ("slackL", "fish", 375.0, 706.0),
     ("slackR", "fish", 470.0, 607.0),
+    ("wave_elbow_l", "chest", 335.0, 568.0),
+    ("wave_wrist_l", "wave_elbow_l", 318.0, 496.0),
+    ("wave_elbow_r", "chest", 614.0, 568.0),
+    ("wave_wrist_r", "wave_elbow_r", 631.0, 496.0),
 ]
 
 # Two-bone IK keeps each hand glued to the cup's side: the forearm tip (where
@@ -283,6 +295,12 @@ SLOTS = [
     ("hair_l", "hairL1", "hair_l"),
     ("hair_r", "hairR1", "hair_r"),
     ("body", "root", "body"),
+    # legs sit under the skirt (the thigh hides behind it) and stay present in
+    # every standing pose; the shoe is its own slot so a heel-raise pivots it
+    ("leg_l", "legL", "leg_l"),
+    ("leg_r", "legR", "leg_r"),
+    ("foot_l", "footL", "foot_l"),
+    ("foot_r", "footR", "foot_r"),
     ("skirt", "skirt", "skirt"),
     # the tail passes in front of the skirt in the art and behind the sleeves,
     # so it sits between the two
@@ -1173,6 +1191,75 @@ def build_layers(im):
         x1, y1 = min(W, x1 + PAD), min(H, y1 + PAD)
         out[name] = (img.crop((x0, y0, x1, y1)), (x0, y0, x1, y1))
     return out, mk, hair_masks
+
+
+# ---------------------------------------------------------------- legs
+# The standing body painting bakes the legs in (there is no independent leg art
+# yet).  Cut the visible sock + shoe out of the body into left/right layers so
+# each leg can march (rotate about the hip) and heel-raise (pivot the shoe about
+# its ball).  The hole left behind is filled with a dark under-skirt base, and a
+# placeholder thigh capsule is drawn from the hip down to the sock so a lifted
+# leg never opens a gap at the hem.  These are placeholders: real leg art and
+# the exact pivots come once the art is re-generated.
+LEG_TOP = 800
+SHOE_TOP = 905
+LEG_SPLIT = 485
+HIP_Y = 720
+LEG_UNDER = (26, 32, 64, 255)
+THIGH_COLOR = (250, 250, 248, 255)
+
+
+def _boxed(img, ox=0, oy=0):
+    bb = img.getchannel("A").getbbox()
+    if not bb:
+        return (Image.new("RGBA", (1, 1)), (0, 0, 1, 1))
+    x0, y0, x1, y1 = bb
+    return (img.crop(bb), (x0 + ox, y0 + oy, x1 + ox, y1 + oy))
+
+
+def cut_legs(layers):
+    """Split the painted lower body into left/right leg (sock) and foot (shoe)."""
+    body, (bx0, by0, _bx1, _by1) = layers["body"]
+    body = body.copy()
+    bp = body.load()
+    w, h = body.size
+    top = LEG_TOP - by0
+    shoe = SHOE_TOP - by0
+    split = LEG_SPLIT - bx0
+
+    leg_mask = [Image.new("L", (w, h), 0) for _ in (0, 1)]
+    foot_mask = [Image.new("L", (w, h), 0) for _ in (0, 1)]
+    lmp = [m.load() for m in leg_mask]
+    fmp = [m.load() for m in foot_mask]
+    for y in range(h):
+        for x in range(w):
+            if bp[x, y][3] <= 8:
+                continue
+            side = 0 if x < split else 1
+            if top <= y < shoe:
+                lmp[side][x, y] = 255
+            elif y >= shoe:
+                fmp[side][x, y] = 255
+
+    legs = []
+    for side in (0, 1):
+        sock = apply_mask(body, leg_mask[side])
+        shoe_img = apply_mask(body, foot_mask[side])
+        legs.append(_boxed(sock, bx0, by0))
+        legs.append(_boxed(shoe_img, bx0, by0))
+
+    hole = leg_mask[0]
+    for m in (leg_mask[1], foot_mask[0], foot_mask[1]):
+        hole = ImageChops.lighter(hole, m)
+    body.putalpha(ImageChops.multiply(body.getchannel("A"), invert(hole)))
+    under = Image.new("RGBA", (w, h), LEG_UNDER)
+    under.putalpha(hole)
+    body.alpha_composite(under)
+
+    layers["body"] = (body, (bx0, by0, _bx1, _by1))
+    layers["leg_l"], layers["foot_l"] = legs[0], legs[1]
+    layers["leg_r"], layers["foot_r"] = legs[2], legs[3]
+    return layers
 
 
 # ---------------------------------------------------------------- face
@@ -2274,7 +2361,8 @@ SIDE_SLOTS = ("s_hair_back", "s_body", "s_arm_up_l", "s_arm_up_r",
               "s_head", "s_arm_fore_l", "s_arm_fore_r")
 # the front set the drink fades out while the side set fades in: body, hair,
 # head, both arms and the front-loading duplicates
-FRONT_SLOTS = ("hair_back", "hair_l", "hair_r", "body", "skirt", "tail",
+FRONT_SLOTS = ("hair_back", "hair_l", "hair_r", "body", "leg_l", "leg_r",
+               "foot_l", "foot_r", "skirt", "tail",
                "arm_up_l", "arm_up_r", "arm_fore_l", "arm_fore_r",
                "head", "eyes", "mouth", "hand_l", "hand_r",
                "arm_fore_l_front", "arm_fore_r_front",
@@ -3340,6 +3428,7 @@ def main():
     layers.update(side_art.rig_layers())
     from rig_repair import repair_layers
     repair_layers(layers)
+    cut_legs(layers)
     print("layers:", ", ".join("%s %dx%d" % (n, layers[n][1][2] - layers[n][1][0],
                                              layers[n][1][3] - layers[n][1][1])
                                for n in sorted(layers)))
@@ -3350,7 +3439,10 @@ def main():
     # ---- build meshes
     meshes = {}
     for name, (img, rect) in layers.items():
-        if name in GRIDS:
+        if name in ("wave_l", "wave_r"):
+            from rig_repair import wave_weights
+            meshes[name] = make_grid(rect, 4, wave_weights(name[-1]))
+        elif name in GRIDS:
             fn = {"body": w_body, "tail": w_tail, "skirt": w_skirt,
                   "hair_l": w_hair("L"), "hair_r": w_hair("R"),
                   "arm_up_l": w_arm_up("L"), "arm_up_r": w_arm_up("R"),
@@ -3373,7 +3465,9 @@ def main():
                     "s_arm_up_l": "s_armL1", "s_arm_up_r": "s_armR1",
                     "s_arm_fore_l": "s_armL2", "s_arm_fore_r": "s_armR2",
                     "s_arm_fore_l_open": "s_armL2", "s_arm_fore_r_open": "s_armR2",
-                    "hand_open_l": "handL"}.get(name, "head")
+                    "hand_open_l": "handL",
+                    "leg_l": "legL", "leg_r": "legR",
+                    "foot_l": "footL", "foot_r": "footR"}.get(name, "head")
             meshes[name] = make_quad(rect, bone)
         if name == "drink_arms":
             meshes[name] = make_quad(rect, "drink_prop")
@@ -3510,6 +3604,8 @@ def main():
         elif s in ("arm_up_l_front", "arm_up_r_front"):
             source = s.removesuffix("_front")
             skins["attachments"][s] = {source: meshes[source]}
+            wave = "wave_" + source[-1]
+            skins["attachments"][s][wave] = meshes[wave]
             if s == "arm_up_r_front":
                 skins["attachments"][s]["slack_sleeve_r"] = meshes["slack_sleeve_r"]
         elif s in ("book", "pen", "fish", "drink_arms", "work_arms", "book_hand",

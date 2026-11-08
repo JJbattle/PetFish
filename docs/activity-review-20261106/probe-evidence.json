@@ -1,0 +1,130 @@
+{
+  "probe1_elbow": {
+    "hand_l_world": {
+      "setup": [
+        400,
+        606
+      ],
+      "t1": [
+        358.774,
+        531.131
+      ]
+    },
+    "hand_r_world": {
+      "setup": [
+        624,
+        606
+      ],
+      "t1": [
+        665.226,
+        531.131
+      ]
+    },
+    "forearm_l_world_static": [
+      424,
+      544
+    ],
+    "forearm_r_world_static": [
+      600,
+      544
+    ]
+  },
+  "probe2_step": {
+    "left_foot_lowest": {
+      "setup": [
+        912,
+        471
+      ],
+      "t1": [
+        907,
+        474
+      ]
+    },
+    "right_foot_lowest": {
+      "setup": [
+        912,
+        544
+      ],
+      "t1": [
+        912,
+        544
+      ]
+    },
+    "right_leg_pixel_diff_bbox": null,
+    "left_foot_lift_px": 5,
+    "left_foot_sway_px": 3,
+    "knee_calf_l_world": {
+      "setup": [
+        475,
+        768
+      ],
+      "t1": [
+        496.547,
+        764.201
+      ]
+    }
+  },
+  "probe3_toe": {
+    "hip_world": {
+      "setup": [
+        512,
+        650
+      ],
+      "peak": [
+        512,
+        645
+      ]
+    },
+    "head_world": {
+      "setup": [
+        512,
+        460
+      ],
+      "peak": [
+        512,
+        455
+      ]
+    },
+    "foot_l_world": {
+      "setup": [
+        475,
+        858
+      ],
+      "peak": [
+        475,
+        858
+      ]
+    },
+    "foot_r_world": {
+      "setup": [
+        549,
+        858
+      ],
+      "peak": [
+        549,
+        858
+      ]
+    },
+    "left_lowest": {
+      "setup": [
+        912,
+        471
+      ],
+      "peak": [
+        917,
+        456
+      ]
+    },
+    "right_lowest": {
+      "setup": [
+        912,
+        544
+      ],
+      "peak": [
+        916,
+        549
+      ]
+    },
+    "heel_l_below_ground_px": 5
+  }
+}

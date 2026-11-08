@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cfeedtest1"]
+
+[ext_resource type="Script" path="res://tests/feed_test.gd" id="1_ft"]
+
+[node name="FeedTest" type="Node"]
+script = ExtResource("1_ft")
