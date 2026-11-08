@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cupdateest1"]
+
+[ext_resource type="Script" path="res://tests/update_test.gd" id="1_ut"]
+
+[node name="UpdateTest" type="Node"]
+script = ExtResource("1_ut")

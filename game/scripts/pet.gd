@@ -13,6 +13,7 @@ const SettingsPanel = preload("res://scripts/settings_panel.gd")
 const ChatPanel = preload("res://scripts/chat_panel.gd")
 const Deepseek = preload("res://scripts/deepseek.gd")
 const GitFeed = preload("res://scripts/git_feed.gd")
+const Updater = preload("res://scripts/updater.gd")
 const ActivitySession = preload("res://scripts/activity_session.gd")
 
 const STATE_DIR := "res://../state"
@@ -158,6 +159,7 @@ var _settings_open := false
 var _chat_panel
 var _deepseek
 var _feed
+var _updater
 var _chat_rect := Rect2()
 var _chat_open := false
 ## True when the panel was opened by a plain notice (not a reminder) and should
@@ -250,6 +252,7 @@ func _ready() -> void:
 	_tail = TranscriptTail.new()
 	_setup_reminders()
 	_setup_feed()
+	_setup_updater()
 	_load_config()
 	_happy_timer = randf_range(HAPPY_COOLDOWN_MIN, HAPPY_COOLDOWN_MAX)
 	_slack_switch_timer = randf_range(SLACK_SWITCH_MIN, SLACK_SWITCH_MAX)
@@ -531,7 +534,8 @@ func _build_ui() -> void:
 	for item in [
 		["喝水打卡", "water"],
 		["提醒设置", "settings"],
-		["检查更新", "feed"],
+		["检查更新", "update"],
+		["同步投喂", "feed"],
 		["切换会话", "cycle"],
 		["取消固定", "unpin"],
 		["退出", "quit"],
@@ -620,6 +624,33 @@ func _on_feed_ready(text: String) -> void:
 ## an informational line in the chat card, never the reminder banner, so it never
 ## clobbers a pending alarm/memo.
 func _on_feed_checked(message: String) -> void:
+	if not _chat_open:
+		_open_chat(false)
+	_chat_panel.notice(message)
+	_notice_timer = NOTICE_SECS
+	_chat_auto_close = true
+
+
+func _setup_updater() -> void:
+	_updater = Updater.new()
+	_updater.name = "Updater"
+	add_child(_updater)
+	_updater.update_ready.connect(_on_update_ready)
+	_updater.update_checked.connect(_on_update_checked)
+
+
+## A newer build's installer finished downloading: surface its path in the chat
+## card so the user knows where to run it.
+func _on_update_ready(path: String, version: String) -> void:
+	if not _chat_open:
+		_open_chat(false)
+	_chat_panel.notice("发现新版本 v%s，安装包已下载到：\n%s" % [version, path])
+	_notice_timer = NOTICE_SECS
+	_chat_auto_close = true
+
+
+## A manual "检查更新" finished with nothing new / no installer yet / a failure.
+func _on_update_checked(message: String) -> void:
 	if not _chat_open:
 		_open_chat(false)
 	_chat_panel.notice(message)
@@ -1957,6 +1988,8 @@ func _on_menu_action(action: String) -> void:
 		"settings":
 			_open_settings()
 			return
+		"update":
+			_updater.check_now()
 		"feed":
 			_feed.check_now()
 		"cycle":
