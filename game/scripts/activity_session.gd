@@ -9,14 +9,16 @@ const TOTAL_SECS := 60.0
 
 ## A 套 (原地巡逻) is the delivered set; B/C land once their clips exist.
 ## Segments sum to TOTAL_SECS and each clip loops until its segment elapses.
+## The clips live on the STANDING rig (pet_portrait.png style), so the
+## follow-along shows the same character as the idle pet, not a redrawn one.
 const PACKAGES := {
 	"a": {
 		"name": "原地巡逻",
 		"segments": [
-			{"clip": "activity_ready", "dur": 10.0},
-			{"clip": "activity_march_cycle", "dur": 20.0},
-			{"clip": "activity_heel_cycle", "dur": 20.0},
-			{"clip": "activity_relax", "dur": 10.0},
+			{"clip": "needs_input", "dur": 10.0},
+			{"clip": "march", "dur": 20.0},
+			{"clip": "heel", "dur": 20.0},
+			{"clip": "idle", "dur": 10.0},
 		],
 	},
 	"b": {"name": "海草舒展", "segments": []},

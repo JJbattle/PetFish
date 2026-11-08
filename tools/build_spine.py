@@ -3394,6 +3394,47 @@ def build_animations():
     a["ik"]["s_ik_arm_r"] = ikf([(0, 1.0), (0.60, 1.0), (0.88, 0.0), (T, 0.0)], False)
     anims["drink_out"] = a
 
+    # ------------------------------------------------ march 2.0 s (loop)
+    # 原地踏步: left foot low-lift (0-0.5) -> settle (0.5-1.0) -> right foot
+    # low-lift (1.0-1.5) -> settle (1.5-2.0).  The continuous leg mesh folds the
+    # knee (thigh +20 / calf -35 on the lifting side) instead of swinging a
+    # single rigid leg about the hip.  Angles follow the standing-leg handoff
+    # (thigh +/-20, calf ∓35); the visible sock hem stays fully on the calf, so
+    # the fold reads at the hidden knee, not at the lace.
+    T = 2.0
+    a = base_anim(T, eyes=att([(0, "eyes_open")]),
+                  mouth=att([(0, "mouth_default")]))
+    a["bones"] = {
+        "legL": {"rotate": ro([(0, 0), (0.5, 20), (1.0, 0), (T, 0)])},
+        "calfL": {"rotate": ro([(0, 0), (0.5, -35), (1.0, 0), (T, 0)])},
+        "legR": {"rotate": ro([(0, 0), (1.0, 0), (1.5, -20), (T, 0)])},
+        "calfR": {"rotate": ro([(0, 0), (1.0, 0), (1.5, 35), (T, 0)])},
+        "armL1": {"rotate": ro([(0, 0), (0.5, 5), (1.0, 0), (1.5, -5), (T, 0)])},
+        "armR1": {"rotate": ro([(0, 0), (0.5, -5), (1.0, 0), (1.5, 5), (T, 0)])},
+        "spine": {"rotate": ro([(0, 0), (0.5, 1), (1.0, 0), (1.5, -1), (T, 0)])},
+    }
+    anims["march"] = a
+
+    # --------------------------------------------------------- heel 4.0 s
+    # 提踵: 1 s rise onto the toes -> 1 s hold -> 1.5 s lower -> 0.5 s settle.
+    # Toe-fixed raise with the ordinary shoe (no separate heel art): the body
+    # rises and the feet get an equal-and-opposite translate so the toe contact
+    # stays planted.  No foot rotation -- the ankle sits almost directly above
+    # the toe, so rotating only swings the ankle sideways.
+    T = 4.0
+    rise = 5.0
+    a = base_anim(T, eyes=att([(0, "eyes_open")]),
+                  mouth=att([(0, "mouth_default")]))
+    a["bones"] = {
+        "root": {"translate": tr([(0, 0, 0), (1.0, 0, -rise), (2.0, 0, -rise),
+                                  (3.5, 0, 0), (T, 0, 0)])},
+        "footL": {"translate": tr([(0, 0, 0), (1.0, 0, rise), (2.0, 0, rise),
+                                   (3.5, 0, 0), (T, 0, 0)])},
+        "footR": {"translate": tr([(0, 0, 0), (1.0, 0, rise), (2.0, 0, rise),
+                                   (3.5, 0, 0), (T, 0, 0)])},
+    }
+    anims["heel"] = a
+
     # slot channels live under "slots"; the clips above keep them at the top
     # level for readability.
     slot_names = {name for name, _bone, _att in SLOTS}

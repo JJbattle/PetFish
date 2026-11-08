@@ -1,8 +1,8 @@
 extends Node
 ## Dev-only: the A 套 60 s follow-along runs to completion through the whole
-## clip sequence (ready -> march -> heel -> relax), then offers the completion
-## confirmation on the activity bar.  Fast-forwards by driving _tick_activity
-## directly instead of waiting a real minute.
+## clip sequence (needs_input -> march -> heel -> idle), then offers the
+## completion confirmation on the activity bar.  Fast-forwards by driving
+## _tick_activity directly instead of waiting a real minute.
 
 const Stage = preload("res://tests/test_stage.gd")
 
@@ -75,9 +75,8 @@ func _ready() -> void:
 		if clip != last:
 			last = clip
 			seq.append(clip)
-	_check(seq == ["activity_ready", "activity_march_cycle",
-			"activity_heel_cycle", "activity_relax", ""],
-		"clip sequence runs ready -> march -> heel -> relax, then finishes (got %s)" % str(seq))
+	_check(seq == ["needs_input", "march", "heel", "idle", ""],
+		"clip sequence runs needs_input -> march -> heel -> idle, then finishes (got %s)" % str(seq))
 
 	# Completion: activity ends and the confirmation replaces the bar.
 	_check(not pet._activity_active, "activity ends at 60 s")

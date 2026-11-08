@@ -856,9 +856,11 @@ func _start_activity(action: String) -> void:
 	_hide_notice_card()
 	_attention_clip = ""
 	_activity_active = true
-	_request_rig("activity")
+	# The follow-along runs on the standing rig (the real character), so the
+	# clips below are standing clips, not the old redrawn activity rig.
+	_request_rig("standing")
 	# start() already advanced to segment 0; play it now.
-	_play_on("activity", _activity.current_clip(), _activity.current_loop())
+	_play(_activity.current_clip(), _activity.current_loop())
 	_refresh_activity_bar()
 	_refresh_texts()
 	_update_passthrough()
@@ -874,7 +876,7 @@ func _tick_activity(delta: float) -> void:
 		return
 	var after: String = _activity.current_clip()
 	if after != before and after != "":
-		_play_on("activity", after, _activity.current_loop())
+		_play(after, _activity.current_loop())
 		_refresh_activity_bar()
 	_activity_bar_accum += delta
 	if _activity_bar_accum >= 1.0:
@@ -886,6 +888,9 @@ func _tick_activity(delta: float) -> void:
 func _on_activity_finished() -> void:
 	_activity_active = false
 	_request_rig("standing")
+	# The activity drove the standing rig's clips; hand it back to the normal
+	# state pose now that the session owns the stage again.
+	_enter_state()
 	_show_activity_done()
 
 
@@ -940,8 +945,8 @@ func _activity_status_text() -> String:
 		return ""
 	var seg: String = _activity.current_clip()
 	var seg_name: String = {
-		"activity_ready": "站稳准备", "activity_march_cycle": "原地踏步",
-		"activity_heel_cycle": "缓慢提踵", "activity_relax": "放松",
+		"needs_input": "站稳准备", "march": "原地踏步",
+		"heel": "缓慢提踵", "idle": "放松",
 	}.get(seg, "")
 	var remain: int = int(ceilf(_activity.total_remaining()))
 	if _activity.state() == "paused":
