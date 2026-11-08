@@ -1,5 +1,7 @@
 # 正式站姿腿部补件回交
 
+> 后续接入修正：用户截图暴露了真实前裙 `body` 排在腿后的问题，现已修正正式 builder 并重新构建/导入。`skirt` 当前是空附件，不能用它充当前裙遮挡。细节与验证见 `STANDING_OCCLUSION_FIX.md`；下文保留原始美术回交记录。
+
 2026-11-08。原交接单要求的左右大腿、膝部连续母件/重叠拆件、裙下遮挡已出齐。
 
 资产：`assets/art/standing_leg_kit_v1/`。先读其中 `README.md`，按 `assembly.json` 接入；拆件总览 `parts-overview.jpg`、中立对照 `neutral-registration.jpg`、拆层检查 `occlusion-layer-check.jpg`。

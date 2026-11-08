@@ -298,7 +298,6 @@ SLOTS = [
     ("hair_back", "root", "hair_back"),
     ("hair_l", "hairL1", "hair_l"),
     ("hair_r", "hairR1", "hair_r"),
-    ("body", "root", "body"),
     # legs sit under the skirt (the thigh hides behind it) and stay present in
     # every standing pose; the shoe is its own slot so a heel-raise pivots it.
     # leg_l/leg_r are now continuous thigh-knee-calf meshes weighted legL<->calfL
@@ -309,6 +308,11 @@ SLOTS = [
     ("foot_l", "footL", "foot_l"),
     ("foot_r", "footR", "foot_r"),
     ("skirt_inner", "hip", "skirt_inner"),
+    # repair_layers() keeps the front dress/hem in body and clears skirt.
+    # Draw the real front occluder after the legs/lining, otherwise the hidden
+    # thigh roots paint over the dress even though the empty skirt slot is in
+    # front. base_anim() derives every clip's reset order from this same list.
+    ("body", "root", "body"),
     ("skirt", "skirt", "skirt"),
     # the tail passes in front of the skirt in the art and behind the sleeves,
     # so it sits between the two
@@ -2307,11 +2311,20 @@ def w_leg(side):
     # visible sock hem (y839-861), keeping the hem fully on the calf.
     thigh = "legL" if side == "L" else "legR"
     calf = "calfL" if side == "L" else "calfR"
+    foot = "footL" if side == "L" else "footR"
 
     def f(x, y):
-        t = smoothstep(782.0, 818.0, y)
-        return {thigh: 1.0 - t, calf: t}
+        knee = smoothstep(782.0, 818.0, y)
+        ankle = _standing_ankle_t(y)
+        # Both textures contain the shoe upper at their y905 split. They must
+        # share ankle weights when the lifted shoe counter-rotates to level.
+        return {thigh: 1.0 - knee, calf: knee * (1.0 - ankle),
+                foot: knee * ankle}
     return f
+
+
+def _standing_ankle_t(y):
+    return smoothstep(885.0, 905.0, y)
 
 
 def w_shoe(side):
@@ -2323,7 +2336,7 @@ def w_shoe(side):
     foot = "footL" if side == "L" else "footR"
 
     def f(x, y):
-        t = smoothstep(885.0, 905.0, y)
+        t = _standing_ankle_t(y)
         return {calf: 1.0 - t, foot: t}
     return f
 
@@ -2542,6 +2555,49 @@ def hop_keys(offset=0.0):
 
 def hop_scale(offset=0.0):
     return [(round(t + offset, 3), x, y) for t, x, y in HOP_SCALE]
+
+
+def _standing_step(side, start, lift=55.0):
+    """Front-view step projection, authored in source/screen coordinates.
+
+    Frontal Z rotations alone spread the knees sideways and largely cancel
+    the ankle lift. Project the forward-raised thigh into the image instead:
+    place the ankle on a mostly vertical path, solve the hidden knee offset,
+    and counter-rotate the shoe. Left/right use their own bind geometry.
+    """
+    def rotate(angle, vector):
+        c, s = math.cos(math.radians(angle)), math.sin(math.radians(angle))
+        return c * vector[0] - s * vector[1], s * vector[0] + c * vector[1]
+
+    thigh, calf, foot = "leg" + side, "calf" + side, "foot" + side
+    hip_xy, knee_xy, ankle_xy = [BONES[BONE_INDEX[n]][2:] for n in (thigh, calf, foot)]
+    sign = 1 if side == "L" else -1
+    channels = {thigh: {"rotate": []}, calf: {"rotate": [], "translate": []},
+                foot: {"rotate": []}}
+    phases = [(0, 0), (.1, .1), (.22, .5), (.36, .9), (.45, 1),
+              (.55, 1), (.64, .9), (.78, .5), (.9, .1), (1, 0)]
+    for t, amount in phases:
+        upper_angle, lower_angle = sign * 10 * amount, -sign * 22 * amount
+        desired = (ankle_xy[0] - sign * 3 * amount, ankle_xy[1] - lift * amount)
+        lower = rotate(upper_angle + lower_angle,
+                       (ankle_xy[0] - knee_xy[0], ankle_xy[1] - knee_xy[1]))
+        upper = rotate(upper_angle, (knee_xy[0] - hip_xy[0], knee_xy[1] - hip_xy[1]))
+        offset = (desired[0] - lower[0] - hip_xy[0] - upper[0],
+                  desired[1] - lower[1] - hip_xy[1] - upper[1])
+        dx, dy = rotate(-upper_angle, offset)
+        at = round(start + t, 3)
+        channels[thigh]["rotate"].append((at, upper_angle))
+        channels[calf]["rotate"].append((at, lower_angle))
+        channels[calf]["translate"].append((at, dx, dy))
+        channels[foot]["rotate"].append((at, -upper_angle - lower_angle))
+    for bone in channels.values():
+        for name, keys in bone.items():
+            if keys[0][0] > 0:
+                keys.insert(0, (0,) + keys[0][1:])
+            if keys[-1][0] < 2:
+                keys.append((2,) + keys[-1][1:])
+            bone[name] = ro(keys) if name == "rotate" else tr(keys)
+    return channels
 
 
 def build_animations():
@@ -3395,20 +3451,16 @@ def build_animations():
     anims["drink_out"] = a
 
     # ------------------------------------------------ march 2.0 s (loop)
-    # 原地踏步: left foot low-lift (0-0.5) -> settle (0.5-1.0) -> right foot
-    # low-lift (1.0-1.5) -> settle (1.5-2.0).  The continuous leg mesh folds the
-    # knee (thigh +20 / calf -35 on the lifting side) instead of swinging a
-    # single rigid leg about the hip.  Angles follow the standing-leg handoff
-    # (thigh +/-20, calf ∓35); the visible sock hem stays fully on the calf, so
-    # the fold reads at the hidden knee, not at the lace.
+    # 原地踏步: alternate a visible forward knee lift, projected into this
+    # front view. 55 source px is ~11 px at the default 170 px pet height.
+    # Do not restore +/-20, -/+35 alone: that opens the knees sideways while
+    # lifting the asymmetric left/right ankles by only ~8 / ~17 source px.
     T = 2.0
     a = base_anim(T, eyes=att([(0, "eyes_open")]),
                   mouth=att([(0, "mouth_default")]))
     a["bones"] = {
-        "legL": {"rotate": ro([(0, 0), (0.5, 20), (1.0, 0), (T, 0)])},
-        "calfL": {"rotate": ro([(0, 0), (0.5, -35), (1.0, 0), (T, 0)])},
-        "legR": {"rotate": ro([(0, 0), (1.0, 0), (1.5, -20), (T, 0)])},
-        "calfR": {"rotate": ro([(0, 0), (1.0, 0), (1.5, 35), (T, 0)])},
+        **_standing_step("L", 0.0),
+        **_standing_step("R", 1.0),
         "armL1": {"rotate": ro([(0, 0), (0.5, 5), (1.0, 0), (1.5, -5), (T, 0)])},
         "armR1": {"rotate": ro([(0, 0), (0.5, -5), (1.0, 0), (1.5, 5), (T, 0)])},
         "spine": {"rotate": ro([(0, 0), (0.5, 1), (1.0, 0), (1.5, -1), (T, 0)])},
@@ -3435,10 +3487,97 @@ def build_animations():
     }
     anims["heel"] = a
 
+    # ------------------------------------------- side_bend_l / _r 5.0 s
+    # 海草舒展 B 套的左右侧弯：躯干以腰/胸为轴侧倾，骨盆与双脚稳定，头颈自然
+    # 跟随。侧弯不绕脚踝把整人当木板倾斜，所以只转 spine/chest，不动 root/hip。
+    # 侧手沿腿外侧下滑，只做小幅 armL1/armR1 跟随，不拉长手臂。正为左倾、
+    # 负为右倾（screen 顺时针为正，故左倾用负角）。1.5 s 进入、2 s 停、1.5 s 回。
+    def _side_bend(lean):
+        T = 5.0
+        a = base_anim(T, eyes=att([(0, "eyes_open")]),
+                      mouth=att([(0, "mouth_default")]))
+        bend = 7.0 * lean   # lean -1 -> left, +1 -> right
+        a["bones"] = {
+            "spine": {"rotate": ro([(0, 0), (1.5, bend * 0.7),
+                                    (3.5, bend * 0.7), (T, 0)])},
+            "chest": {"rotate": ro([(0, 0), (1.5, bend),
+                                    (3.5, bend), (T, 0)])},
+            # neck/head follow the bend rather than staying bolt upright; the
+            # small counter keeps the tilt readable instead of lolling over
+            "neck": {"rotate": ro([(0, 0), (1.5, -bend * 0.15),
+                                   (3.5, -bend * 0.15), (T, 0)])},
+            "head": {"rotate": ro([(0, 0), (1.5, -bend * 0.15),
+                                   (3.5, -bend * 0.15), (T, 0)])},
+            # the hand on the bending side slides down the outer thigh; the
+            # off side just relaxes.  lean<0 (left) moves the left hand down.
+            "armL1": {"rotate": ro([(0, 0), (1.5, -6 * lean),
+                                    (3.5, -6 * lean), (T, 0)])},
+            "armR1": {"rotate": ro([(0, 0), (1.5, 6 * lean),
+                                    (3.5, 6 * lean), (T, 0)])},
+            "hairL2": {"rotate": ro(sine_pairs(T, 1.4 * lean, 1.0))},
+            "hairL3": {"rotate": ro(sine_pairs(T, 2.0 * lean, 1.5))},
+            "hairR2": {"rotate": ro(sine_pairs(T, 1.4 * lean, 1.0))},
+            "hairR3": {"rotate": ro(sine_pairs(T, 2.0 * lean, 1.5))},
+            "tail1": {"rotate": ro(sine_pairs(T, -2.0 * lean, 0.3))},
+            "tailFin": {"rotate": ro(sine_pairs(T, -3.0 * lean, 1.0))},
+        }
+        return a
+
+    anims["side_bend_l"] = _side_bend(-1.0)
+    anims["side_bend_r"] = _side_bend(1.0)
+
+    # ------------------------------------------------------- shrug 10.0 s
+    # 肩膀放松 C 套的耸肩：肩头抬起->轻停->落下，头顶/脸保持稳定。只抬肩不摆
+    # 整条手臂：armL1/armR1 上移，chest/neck/head 不动，所以脸不跟着走。
+    # 1 s 抬、4 s 停、1 s 落、4 s 放松。
+    T = 10.0
+    rise = 13.0
+    a = base_anim(T, eyes=att([(0, "eyes_open")]),
+                  mouth=att([(0, "mouth_default")]))
+    a["bones"] = {
+        "armL1": {"translate": tr([(0, 0, 0), (1.0, 0, -rise), (5.0, 0, -rise),
+                                   (6.0, 0, 0), (T, 0, 0)])},
+        "armR1": {"translate": tr([(0, 0, 0), (1.0, 0, -rise), (5.0, 0, -rise),
+                                   (6.0, 0, 0), (T, 0, 0)])},
+    }
+    anims["shrug"] = a
+
+    # --------------------------------------------------- chest_open 15.0 s
+    # B/C 共用的低位开胸：双臂在低位稍向外打开，肩后下，再放回。不后仰、不夸张
+    # 高举、不缩放袖子；手始终停在腰侧（低于头发），所以不需要 arms_front。
+    # 1.5 s 进入、12 s 轻持、1.5 s 回正。
+    T = 15.0
+    a = base_anim(T, eyes=att([(0, "eyes_open")]),
+                  mouth=att([(0, "mouth_default")]))
+    a["bones"] = {
+        "armL1": {"rotate": ro([(0, 0), (1.5, 30), (13.5, 30), (T, 0)]),
+                  "translate": tr([(0, 0, 0), (1.5, 0, 3), (13.5, 0, 3),
+                                   (T, 0, 0)])},
+        "armL2": {"rotate": ro([(0, 0), (1.5, 8), (13.5, 8), (T, 0)])},
+        "armR1": {"rotate": ro([(0, 0), (1.5, -30), (13.5, -30), (T, 0)]),
+                  "translate": tr([(0, 0, 0), (1.5, 0, 3), (13.5, 0, 3),
+                                   (T, 0, 0)])},
+        "armR2": {"rotate": ro([(0, 0), (1.5, -8), (13.5, -8), (T, 0)])},
+        "hairL2": {"rotate": ro(sine_pairs(T, 1.2, 1.0))},
+        "hairL3": {"rotate": ro(sine_pairs(T, 1.8, 1.5))},
+        "hairR2": {"rotate": ro(sine_pairs(T, -1.2, 1.0))},
+        "hairR3": {"rotate": ro(sine_pairs(T, -1.8, 1.5))},
+    }
+    anims["chest_open"] = a
+
     # slot channels live under "slots"; the clips above keep them at the top
     # level for readability.
     slot_names = {name for name, _bone, _att in SLOTS}
     for a in anims.values():
+        # Unkeyed properties can retain part of a previous mixed pose in this
+        # runtime. Reset the standing chain explicitly, including the new
+        # projected-knee translation and shoe counter-roll, on every clip.
+        bones = a.setdefault("bones", {})
+        for name in ("legL", "calfL", "footL", "legR", "calfR", "footR"):
+            leg = bones.setdefault(name, {})
+            leg.setdefault("rotate", ro([(0, 0)]))
+            if name.startswith(("calf", "foot")):
+                leg.setdefault("translate", tr([(0, 0, 0)]))
         ch = a.setdefault("slots", {})
         for name in list(a):
             if name in slot_names:

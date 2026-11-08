@@ -1,8 +1,8 @@
 extends Node
-## Dev-only: the A 套 60 s follow-along runs to completion through the whole
-## clip sequence (needs_input -> march -> heel -> idle), then offers the
-## completion confirmation on the activity bar.  Fast-forwards by driving
-## _tick_activity directly instead of waiting a real minute.
+## Dev-only: all three follow-along packages run to completion through their
+## full clip sequences, then offer the completion confirmation on the activity
+## bar.  Fast-forwards by driving _tick_activity directly instead of waiting a
+## real minute.  A 套 also exercises the hover / right-click guards.
 
 const Stage = preload("res://tests/test_stage.gd")
 
@@ -64,7 +64,43 @@ func _ready() -> void:
 	_check(not pet._menu_open, "right-click during activity does not open the menu")
 	pet._test_pointer = Vector2(-9999, -9999)
 
-	# Fast-forward 60 s in 0.5 s steps and record the clip sequence.
+	_check(_run_to_end() == ["needs_input", "march", "heel", "idle", ""],
+		"A 套 runs needs_input -> march -> heel -> idle, then finishes")
+	_check(not pet._activity_active, "A 套 ends at 60 s")
+	_check(_button_texts() == ["完成活动", "暂不记录"], "completion confirmation shown")
+
+	# Recording the completion stands the user up and clears everything.
+	pet._on_notice_action("activity_done")
+	_check(not pet._notice_card.visible, "completion hides the card")
+	_check(pet._attention_clip == "" and pet._bubble_notice == "", "completion clears the reminder")
+	await _shot(vp, "done.png")
+
+	# B 套 海草舒展.
+	_start_package("b")
+	_check(_run_to_end() == ["needs_input", "side_bend_l", "side_bend_r",
+			"chest_open", "idle", ""],
+		"B 套 runs needs_input -> side_bend_l -> side_bend_r -> chest_open -> idle")
+	pet._on_notice_action("activity_skip")
+
+	# C 套 肩膀放松.
+	_start_package("c")
+	_check(_run_to_end() == ["needs_input", "shrug", "march", "chest_open", "idle", ""],
+		"C 套 runs needs_input -> shrug -> march -> chest_open -> idle")
+	pet._on_notice_action("activity_skip")
+
+	_finish()
+
+
+func _start_package(pkg: String) -> void:
+	pet._on_notice("sit", "坐了1小时啦，起来动动")
+	pet._on_notice_action("activity")
+	pet._on_notice_action("activity_" + pkg)
+	_check(pet._activity_active and pet._activity.state() == "running",
+		pkg + " 套 running")
+
+
+## Fast-forward 60 s in 0.5 s steps and return the distinct clip sequence.
+func _run_to_end() -> Array:
 	var seq: Array = []
 	var last := ""
 	for _i in 130:
@@ -75,20 +111,7 @@ func _ready() -> void:
 		if clip != last:
 			last = clip
 			seq.append(clip)
-	_check(seq == ["needs_input", "march", "heel", "idle", ""],
-		"clip sequence runs needs_input -> march -> heel -> idle, then finishes (got %s)" % str(seq))
-
-	# Completion: activity ends and the confirmation replaces the bar.
-	_check(not pet._activity_active, "activity ends at 60 s")
-	_check(_button_texts() == ["完成活动", "暂不记录"], "completion confirmation shown")
-
-	# Recording the completion stands the user up and clears everything.
-	pet._on_notice_action("activity_done")
-	_check(not pet._notice_card.visible, "completion hides the card")
-	_check(pet._attention_clip == "" and pet._bubble_notice == "", "completion clears the reminder")
-	await _shot(vp, "done.png")
-
-	_finish()
+	return seq
 
 
 func _button_texts() -> Array:

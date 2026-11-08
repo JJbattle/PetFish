@@ -1,0 +1,121 @@
+{
+  "bones_unchanged": true,
+  "skins_and_weights_unchanged": true,
+  "all_non_draw_order_animation_channels_unchanged": true,
+  "sampled_frames": 630,
+  "clips": 29,
+  "same_pose_pixel_diffs": {
+    "drink_sip_0.500": {
+      "changed_pixels": 0,
+      "bbox": null,
+      "above_y700_changed": 0,
+      "below_y830_changed": 0
+    },
+    "heel_2.000": {
+      "changed_pixels": 19532,
+      "bbox": [
+        344,
+        707,
+        602,
+        821
+      ],
+      "above_y700_changed": 0,
+      "below_y830_changed": 0
+    },
+    "idle_0.000": {
+      "changed_pixels": 19532,
+      "bbox": [
+        344,
+        712,
+        602,
+        826
+      ],
+      "above_y700_changed": 0,
+      "below_y830_changed": 0
+    },
+    "march_0.000": {
+      "changed_pixels": 19532,
+      "bbox": [
+        344,
+        712,
+        602,
+        826
+      ],
+      "above_y700_changed": 0,
+      "below_y830_changed": 0
+    },
+    "march_0.500": {
+      "changed_pixels": 19959,
+      "bbox": [
+        344,
+        699,
+        602,
+        826
+      ],
+      "above_y700_changed": 3,
+      "below_y830_changed": 0
+    },
+    "march_1.500": {
+      "changed_pixels": 20245,
+      "bbox": [
+        344,
+        699,
+        602,
+        826
+      ],
+      "above_y700_changed": 4,
+      "below_y830_changed": 0
+    },
+    "needs_input_hop_0.200": {
+      "changed_pixels": 19532,
+      "bbox": [
+        344,
+        712,
+        602,
+        826
+      ],
+      "above_y700_changed": 0,
+      "below_y830_changed": 0
+    },
+    "present_1.000": {
+      "changed_pixels": 0,
+      "bbox": null,
+      "above_y700_changed": 0,
+      "below_y830_changed": 0
+    },
+    "slack_1.000": {
+      "changed_pixels": 19865,
+      "bbox": [
+        344,
+        714,
+        602,
+        829
+      ],
+      "above_y700_changed": 0,
+      "below_y830_changed": 0
+    },
+    "working_1.000": {
+      "changed_pixels": 19899,
+      "bbox": [
+        344,
+        711,
+        602,
+        826
+      ],
+      "above_y700_changed": 0,
+      "below_y830_changed": 0
+    }
+  },
+  "continuous_loop": {
+    "fps": 15,
+    "duration": 6,
+    "frames": 91,
+    "loop": true,
+    "boundary_max_channel_diff": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "reference_scale": "170px screen height / 820 source units",
+  "peak_ankles": {
+    "L": {
+      "old_lift_source_px": 8.218,
+      "new_lift_source_px": 55.001,
+      "new_lift_screen_px": 11.4,
+      "horizontal_source_px": -3.0,
+      "support_foot_world_delta": [
+        0.0,
+        0.0
+      ],
+      "support_foot_pixel_diff": 0
+    },
+    "R": {
+      "old_lift_source_px": 17.346,
+      "new_lift_source_px": 55.0,
+      "new_lift_screen_px": 11.4,
+      "horizontal_source_px": 3.0,
+      "support_foot_world_delta": [
+        0.0,
+        0.0
+      ],
+      "support_foot_pixel_diff": 0
+    }
+  },
+  "continuous_loop": {
+    "fps": 20,
+    "duration": 6,
+    "frames": 121,
+    "boundary_max_channel_diff": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "mixed_sequence": [
+    {
+      "clip": "march",
+      "max_local_delta_from_setup": 49.32
+    },
+    {
+      "clip": "heel",
+      "max_local_delta_from_setup": 5.0
+    },
+    {
+      "clip": "idle",
+      "max_local_delta_from_setup": 0.0
+    },
+    {
+      "clip": "needs_input_hop",
+      "max_local_delta_from_setup": 0.0
+    },
+    {
+      "clip": "march",
+      "max_local_delta_from_setup": 44.023998
+    },
+    {
+      "clip": "idle",
+      "max_local_delta_from_setup": 0.0
+    }
+  ],
+  "limits": "Runtime motion/pose checks only; the broader verify_pet.py harness has pre-existing removed UI constant references.",
+  "sampled_animation_frames": 646,
+  "sampled_animations": 29,
+  "neutral_pixel_diff": {
+    "pixels": 0,
+    "max_channel": 0
+  }
+}

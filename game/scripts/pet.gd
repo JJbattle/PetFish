@@ -947,6 +947,8 @@ func _activity_status_text() -> String:
 	var seg_name: String = {
 		"needs_input": "站稳准备", "march": "原地踏步",
 		"heel": "缓慢提踵", "idle": "放松",
+		"side_bend_l": "左侧弯", "side_bend_r": "右侧弯",
+		"shrug": "耸肩", "chest_open": "低位开胸",
 	}.get(seg, "")
 	var remain: int = int(ceilf(_activity.total_remaining()))
 	if _activity.state() == "paused":
