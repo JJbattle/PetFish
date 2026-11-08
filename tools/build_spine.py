@@ -42,6 +42,7 @@ GRID_BODY = 8.0
 GRID_HAIR = 8.0
 GRID_TAIL = 8.0
 GRID_ARM = 5.0
+GRID_LEG = 8.0
 
 # ---------------------------------------------------------------- polygons
 
@@ -126,14 +127,17 @@ BONES = [
     ("tail2", "tail1", 675.0, 760.0),
     ("tailFin", "tail2", 730.0, 700.0),
     ("skirt", "hip", 470.0, 665.0),
-    # ---- legs (placeholder): two-bone chains from the hip.  The sock rides
-    # legL/legR; the shoe rides footL/footR so a heel-raise can pivot the shoe
-    # independently of the leg.  These are placeholder joints: the real pivots
-    # (hip socket, knee, ball of foot) are refined once real leg art lands.
+    # ---- legs: three-bone chains (hip -> knee -> ankle -> shoe).  The
+    # continuous thigh-knee-calf mesh rides legL/calfL and is weighted across
+    # the knee; the shoe rides footL/footR so a heel-raise pivots it about the
+    # ball of the foot.  Knee pivots are the standing_leg_kit_v1 hidden-knee
+    # reference (left 438 / right 523.5 at y800), not the visible sock hem.
     ("legL", "hip", 442.0, 720.0),
-    ("footL", "legL", 432.0, 905.0),
+    ("calfL", "legL", 438.0, 800.0),
+    ("footL", "calfL", 432.0, 905.0),
     ("legR", "hip", 500.0, 720.0),
-    ("footR", "legR", 520.0, 905.0),
+    ("calfR", "legR", 523.5, 800.0),
+    ("footR", "calfR", 520.0, 905.0),
     ("armL1", "chest", 414.0, 566.0),
     ("armL2", "armL1", 363.0, 625.0),
     ("handL", "armL2", 338.0, 663.0),
@@ -296,11 +300,15 @@ SLOTS = [
     ("hair_r", "hairR1", "hair_r"),
     ("body", "root", "body"),
     # legs sit under the skirt (the thigh hides behind it) and stay present in
-    # every standing pose; the shoe is its own slot so a heel-raise pivots it
+    # every standing pose; the shoe is its own slot so a heel-raise pivots it.
+    # leg_l/leg_r are now continuous thigh-knee-calf meshes weighted legL<->calfL
+    # (see w_leg), the shoe is weighted calfL<->footL (see w_shoe), and the skirt
+    # lining covers the thigh roots between the legs and the front skirt.
     ("leg_l", "legL", "leg_l"),
     ("leg_r", "legR", "leg_r"),
     ("foot_l", "footL", "foot_l"),
     ("foot_r", "footR", "foot_r"),
+    ("skirt_inner", "hip", "skirt_inner"),
     ("skirt", "skirt", "skirt"),
     # the tail passes in front of the skirt in the art and behind the sleeves,
     # so it sits between the two
@@ -375,6 +383,8 @@ GRIDS = {
     "tail": GRID_TAIL, "skirt": GRID_HAIR,
     "arm_up_l": GRID_ARM, "arm_up_r": GRID_ARM,
     "arm_fore_l": GRID_ARM, "arm_fore_r": GRID_ARM,
+    "leg_l": GRID_LEG, "leg_r": GRID_LEG,
+    "foot_l": GRID_LEG, "foot_r": GRID_LEG,
 }
 
 
@@ -1259,6 +1269,31 @@ def cut_legs(layers):
     layers["body"] = (body, (bx0, by0, _bx1, _by1))
     layers["leg_l"], layers["foot_l"] = legs[0], legs[1]
     layers["leg_r"], layers["foot_r"] = legs[2], legs[3]
+    return layers
+
+
+# The standing_leg_kit_v1 delivery (2026-11-08) replaces the placeholder legs
+# above.  It ships a leg-removed body that keeps the original skirt edge (no dark
+# fill), a continuous thigh-knee-calf drawing per leg, a separate shoe, and the
+# skirt lining.  Every PNG is already cropped to its source_rect in the 1024
+# source space, so the layer rect is the source_rect directly.
+LEG_KIT = "assets/art/standing_leg_kit_v1/parts"
+
+
+def load_leg_kit(layers):
+    def _kit(name, rect):
+        img = Image.open(os.path.join(LEG_KIT, name)).convert("RGBA")
+        return (img, rect)
+
+    # Leg-removed front body (original skirt edge preserved, no dark hole).
+    layers["body"] = _kit("front_body_without_legs.png", (206, 538, 812, 830))
+    # Continuous leg meshes (source y 708..909) and shoes (y 901..956).
+    layers["leg_l"] = _kit("leg_l_full.png", (389, 708, 484, 909))
+    layers["leg_r"] = _kit("leg_r_full.png", (456, 708, 582, 909))
+    layers["foot_l"] = _kit("shoe_l.png", (389, 901, 489, 956))
+    layers["foot_r"] = _kit("shoe_r.png", (481, 901, 582, 956))
+    # Skirt lining in front of the leg roots, behind the front skirt.
+    layers["skirt_inner"] = _kit("skirt_inner.png", (340, 731, 606, 798))
     return layers
 
 
@@ -2264,6 +2299,35 @@ def w_arm_fore(side):
     return f
 
 
+def w_leg(side):
+    # Continuous thigh-knee-calf mesh (leg_l_full / leg_r_full).  Above the
+    # hidden knee (source y~800) the drawing follows the thigh bone (legL/legR),
+    # below it the calf bone (calfL/calfR), so a knee bend folds the sock
+    # smoothly instead of splitting at a slice.  The blend band sits above the
+    # visible sock hem (y839-861), keeping the hem fully on the calf.
+    thigh = "legL" if side == "L" else "legR"
+    calf = "calfL" if side == "L" else "calfR"
+
+    def f(x, y):
+        t = smoothstep(782.0, 818.0, y)
+        return {thigh: 1.0 - t, calf: t}
+    return f
+
+
+def w_shoe(side):
+    # Shoe mesh (shoe_l / shoe_r), weighted calf<->foot across the ankle band
+    # (source y 885..905).  The sock/shoe junction stays continuous while the
+    # sole follows the foot bone, so a heel-raise pivots the shoe without a tear
+    # at the ankle.  The band uses the same world-y cut as the sock bottom.
+    calf = "calfL" if side == "L" else "calfR"
+    foot = "footL" if side == "L" else "footR"
+
+    def f(x, y):
+        t = smoothstep(885.0, 905.0, y)
+        return {calf: 1.0 - t, foot: t}
+    return f
+
+
 # ------------------------------------------------------------ animations
 # Authored in screen convention: +y is down, +rotation is clockwise on screen.
 # mirror_y() converts the channels to Spine's y-up JSON; the runtime flips the
@@ -2362,7 +2426,7 @@ SIDE_SLOTS = ("s_hair_back", "s_body", "s_arm_up_l", "s_arm_up_r",
 # the front set the drink fades out while the side set fades in: body, hair,
 # head, both arms and the front-loading duplicates
 FRONT_SLOTS = ("hair_back", "hair_l", "hair_r", "body", "leg_l", "leg_r",
-               "foot_l", "foot_r", "skirt", "tail",
+               "foot_l", "foot_r", "skirt_inner", "skirt", "tail",
                "arm_up_l", "arm_up_r", "arm_fore_l", "arm_fore_r",
                "head", "eyes", "mouth", "hand_l", "hand_r",
                "arm_fore_l_front", "arm_fore_r_front",
@@ -3428,7 +3492,7 @@ def main():
     layers.update(side_art.rig_layers())
     from rig_repair import repair_layers
     repair_layers(layers)
-    cut_legs(layers)
+    load_leg_kit(layers)
     print("layers:", ", ".join("%s %dx%d" % (n, layers[n][1][2] - layers[n][1][0],
                                              layers[n][1][3] - layers[n][1][1])
                                for n in sorted(layers)))
@@ -3446,7 +3510,9 @@ def main():
             fn = {"body": w_body, "tail": w_tail, "skirt": w_skirt,
                   "hair_l": w_hair("L"), "hair_r": w_hair("R"),
                   "arm_up_l": w_arm_up("L"), "arm_up_r": w_arm_up("R"),
-                  "arm_fore_l": w_arm_fore("L"), "arm_fore_r": w_arm_fore("R")}[name]
+                  "arm_fore_l": w_arm_fore("L"), "arm_fore_r": w_arm_fore("R"),
+                  "leg_l": w_leg("L"), "leg_r": w_leg("R"),
+                  "foot_l": w_shoe("L"), "foot_r": w_shoe("R")}[name]
             meshes[name] = make_grid(rect, GRIDS[name], fn)
         else:
             bone = {"head": "head", "hand_l": "handL", "hand_rest": "handR",
@@ -3466,8 +3532,7 @@ def main():
                     "s_arm_fore_l": "s_armL2", "s_arm_fore_r": "s_armR2",
                     "s_arm_fore_l_open": "s_armL2", "s_arm_fore_r_open": "s_armR2",
                     "hand_open_l": "handL",
-                    "leg_l": "legL", "leg_r": "legR",
-                    "foot_l": "footL", "foot_r": "footR"}.get(name, "head")
+                    "skirt_inner": "hip"}.get(name, "head")
             meshes[name] = make_quad(rect, bone)
         if name == "drink_arms":
             meshes[name] = make_quad(rect, "drink_prop")

@@ -1,0 +1,318 @@
+{
+  "coordinate_system": "1024x1024 source pixels, x right/y down; no extra scaling",
+  "runtime_status": "art kit only, not integrated",
+  "parts": {
+    "leg_l_master": {
+      "file": "parts/leg_l_master.png",
+      "source_rect": [
+        389,
+        708,
+        489,
+        956
+      ],
+      "position_top_left": [
+        389,
+        708
+      ],
+      "scale": 1.0
+    },
+    "leg_l_full": {
+      "file": "parts/leg_l_full.png",
+      "source_rect": [
+        389,
+        708,
+        484,
+        909
+      ],
+      "position_top_left": [
+        389,
+        708
+      ],
+      "scale": 1.0
+    },
+    "shoe_l": {
+      "file": "parts/shoe_l.png",
+      "source_rect": [
+        389,
+        901,
+        489,
+        956
+      ],
+      "position_top_left": [
+        389,
+        901
+      ],
+      "scale": 1.0
+    },
+    "thigh_l": {
+      "file": "parts/thigh_l.png",
+      "source_rect": [
+        396,
+        708,
+        484,
+        824
+      ],
+      "position_top_left": [
+        396,
+        708
+      ],
+      "scale": 1.0
+    },
+    "calf_l": {
+      "file": "parts/calf_l.png",
+      "source_rect": [
+        389,
+        776,
+        488,
+        921
+      ],
+      "position_top_left": [
+        389,
+        776
+      ],
+      "scale": 1.0
+    },
+    "shoe_l_overlap_reference": {
+      "file": "parts/shoe_l_overlap_reference.png",
+      "source_rect": [
+        389,
+        885,
+        489,
+        956
+      ],
+      "position_top_left": [
+        389,
+        885
+      ],
+      "scale": 1.0
+    },
+    "thigh_l_painted_underlap": {
+      "file": "parts/thigh_l_painted_underlap.png",
+      "source_rect": [
+        398,
+        708,
+        484,
+        847
+      ],
+      "position_top_left": [
+        398,
+        708
+      ],
+      "scale": 1.0
+    },
+    "source_leg_l_removal_mask": {
+      "file": "parts/source_leg_l_removal_mask.png",
+      "source_rect": [
+        386,
+        808,
+        489,
+        956
+      ],
+      "position_top_left": [
+        386,
+        808
+      ],
+      "scale": 1.0
+    },
+    "leg_r_master": {
+      "file": "parts/leg_r_master.png",
+      "source_rect": [
+        456,
+        708,
+        582,
+        956
+      ],
+      "position_top_left": [
+        456,
+        708
+      ],
+      "scale": 1.0
+    },
+    "leg_r_full": {
+      "file": "parts/leg_r_full.png",
+      "source_rect": [
+        456,
+        708,
+        582,
+        909
+      ],
+      "position_top_left": [
+        456,
+        708
+      ],
+      "scale": 1.0
+    },
+    "shoe_r": {
+      "file": "parts/shoe_r.png",
+      "source_rect": [
+        481,
+        901,
+        582,
+        956
+      ],
+      "position_top_left": [
+        481,
+        901
+      ],
+      "scale": 1.0
+    },
+    "thigh_r": {
+      "file": "parts/thigh_r.png",
+      "source_rect": [
+        456,
+        708,
+        571,
+        824
+      ],
+      "position_top_left": [
+        456,
+        708
+      ],
+      "scale": 1.0
+    },
+    "calf_r": {
+      "file": "parts/calf_r.png",
+      "source_rect": [
+        476,
+        776,
+        582,
+        921
+      ],
+      "position_top_left": [
+        476,
+        776
+      ],
+      "scale": 1.0
+    },
+    "shoe_r_overlap_reference": {
+      "file": "parts/shoe_r_overlap_reference.png",
+      "source_rect": [
+        481,
+        885,
+        582,
+        956
+      ],
+      "position_top_left": [
+        481,
+        885
+      ],
+      "scale": 1.0
+    },
+    "thigh_r_painted_underlap": {
+      "file": "parts/thigh_r_painted_underlap.png",
+      "source_rect": [
+        456,
+        708,
+        573,
+        847
+      ],
+      "position_top_left": [
+        456,
+        708
+      ],
+      "scale": 1.0
+    },
+    "source_leg_r_removal_mask": {
+      "file": "parts/source_leg_r_removal_mask.png",
+      "source_rect": [
+        481,
+        804,
+        584,
+        956
+      ],
+      "position_top_left": [
+        481,
+        804
+      ],
+      "scale": 1.0
+    },
+    "skirt_inner": {
+      "file": "parts/skirt_inner.png",
+      "source_rect": [
+        340,
+        731,
+        606,
+        798
+      ],
+      "position_top_left": [
+        340,
+        731
+      ],
+      "scale": 1.0
+    },
+    "front_body_without_legs": {
+      "file": "parts/front_body_without_legs.png",
+      "source_rect": [
+        206,
+        538,
+        812,
+        830
+      ],
+      "position_top_left": [
+        206,
+        538
+      ],
+      "scale": 1.0
+    }
+  },
+  "bone_guides": {
+    "hip_l": [
+      442,
+      720
+    ],
+    "hip_r": [
+      500,
+      720
+    ],
+    "ankle_l": [
+      432,
+      905
+    ],
+    "ankle_r": [
+      520,
+      905
+    ]
+  },
+  "suggested_new_knees_from_texture_y800": {
+    "l": [
+      438.0,
+      800
+    ],
+    "r": [
+      523.5,
+      800
+    ]
+  },
+  "primary_attachment_plan": {
+    "leg_slots": [
+      "leg_l_full",
+      "leg_r_full"
+    ],
+    "shoe_slots": [
+      "shoe_l",
+      "shoe_r"
+    ],
+    "continuous_master": [
+      "leg_l_master",
+      "leg_r_master"
+    ],
+    "replace_body_before_old_cut_legs": "front_body_without_legs",
+    "reference_only": [
+      "thigh_l",
+      "thigh_r",
+      "calf_l",
+      "calf_r",
+      "shoe_l_overlap_reference",
+      "shoe_r_overlap_reference",
+      "thigh_l_painted_underlap",
+      "thigh_r_painted_underlap",
+      "source_leg_l_removal_mask",
+      "source_leg_r_removal_mask"
+    ],
+    "layer_order_back_to_front": [
+      "legs_and_shoes",
+      "skirt_inner",
+      "existing_front_body_and_skirt"
+    ]
+  }
+}

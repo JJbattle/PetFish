@@ -1,5 +1,8 @@
 # 站姿活动腿部拆件补图交接（给老师）
 
+> 2026-11-08 美术已交付：`assets/art/standing_leg_kit_v1/`，详见本目录 `STANDING_LEG_ART_DELIVERY.md`。
+> 下文为原请求。坐标纠正：y800 是隐藏膝位参考，可见袜口花边实际约 y839–861；旧活动 rig 的局部权重数字需重定标。接入同时应替换旧 y800 整条横切裙边的做法，包内已给去腿前身体层与移除遮罩。
+
 2026-11-08。目标：站立跟练复用站姿骨架 + `pet_portrait.png` 原画，只补缺失的腿部拆件。
 对照图见同目录 `neutral-wave-comparison.png`（站 idle/needs_input_hop vs 活动 neutral/ready）。
 

@@ -1,0 +1,21 @@
+{
+  "l_visible_native_pixel_diff": 0,
+  "l_knee_alpha_width_y800": 73,
+  "r_visible_native_pixel_diff": 0,
+  "r_knee_alpha_width_y800": 76,
+  "front_body_pixels_outside_leg_masks_changed": 0,
+  "scope": "Static artwork registration only; no runtime mesh/pose validation.",
+  "visible_source": "rig_repair.registered(front_armless_v1.png, .78, (31,28)), same as repair_layers",
+  "source_sha256": "daca1224f950bb427d8a3ff566f218cf96e8f1a67eb44d4876b979984107d091",
+  "coordinates": {
+    "knee_bone_guide_y": 800,
+    "native_skin_join_y": 826,
+    "visible_sock_frill_y": [
+      839,
+      861
+    ],
+    "existing_ankle_bone_y": 905,
+    "actual_shoe_vamp_begins_y_approx": 880
+  },
+  "minimum_attachment_source_y": 538
+}
