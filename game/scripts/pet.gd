@@ -167,7 +167,8 @@ var _chat_open := false
 var _chat_auto_close := false
 ## The collapsed bubble is the chat entry in every state.  `_bubble_speech` is the
 ## last assistant reply, `_bubble_notice` the pending reminder line; the bubble
-## shows whichever is current, else live working progress, else the idle prompt.
+## shows whichever is current, in priority order: pending notice, then live
+## working progress, then the last reply, then the idle prompt.
 var _bubble_speech := ""
 var _bubble_notice := ""
 ## Weekly feed sync: `_feed_pending` means new content is waiting for the user to
@@ -179,8 +180,8 @@ var _chime: AudioStreamPlayer
 var _notice_timer := 0.0
 var _attention_clip := ""
 ## The kind of the pending reminder ("water"/"sit"/"alarm"/"memo"/"").  Water and
-## sit act from the bubble (their prompt + action live in a small card above it);
-## alarm and memo keep the chat card's top banner.
+## sit act from the bubble (clicking it reveals a small action card above it);
+## alarm and memo reveal the chat card's top banner on that same click.
 var _notice_kind := ""
 ## The small action card shown for a water/sit reminder, so the user can log water
 ## or start the follow-along without opening the chat card at all.
@@ -729,32 +730,25 @@ func _on_water_logged(ml: int, total: int, goal: int) -> void:
 
 func _show_notice(text: String, kind: String = "") -> void:
 	_notice_kind = kind
-	if kind == "water" or kind == "sit":
-		# Water and sit act from the bubble: show the line plus an action card
-		# above it, and never open the chat card / banner for them.
+	if _attention_clip != "":
+		# A real reminder (water/sit/alarm/memo) stays in the bubble only: it never
+		# pops the action card or the chat panel open on its own.  Acting on it is
+		# the user's click -- the bubble opens the action card (water/sit) or the
+		# chat card with its banner (alarm/memo, armed below).
 		_close_chat()
 		_bubble_notice = text
+		if kind == "alarm" or kind == "memo":
+			_chat_panel.reminder(text)
 		_refresh_texts()
-		_show_notice_card(kind, text)
 		_update_passthrough()
 		return
+	# A plain drink-logged notice is informational: append it to the log and let
+	# the panel close itself after NOTICE_SECS.
 	if not _chat_open:
 		_open_chat(false)
-	if _attention_clip != "":
-		# A real reminder (alarm/memo) needs an action, so it opens the banner at
-		# the top of the card (never the chat log) and also survives as a bubble
-		# line while the card is collapsed.
-		_bubble_notice = text
-		_chat_panel.reminder(text)
-	else:
-		# A plain drink-logged notice is informational: append it to the log and
-		# let the panel close itself after NOTICE_SECS.
-		_chat_panel.notice(text)
+	_chat_panel.notice(text)
 	_notice_timer = NOTICE_SECS
-	# A plain notice (drink logged etc.) closes the panel on its own after
-	# NOTICE_SECS; a reminder keeps its attention clip set, so the panel stays
-	# until the user acts on or dismisses it.
-	_chat_auto_close = (_attention_clip == "")
+	_chat_auto_close = true
 
 
 func _dismiss_notice() -> void:
@@ -1213,8 +1207,9 @@ func _current_action() -> String:
 	return "思考中"
 
 
-## What the collapsed bubble shows: a pending notice/reminder first, then live
-## working progress, then the last assistant reply, then the idle prompt.
+## What the collapsed bubble shows, in priority order: a pending notice/reminder
+## first, then live working progress, then the last assistant reply, then the
+## idle prompt.
 func _bubble_text() -> String:
 	if _activity_active:
 		return _activity_status_text()
@@ -1935,9 +1930,9 @@ func _input(event: InputEvent) -> void:
 		return
 	if event.button_index == MOUSE_BUTTON_LEFT:
 		# The bubble above the head is the chat entry: click it to open the chat
-		# card (input + history + reminders).  It also still shows live progress
-		# while working, and a click there opens the chat too.  A pending water/sit
-		# reminder turns the click into its action card instead of the chat.
+		# card (input + history + reminders).  A pending reminder turns the click
+		# into its action instead: water/sit reveal the quick-action card, and
+		# alarm/memo open the chat card so its banner can be confirmed.
 		if _bubble.visible and _bubble_rect.has_point(mouse):
 			if _activity_active:
 				# During a follow-along the bubble shows its live status; a click
@@ -1948,6 +1943,8 @@ func _input(event: InputEvent) -> void:
 				_reveal_feed()
 			elif _notice_kind == "water" or _notice_kind == "sit":
 				_show_notice_card(_notice_kind, _bubble_notice)
+			elif _notice_kind == "alarm" or _notice_kind == "memo":
+				_open_chat(false)
 			else:
 				_open_chat()
 			return
